@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="Infinity.Roulette.Controls.DashboardSpinTypeSelectorControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:convert="clr-namespace:Infinity.Roulette.Converters"
+             xmlns:constants="clr-namespace:Infinity.Data.Constants;assembly=Infinity.Data"
+             mc:Ignorable="d" Background="Transparent" Width="360" Height="90">
+    <UserControl.Resources>
+        <convert:GameTypeConverter x:Key="GameTypeConverter"/>        
+    </UserControl.Resources>
+    <Grid Background="Transparent" Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="15" />
+            <RowDefinition Height="15" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Row="1" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="3" BorderBrush="{StaticResource selected-row-green}" BorderThickness="2" CornerRadius="10" Background="#FF282828">
+            <Grid Background="#FF282828" Margin="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <RadioButton x:Name="rbRandom" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="0" Content="Random" Style="{StaticResource rbRestyle-orange}" Foreground="{StaticResource solid-color-brush-lime-green}"
+                             Checked="rbRandom_Checked" 
+                             IsChecked="{Binding RouletteGameType, Converter={StaticResource GameTypeConverter}, ConverterParameter={x:Static constants:GameType.Random}}" />
+                <RadioButton x:Name="rbAutoplay" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="1" Content="Autoplay" Style="{StaticResource rbRestyle-blue}" Foreground="{StaticResource solid-color-brush-lime-green}"
+                             Checked="rbAutoplay_Checked"
+                             IsChecked="{Binding RouletteGameType, Converter={StaticResource GameTypeConverter}, ConverterParameter={x:Static constants:GameType.Autoplay}}" />
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" BorderBrush="{StaticResource selected-row-green}" BorderThickness="2" CornerRadius="10" Background="#FF282828">
+            <Grid Background="#FF282828" Margin="2">
+                <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18px" Padding="0">
+                    <Label.Content>
+                        <TextBlock Text="SPIN TYPE" Foreground="{StaticResource selected-row-green}" FontSize="18px" FontWeight="Bold"/>
+                    </Label.Content>
+                </Label>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

@@ -1,0 +1,57 @@
+﻿<Window x:Class="Infinity.Roulette.ReworkDefaultSettings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ctrls="clr-namespace:Infinity.Roulette.Controls"
+        xmlns:convert="clr-namespace:Infinity.Roulette.Converters"
+        mc:Ignorable="d"
+        Title="ReworkDefaultSettings" SizeToContent="WidthAndHeight" ResizeMode="NoResize" Background="#FF282828">
+    <Window.Resources>
+        <convert:NullableValueConverter x:Key="NullableValueConverter" x:Name="NullableValueConverter" />
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10" VerticalAlignment="Center">
+            <TextBlock Text="Game Type: " Foreground="#FFF" VerticalAlignment="Center" Margin="0, 0, 10, 0" />
+            <ComboBox x:Name="cbGameType" UseLayoutRounding="True" MinWidth="90" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="2,0,0,0" Margin="0,5"
+                      
+                      MinHeight="20" Height="20" ItemsSource="{Binding GameTypes}" SelectedItem="{Binding SelectedGameType, Converter={StaticResource NullableValueConverter}, Mode=TwoWay}" SelectionChanged="cbGameType_SelectionChanged" >
+            </ComboBox>
+        </StackPanel>
+        <ctrls:DashboardTableSettingsControl Grid.Row="1" x:Name="TableSettings" />
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="btnSave" Grid.Row="1" Grid.Column="0" Margin="0,20" Background="{StaticResource solid-color-brush-light-blue}" Click="btnSave_Click">
+                <UIElement.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.8" Color="{StaticResource light-blue-color}"/>
+                </UIElement.Effect>
+                <TextBlock Text="SAVE" Foreground="WhiteSmoke">
+                <UIElement.Effect>
+                  <DropShadowEffect BlurRadius="4" ShadowDepth="3" Color="Black" Opacity="0.8"/>
+                </UIElement.Effect>
+                </TextBlock>
+            </Button>
+            <Button x:Name="btnCancel" Grid.Row="1" Grid.Column="1" Margin="0,20" Background="{StaticResource solid-color-brush-orange-red}" Click="btnCancel_Click">
+                <UIElement.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.8" Color="{StaticResource orange-red-color}"/>
+                </UIElement.Effect>
+                <TextBlock Text="CANCEL" Foreground="WhiteSmoke">
+                <UIElement.Effect>
+                  <DropShadowEffect BlurRadius="4" ShadowDepth="3" Color="Black" Opacity="0.8"/>
+                </UIElement.Effect>
+                </TextBlock>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,127 @@
+﻿<Window x:Class="Infinity.Roulette.ReworkDash"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:ctrls="clr-namespace:Infinity.Roulette.Controls"
+        xmlns:convert="clr-namespace:Infinity.Roulette.Converters"
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen" UseLayoutRounding="True"
+        SizeToContent="WidthAndHeight" ResizeMode="CanMinimize"
+        Title="Rework" Background="#FF282828">
+    <Window.Resources>
+        <convert:VisibilityConverter x:Key="VisibilityConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ctrls:DashboardTableSettingsControl Grid.Row="0" x:Name="TableSettings" />
+        <ctrls:DashboardSpinTypeSelectorControl Grid.Row="1" x:Name="TypeSelector" />
+
+        <Grid Grid.Row="2" Margin="5,20">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="47*" />
+                <ColumnDefinition Width="48*"/>
+                <ColumnDefinition Width="95*" />
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="btnRun" Grid.Row="0" Grid.Column="0" Visibility="{Binding ShowRunBtn, Converter={StaticResource VisibilityConverter}}" Background="{StaticResource solid-color-brush-light-blue}"
+                   Click="btnRun_Click" Grid.ColumnSpan="2" Margin="25,0,25,0" >
+                <ContentControl.Content>
+                    <TextBlock Text="RUN" Foreground="WhiteSmoke">
+                  <UIElement.Effect>
+                    <DropShadowEffect BlurRadius="4" ShadowDepth="3" Color="Black" Opacity="0.8"/>
+                  </UIElement.Effect>
+                    </TextBlock>
+                </ContentControl.Content>
+                <UIElement.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.8" Color="{StaticResource light-blue-color}"/>
+                </UIElement.Effect>
+            </Button>
+            <Button x:Name="btnStop" Grid.Row="0" Grid.Column="0" Visibility="{Binding ShowStopBtn, Converter={StaticResource VisibilityConverter}}" Background="{StaticResource solid-color-brush-purple}"
+                   Click="btnStop_Click" Grid.ColumnSpan="2" Margin="25,0,25,0">
+                <ContentControl.Content>
+                    <TextBlock Text="STOP" Foreground="WhiteSmoke">
+                  <UIElement.Effect>
+                    <DropShadowEffect BlurRadius="4" ShadowDepth="3" Color="Black" Opacity="0.8"/>
+                  </UIElement.Effect>
+                    </TextBlock>
+                </ContentControl.Content>
+                <UIElement.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.8" Color="{StaticResource light-purple-color}"/>
+                </UIElement.Effect>
+            </Button>
+
+            <Button x:Name="btnResults" Grid.Row="0" Grid.Column="2" Background="{StaticResource solid-color-brush-orange}"
+                    Click="btnResults_Click" Margin="25,0,25,0">
+                <ContentControl.Content>
+                    <TextBlock Text="RESULTS" Foreground="WhiteSmoke">
+                  <UIElement.Effect>
+                    <DropShadowEffect BlurRadius="4" ShadowDepth="3" Color="Black" Opacity="0.8"/>
+                  </UIElement.Effect>
+                    </TextBlock>
+                </ContentControl.Content>
+                <UIElement.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.8" Color="{StaticResource orange-color}"/>
+                </UIElement.Effect>
+            </Button>
+
+            <Button x:Name="btnNewTable" Grid.Row="1" Grid.Column="0" Margin="25,20,25,20" Background="{StaticResource selected-row-green}" Grid.ColumnSpan="2">
+                <UIElement.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.8" Color="{StaticResource green-color-04}"/>
+                </UIElement.Effect>
+                <TextBlock Text="NEW TABLE" Foreground="WhiteSmoke">
+                <UIElement.Effect>
+                  <DropShadowEffect BlurRadius="4" ShadowDepth="3" Color="Black" Opacity="0.8"/>
+                </UIElement.Effect>
+                </TextBlock>
+            </Button>
+            <Button x:Name="btnReset" Grid.Row="1" Grid.Column="2" Margin="25,20,25,20" Background="{StaticResource solid-color-brush-night-rider}" Click="btnReset_Click">
+                <UIElement.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.8" Color="{StaticResource night-rider}"/>
+                </UIElement.Effect>
+                <TextBlock Text="RESET" Foreground="WhiteSmoke">
+                <UIElement.Effect>
+                  <DropShadowEffect BlurRadius="4" ShadowDepth="3" Color="Black" Opacity="0.8"/>
+                </UIElement.Effect>
+                </TextBlock>
+            </Button>
+        </Grid>
+
+        <Grid Grid.Row="3" Margin="5, 20">
+            <StackPanel x:Name="spPrepareTablesUpdate" Visibility="Collapsed">
+                <Label HorizontalContentAlignment="Center">
+                    <Label.Content>
+                        <TextBlock Text="Preparing tables" />
+                    </Label.Content>
+                </Label>
+                <ProgressBar x:Name="pbLoadTablesUpdate" Style="{StaticResource ProgressBar_2}" Height="30" 
+                         HorizontalAlignment="Center" Width="330" HorizontalContentAlignment="Left"                         
+                         Value="0" />
+            </StackPanel>
+            <StackPanel x:Name="spDashboardSearchUpdate" Visibility="Collapsed">
+                <ProgressBar x:Name="pbProgressUpdate" Style="{StaticResource ProgressBar_2}" Height="30" 
+                         HorizontalAlignment="Center" Width="330" HorizontalContentAlignment="Left"                         
+                         Value="0" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+    <ui:ContextFlyoutService.ContextFlyout>
+        <ui:MenuFlyout>
+            <MenuItem Click="mnuDefaultSettings_Click"  x:Name="mnuDefaultSettings" Header="Default Settings"
+                Cursor="Hand" Margin="5,0,5,0"/>
+            <!--<MenuItem Click="mnuGenerateSpinfile_Click" x:Name="mnuGenerateSpinfile" Header="Generate Spinfile"
+                Cursor="Hand" Margin="5,0,5,0"/>-->
+        </ui:MenuFlyout>
+    </ui:ContextFlyoutService.ContextFlyout>
+</Window>

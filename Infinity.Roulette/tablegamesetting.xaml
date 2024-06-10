@@ -1,0 +1,199 @@
+<Window x:Class="Infinity.Roulette.TableGameSetting"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Infinity.Roulette"
+        xmlns:convert="clr-namespace:Infinity.Roulette.Converters"
+        xmlns:controls="clr-namespace:Infinity.Roulette.Controls"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:constants="clr-namespace:Infinity.Data.Constants;assembly=Infinity.Data"
+        x:Name="DefaultGameSettings" ui:WindowHelper.UseModernWindowStyle="True"
+        WindowStartupLocation="CenterScreen" UseLayoutRounding="True" AllowsTransparency="True"
+        WindowStyle="None" BorderThickness="0" ui:TitleBar.ExtendViewIntoTitleBar="True"
+        Background="Transparent" ResizeMode="NoResize" Title="Table Game Settings"
+        SizeToContent="WidthAndHeight" MinWidth="300" SnapsToDevicePixels="True">
+  <FrameworkElement.Resources>
+    <convert:GameTypeConverter x:Key="GameTypeConverter"/>
+    <convert:VisibilityConverter x:Key="VisibilityConverter"/>
+    <convert:NullableValueConverter x:Key="NullableValueConverter"/>
+  </FrameworkElement.Resources>
+  <ui:TitleBar.Style>
+    <Style TargetType="{x:Type ui:TitleBarControl}">
+      <Setter Property="FrameworkElement.Margin" Value="2"/>
+    </Style>
+  </ui:TitleBar.Style>
+  <Grid Margin="-2">
+    <Border BorderBrush="Black" Background="Black" BorderThickness="4" CornerRadius="10">
+      <Grid Margin="2">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="40"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Background="Black" Row="0">
+          <Image Source="{StaticResource redesign-background-image}" MaxHeight="35" Margin="5,0,0,0"
+                 HorizontalAlignment="Left"/>
+        </Grid>
+        <Grid Background="#FF282828" Row="1">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="0"/>
+            <RowDefinition Height="0"/>
+            <RowDefinition Height="310"/>
+            <RowDefinition Height="10"/>
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="10"/>
+          </Grid.ColumnDefinitions>
+          <Grid Margin="0,-10,0,0" Row="3" Column="1" ColumnSpan="2">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="0"/>
+              <RowDefinition Height="35"/>
+              <RowDefinition Height="28"/>
+              <RowDefinition Height="28"/>
+              <RowDefinition Height="28"/>
+              <RowDefinition Height="28"/>
+              <RowDefinition Height="34"/>
+              <RowDefinition Height="34"/>
+              <RowDefinition Height="34"/>
+              <RowDefinition Height="34"/>
+              <RowDefinition Height="5"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Content="Game:"
+                   FontWeight="Bold" Margin="0,0,5,0"/>
+            <ComboBox SelectionChanged="cbSettingGameType_SelectionChanged" x:Name="cbSettingGameType" Grid.Row="1"
+                      Grid.Column="1" Margin="0,0,0,0" Width="100" VerticalAlignment="Center" HorizontalAlignment="Left"
+                      MinHeight="20" Height="20" TabIndex="8" ItemsSource="{Binding GameTypeOptions}"
+                      SelectedItem="{Binding SelectedType, Converter={StaticResource NullableValueConverter}}"/>
+            <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right"
+                   Content="Random:" FontWeight="Bold" Margin="0,0,5,0"/>
+            <TextBox x:Name="txtRandomNumbers" Grid.Row="2" Grid.Column="1" TabIndex="3" Margin="0,0,0,0"
+                     Padding="2,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" Width="100"
+                     Text="{Binding GameSetting.RandomNumbers, Mode=TwoWay, Converter={StaticResource NullableValueConverter}}"/>
+            <Label Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right"
+                   Content="Autoplays:" FontWeight="Bold" Margin="0,0,5,0"
+                   Visibility="{Binding AutoplaySelected, Converter={StaticResource VisibilityConverter}}"/>
+            <ComboBox x:Name="cbAutoplays" Grid.Row="3" Grid.Column="1" Margin="0,0,0,0" VerticalAlignment="Center"
+                      HorizontalAlignment="Left" Width="100" MinHeight="20" Height="20" TabIndex="8"
+                      ItemsSource="{Binding AutoplayOptions}"
+                      SelectedItem="{Binding SelectedAutoplay, Converter={StaticResource NullableValueConverter}}"
+                      Visibility="{Binding AutoplaySelected, Converter={StaticResource VisibilityConverter}}"/>
+            <Grid Row="5" Column="0" ColumnSpan="2" RowSpan="4">
+              <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+              </Grid.RowDefinitions>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+              </Grid.ColumnDefinitions>
+              <Border Grid.Row="0" Grid.RowSpan="4" Grid.Column="0"
+                      BorderBrush="{StaticResource solid-color-brush-logo-orange}" BorderThickness="2,2,0,2"
+                      CornerRadius="10, 0, 0, 10"/>
+              <Border Grid.Row="0" Grid.RowSpan="4" Grid.Column="4"
+                      BorderBrush="{StaticResource solid-color-brush-logo-orange}" BorderThickness="0,2,2,2"
+                      CornerRadius="0, 10, 10, 0"/>
+              <Border Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3"
+                      BorderBrush="{StaticResource solid-color-brush-logo-orange}" BorderThickness="0,0,0,2"/>
+              <Border Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3"
+                      BorderBrush="{StaticResource solid-color-brush-logo-orange}" BorderThickness="2" CornerRadius="10"
+                      Margin="0,-15,0,15">
+                <Label VerticalAlignment="Center" HorizontalAlignment="Center"
+                       Foreground="{StaticResource solid-color-brush-logo-orange}" Content="L I M I T S" FontWeight="Bold"/>
+              </Border>
+              <Grid Margin="0,-5,0,0" Row="1" Column="0" ColumnSpan="5" RowSpan="3">
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="32"/>
+                  <RowDefinition Height="32"/>
+                  <RowDefinition Height="32"/>
+                  <RowDefinition Height="32"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition/>
+                  <ColumnDefinition/>
+                  <ColumnDefinition/>
+                  <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Margin="0,0,5,0" VerticalAlignment="Center"
+                       HorizontalAlignment="Right" Content="Rows:" FontWeight="Bold"/>
+                <TextBox x:Name="txtRowLimit" Grid.Row="0" Grid.Column="1" TabIndex="5" MinWidth="60" Width="60"
+                         Margin="0,0,0,0" Padding="2,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"
+                         Text="{Binding GameSetting.RowLimit, Mode=TwoWay, Converter={StaticResource NullableValueConverter}}"/>
+                <Label Grid.Row="0" Grid.Column="2" Margin="0,0,5,0" VerticalAlignment="Center"
+                       HorizontalAlignment="Right" Content="R1 Win:" FontWeight="Bold"/>
+                <TextBox x:Name="txtR1W" Grid.Row="0" Grid.Column="3" TabIndex="8" MinWidth="60" Width="60" Margin="0,0,0,0"
+                         Padding="2,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"
+                         Text="{Binding GameSetting.R1WLimit, Mode=TwoWay, Converter={StaticResource NullableValueConverter}}"/>
+                <Label Grid.Row="1" Grid.Column="0" Margin="0,0,5,0" VerticalAlignment="Center"
+                       HorizontalAlignment="Right" Content="GS:" FontWeight="Bold"/>
+                <TextBox x:Name="txtGSLimit" Grid.Row="1" Grid.Column="1" TabIndex="7" MinWidth="60" Width="60"
+                         Margin="0,0,0,0" Padding="2,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"
+                         Text="{Binding GameSetting.GSLimit, Mode=TwoWay, Converter={StaticResource NullableValueConverter}}"/>
+                <Label Grid.Row="1" Grid.Column="2" Margin="0,0,5,0" VerticalAlignment="Center"
+                       HorizontalAlignment="Right" Content="T Win:" FontWeight="Bold"/>
+                <TextBox x:Name="txtTW" Grid.Row="1" Grid.Column="3" TabIndex="9" MinWidth="60" Width="60" Margin="0,0,0,0"
+                         Padding="2,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"
+                         Text="{Binding GameSetting.TWLimit, Mode=TwoWay, Converter={StaticResource NullableValueConverter}}"/>
+                <Label Grid.Row="2" Grid.Column="0" Margin="0,0,5,0" VerticalAlignment="Center"
+                       HorizontalAlignment="Right" Content="Count:" FontWeight="Bold"/>
+                <TextBox x:Name="txtCountLimit" Grid.Row="2" Grid.Column="1" TabIndex="6" MinWidth="60" Width="60"
+                         Margin="0,0,0,0" Padding="2,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"
+                         Text="{Binding GameSetting.CountLimit, Mode=TwoWay, Converter={StaticResource NullableValueConverter}}"/>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid Row="3" VerticalAlignment="Bottom" Column="1" ColumnSpan="2" HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+              <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition/>
+              <ColumnDefinition Width="10"/>
+              <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Click="btnSaveSettings_Click" x:Name="btnSaveSettings" Grid.Row="0" Grid.Column="0"
+                    VerticalAlignment="Top" Width="100" Background="{StaticResource solid-color-brush-light-blue}"
+                    HorizontalAlignment="Center" Margin="5,10,5,5" TabIndex="11">
+              <ContentControl.Content>
+                <TextBlock Text="SAVE" Foreground="WhiteSmoke">
+                  <UIElement.Effect>
+                    <DropShadowEffect BlurRadius="4" ShadowDepth="3" Color="Black" Opacity="0.8"/>
+                  </UIElement.Effect>
+                </TextBlock>
+              </ContentControl.Content>
+              <UIElement.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.8" Color="{StaticResource light-blue-color}"/>
+              </UIElement.Effect>
+            </Button>
+            <Button Click="btnCancel_Click" x:Name="btnCancel" Grid.Row="0" Grid.Column="2" VerticalAlignment="Top"
+                    Width="100" Background="{StaticResource solid-color-brush-orange-red}" HorizontalAlignment="Center"
+                    Margin="5,10,5,5" TabIndex="11">
+              <ContentControl.Content>
+                <TextBlock Text="CANCEL" Foreground="WhiteSmoke">
+                  <UIElement.Effect>
+                    <DropShadowEffect BlurRadius="4" ShadowDepth="3" Color="Black" Opacity="0.8"/>
+                  </UIElement.Effect>
+                </TextBlock>
+              </ContentControl.Content>
+              <UIElement.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.8" Color="{StaticResource orange-red-color}"/>
+              </UIElement.Effect>
+            </Button>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Border>
+  </Grid>
+</Window>

@@ -1,0 +1,289 @@
+<Window x:Class="Infinity.Roulette.Main"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:constants="clr-namespace:Infinity.Data.Constants;assembly=Infinity.Data"
+        xmlns:convert="clr-namespace:Infinity.Roulette.Converters"
+        ui:WindowHelper.UseModernWindowStyle="True"
+        WindowStartupLocation="CenterScreen" UseLayoutRounding="True" AllowsTransparency="True"
+        WindowStyle="None" BorderThickness="0" ui:TitleBar.ExtendViewIntoTitleBar="True"
+        Background="Transparent" ResizeMode="CanMinimize" Title="Dashboard" SizeToContent="WidthAndHeight"
+        MinWidth="400" SnapsToDevicePixels="True" Icon="/roulette.ico">
+    <FrameworkElement.Resources>
+        <convert:GameTypeConverter x:Key="GameTypeConverter"/>
+        <convert:VisibilityConverter x:Key="VisibilityConverter"/>
+        <convert:NullableValueConverter x:Key="NullableValueConverter"/>
+    </FrameworkElement.Resources>
+    <ui:TitleBar.Style>
+        <Style TargetType="{x:Type ui:TitleBarControl}">
+            <Setter Property="FrameworkElement.Margin" Value="2"/>
+        </Style>
+    </ui:TitleBar.Style>
+    <Grid Margin="-2">
+        <Border BorderBrush="Black" Background="Black" BorderThickness="4" CornerRadius="10">
+            <Grid Margin="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid Background="Black" Row="0">
+                    <Image Source="{StaticResource redesign-background-image}" MaxHeight="35" Margin="5,0,0,0" HorizontalAlignment="Left"/>
+                </Grid>
+                <Grid Background="#FF282828" Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="28"/>
+                        <RowDefinition Height="28"/>
+                        <RowDefinition Height="28"/>
+                        <RowDefinition Height="28"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="120"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="5"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="86*"/>
+                        <ColumnDefinition Width="71*"/>
+                        <ColumnDefinition Width="57*"/>
+                        <ColumnDefinition Width="86"/>
+                        <ColumnDefinition Width="81"/>
+                        <ColumnDefinition Width="67*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Row="0" Column="0" ColumnSpan="6" Margin="5,2,5,5" Height="25">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="6"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" Margin="2,0,5,0" ToolTip="100% Match"
+                   HorizontalContentAlignment="Right" VerticalContentAlignment="Center"
+                   Style="{StaticResource match-counter-label}">
+                            <ContentControl.Content>
+                                <TextBlock x:Name="ExactMatchCount" Foreground="#CC9933" Text="{Binding ExactMatchCount}"
+                           FontSize="{Binding ExactMatchFontSize}"/>
+                            </ContentControl.Content>
+                        </Label>
+                        <Label Grid.Row="0" Grid.Column="1" Margin="2,0,5,0" ToolTip="R1W Match"
+                   HorizontalContentAlignment="Right" VerticalContentAlignment="Center"
+                   Style="{StaticResource match-counter-label}">
+                            <ContentControl.Content>
+                                <TextBlock x:Name="R1WMatchCount" Foreground="#FF0000" Text="{Binding R1WMatchCount}"
+                           FontSize="{Binding R1WMatchFontSize}"/>
+                            </ContentControl.Content>
+                        </Label>
+                        <Label Grid.Row="0" Grid.Column="2" Margin="2,0,5,0" ToolTip="TW Match" HorizontalContentAlignment="Right"
+                   VerticalContentAlignment="Center" Style="{StaticResource match-counter-label}">
+                            <ContentControl.Content>
+                                <TextBlock x:Name="TWMatchCount" Foreground="#009933" Text="{Binding TWMatchCount}"
+                           FontSize="{Binding TWMatchFontSize}"/>
+                            </ContentControl.Content>
+                        </Label>
+                        <TextBlock Grid.Row="0" Grid.Column="3" Text="/" Foreground="White" VerticalAlignment="Center"
+                       HorizontalAlignment="Center" FontSize="14"/>
+                        <TextBlock x:Name="EstimatedSpinsTotal" Grid.Row="0" Grid.Column="4" Margin="2,0,2,0" FontSize="14"
+                       VerticalAlignment="Center" HorizontalAlignment="Right"
+                       Text="{Binding CalculatedTotalResults, Converter={StaticResource NullableValueConverter}}"/>
+                    </Grid>
+                    <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,20,0"
+                 VerticalContentAlignment="Center" HorizontalContentAlignment="Right">
+                        <TextBlock Text="Tables:"/>
+                    </Label>
+                    <Label Grid.Row="1" Grid.Column="3" Margin="0,0,5,0" VerticalContentAlignment="Center"
+                 HorizontalContentAlignment="Right">
+                        <TextBlock Text="TW:"/>
+                    </Label>
+                    <Label Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="0" Margin="0,0,20,0"
+                 VerticalContentAlignment="Center" HorizontalContentAlignment="Right">
+                        <TextBlock Text="Randomize:"/>
+                    </Label>
+                    <Label Grid.Row="2" Grid.Column="3" Margin="0,0,5,0" VerticalContentAlignment="Center"
+                 HorizontalContentAlignment="Right">
+                        <TextBlock Text="Count:"/>
+                    </Label>
+                    <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,20,0"
+                 VerticalContentAlignment="Center" HorizontalContentAlignment="Right">
+                        <TextBlock Text="Row:"/>
+                    </Label>
+                    <Label Grid.Row="3" Grid.Column="3" Margin="0,0,5,0" VerticalContentAlignment="Center"
+                 HorizontalContentAlignment="Right">
+                        <TextBlock Text="GS:"/>
+                    </Label>
+                    <Label Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,20,0"
+                 VerticalContentAlignment="Center" HorizontalContentAlignment="Right">
+                        <TextBlock Text="R1W:"/>
+                    </Label>
+                    <Label Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="1" Margin="0,0,5,0" VerticalContentAlignment="Center"
+                 HorizontalContentAlignment="Right"
+                 Visibility="{Binding IsChecked, Converter={StaticResource VisibilityConverter}, ElementName=rbAutoplay}">
+                        <TextBlock Text="Autoplays:"/>
+                    </Label>
+                    <Grid Row="5" Column="0" ColumnSpan="6" RowSpan="3" Margin="0,8,0,0">
+                        <Grid HorizontalAlignment="Stretch">
+                            <Grid HorizontalAlignment="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="3" Margin="-10, 15, -10, -10"
+                        BorderThickness="2" CornerRadius="10" BorderBrush="{StaticResource selected-row-green}"/>
+                                <Grid Row="0" Column="0" ColumnSpan="3" Margin="0,0,0,0">
+                                    <Grid HorizontalAlignment="Center">
+                                        <Border BorderBrush="{StaticResource selected-row-green}" BorderThickness="2" CornerRadius="10" Padding="0"
+                            Background="#FF282828">
+                                            <TextBlock Text="SPIN TYPE" Foreground="{StaticResource selected-row-green}" HorizontalAlignment="Center"
+                                 VerticalAlignment="Center" FontSize="18px" Padding="0" Margin="10,0,10,2" MinHeight="10"
+                                 FontWeight="Bold"/>
+                                        </Border>
+                                    </Grid>
+                                </Grid>
+                                <ui:RadioButtons x:Name="rbRandomAuto" Header="" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center"
+                                 Grid.RowSpan="2" Grid.ColumnSpan="3" Margin="10,0,0,0" FontSize="5" MaxColumns="2">
+                                    <RadioButton Checked="rbRandom_Checked" x:Name="rbRandom" Content="Random" HorizontalAlignment="Left"
+                               Style="{StaticResource rbRestyle-orange}"
+                               Foreground="{StaticResource solid-color-brush-lime-green}" TabIndex="9"
+                               IsChecked="{Binding RouletteGameType, Converter={StaticResource GameTypeConverter}, ConverterParameter={x:Static constants:GameType.Random}}"/>
+                                    <RadioButton Checked="rbAutoplay_Checked" x:Name="rbAutoplay" Margin="5,0,5,0" Content="Autoplay"
+                               HorizontalAlignment="Right" Style="{StaticResource rbRestyle-blue}"
+                               Foreground="{StaticResource solid-color-brush-lime-green}" TabIndex="10"
+                               IsChecked="{Binding RouletteGameType, Converter={StaticResource GameTypeConverter}, ConverterParameter={x:Static constants:GameType.Autoplay}}"/>
+                                </ui:RadioButtons>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <TextBox x:Name="txtR1W" Grid.Row="4" Margin="-20,0,20,0" Grid.Column="2" Padding="2,0,0,0"
+                   UseLayoutRounding="True" TabIndex="4"
+                   Text="{Binding R1WLimit, Converter={StaticResource NullableValueConverter}, Mode=TwoWay}"/>
+                    <TextBox x:Name="txtRowLimit" Grid.Row="3" Margin="-20,0,20,0" Grid.Column="2" Padding="2,0,0,0"
+                   UseLayoutRounding="True" TabIndex="3"
+                   Text="{Binding RowLimit, Converter={StaticResource NullableValueConverter}, Mode=TwoWay}"/>
+                    <TextBox x:Name="txtRandom" Grid.Row="2" Margin="-20,0,20,0" Grid.Column="2" Padding="2,0,0,0"
+                   UseLayoutRounding="True" TabIndex="2"
+                   Text="{Binding Random, Converter={StaticResource NullableValueConverter}, Mode=TwoWay}"/>
+                    <TextBox x:Name="txtTables" Grid.Row="1" Margin="-20,0,20,0" Grid.Column="2" Padding="2,0,0,0"
+                   UseLayoutRounding="True" TabIndex="1"
+                   Text="{Binding Tables, Converter={StaticResource NullableValueConverter}, Mode=TwoWay}"/>
+                    <TextBox x:Name="txtTW" Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="2" Margin="0,0,0,0" Padding="2,0,0,0"
+                   UseLayoutRounding="True" HorizontalAlignment="Left" TabIndex="5"
+                   Text="{Binding TWLimit, Converter={StaticResource NullableValueConverter}, Mode=TwoWay}"/>
+                    <TextBox x:Name="txtCountLimit" Grid.Row="2" Margin="0,0,0,0" Grid.Column="4" Grid.ColumnSpan="2"
+                   Padding="2,0,0,0" UseLayoutRounding="True" HorizontalAlignment="Left" TabIndex="6"
+                   Text="{Binding CountLimit, Converter={StaticResource NullableValueConverter}, Mode=TwoWay}"/>
+                    <TextBox x:Name="txtGSLimit" Grid.Row="3" Margin="0,0,0,0" Grid.Column="4" Grid.ColumnSpan="2"
+                   Padding="2,0,0,0" UseLayoutRounding="True" HorizontalAlignment="Left" TabIndex="7"
+                   Text="{Binding GSLimit, Converter={StaticResource NullableValueConverter}, Mode=TwoWay}"/>
+                    <ComboBox x:Name="cbAutoplays" Grid.Row="4" Grid.Column="4" Grid.ColumnSpan="2" Margin="0,0,0,0"
+                    VerticalAlignment="Center" HorizontalAlignment="Left" MinHeight="20" Height="20" TabIndex="8"
+                    ItemsSource="{Binding AutoplayOptions}"
+                    SelectedItem="{Binding SelectedAutoplay, Converter={StaticResource NullableValueConverter}, Mode=TwoWay}"
+                    Visibility="{Binding IsChecked, Converter={StaticResource VisibilityConverter}, ElementName=rbAutoplay}"/>
+                    <Grid Row="8" Column="0" ColumnSpan="6" Height="Auto" Margin="0,15,0,5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Button Click="btnPlay_Click" x:Name="btnPlay" Grid.Row="0" Grid.Column="0" VerticalAlignment="Top"
+                    Background="{StaticResource solid-color-brush-light-blue}" HorizontalAlignment="Center"
+                    Margin="5,10,5,5" TabIndex="11"
+                    Visibility="{Binding ShowRunBtn, Converter={StaticResource VisibilityConverter}}">
+                            <ContentControl.Content>
+                                <TextBlock Text="RUN" Foreground="WhiteSmoke">
+                  <UIElement.Effect>
+                    <DropShadowEffect BlurRadius="4" ShadowDepth="3" Color="Black" Opacity="0.8"/>
+                  </UIElement.Effect>
+                                </TextBlock>
+                            </ContentControl.Content>
+                            <UIElement.Effect>
+                                <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.8" Color="{StaticResource light-blue-color}"/>
+                            </UIElement.Effect>
+                        </Button>
+                        <Button Click="btnStop_Click" x:Name="btnStop" Grid.Row="0" Grid.Column="0" VerticalAlignment="Top"
+                    Background="{StaticResource solid-color-brush-purple}" HorizontalAlignment="Center"
+                    Margin="5,10,5,5" TabIndex="11"
+                    Visibility="{Binding ShowStopBtn, Converter={StaticResource VisibilityConverter}}">
+                            <ContentControl.Content>
+                                <TextBlock Text="STOP" Foreground="WhiteSmoke">
+                  <UIElement.Effect>
+                    <DropShadowEffect BlurRadius="4" ShadowDepth="3" Color="Black" Opacity="0.8"/>
+                  </UIElement.Effect>
+                                </TextBlock>
+                            </ContentControl.Content>
+                            <UIElement.Effect>
+                                <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.8" Color="{StaticResource light-purple-color}"/>
+                            </UIElement.Effect>
+                        </Button>
+                        <Button Click="btnResults_Click" x:Name="btnResults" Grid.Row="0" Grid.Column="1" VerticalAlignment="Top"
+                    Background="{StaticResource solid-color-brush-orange}" HorizontalAlignment="Center"
+                    Margin="5,10,5,5" TabIndex="11">
+                            <ContentControl.Content>
+                                <TextBlock Text="RESULTS" Foreground="WhiteSmoke">
+                  <UIElement.Effect>
+                    <DropShadowEffect BlurRadius="4" ShadowDepth="3" Color="Black" Opacity="0.8"/>
+                  </UIElement.Effect>
+                                </TextBlock>
+                            </ContentControl.Content>
+                            <UIElement.Effect>
+                                <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.8" Color="{StaticResource orange-color}"/>
+                            </UIElement.Effect>
+                        </Button>
+                        <Button Click="btnNewTable_Click" x:Name="btnNewTable" Grid.Row="2" Grid.Column="0" VerticalAlignment="Top"
+                    Background="{StaticResource selected-row-green}" HorizontalAlignment="Center" Margin="5,10,5,5"
+                    TabIndex="11">
+                            <UIElement.Effect>
+                                <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.8" Color="{StaticResource green-color-04}"/>
+                            </UIElement.Effect>
+                            <TextBlock Text="NEW TABLE" Foreground="WhiteSmoke">
+                <UIElement.Effect>
+                  <DropShadowEffect BlurRadius="4" ShadowDepth="3" Color="Black" Opacity="0.8"/>
+                </UIElement.Effect>
+                            </TextBlock>
+                        </Button>
+                        <Button Click="btnReset_Click" x:Name="btnReset" Grid.Row="2" Grid.Column="1" VerticalAlignment="Top"
+                    Background="{StaticResource solid-color-brush-night-rider}" HorizontalAlignment="Center"
+                    Margin="5,10,5,5" TabIndex="11">
+                            <UIElement.Effect>
+                                <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.8" Color="{StaticResource night-rider}"/>
+                            </UIElement.Effect>
+                            <TextBlock Text="RESET" Foreground="WhiteSmoke">
+                <UIElement.Effect>
+                  <DropShadowEffect BlurRadius="4" ShadowDepth="3" Color="Black" Opacity="0.8"/>
+                </UIElement.Effect>
+                            </TextBlock>
+                        </Button>
+                    </Grid>
+                    <Grid Row="9" Column="0" Margin="0,0,0,0" ColumnSpan="6"
+                Visibility="{Binding Spinning, Converter={StaticResource VisibilityConverter}}">
+                        <ProgressBar x:Name="spinProgression" Style="{StaticResource ProgressBar_2}" Height="30"
+                         HorizontalAlignment="Center" Width="330" HorizontalContentAlignment="Left"
+                         Value="{Binding SpinProgress}"/>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+    <ui:ContextFlyoutService.ContextFlyout>
+        <ui:MenuFlyout>
+            <MenuItem Click="mnuDefaultSettings_Click" x:Name="mnuDefaultSettings" Header="Default Settings"
+                Cursor="Hand" Margin="5,0,5,0"/>
+            <MenuItem Click="mnuGenerateSpinfile_Click" x:Name="mnuGenerateSpinfile" Header="Generate Spinfile"
+                Cursor="Hand" Margin="5,0,5,0"/>
+            <MenuItem x:Name="mnuReworkTester" Header="Rework Test" Cursor="Hand" Margin="5,0,5,0" Click="mnuReworkTester_Click" />
+        </ui:MenuFlyout>
+    </ui:ContextFlyoutService.ContextFlyout>
+</Window>

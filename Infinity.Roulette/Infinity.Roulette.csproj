@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>images\roulette.ico</ApplicationIcon>
+    <AssemblyName>Infinity Roulette</AssemblyName>
+    <PackageIcon>matrix.ico</PackageIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Images\grey_gradient_background_darkest.jpg" />
+    <None Remove="Images\RI_Logo.png" />
+    <None Remove="matrix.ico" />
+    <None Remove="roulette.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="images\roulette.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="ModernWpfUI" Version="0.9.6" />
+    <PackageReference Include="Unity" Version="5.11.10" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Infinity.Roulette.Rework.Data\Infinity.Roulette.Rework.Data.csproj" />
+    <ProjectReference Include="..\Infinity.Roulette.Rework.Services\Infinity.Roulette.Rework.Services.csproj" />
+    <ProjectReference Include="..\Infinity.Services\Infinity.Services.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\grey_gradient_background_darkest.jpg" />
+    <Resource Include="Images\Matrix.ico" />
+    <Resource Include="Images\RI_Logo.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="matrix.ico" />
+    <Resource Include="roulette.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="images\matrix.ico">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+</Project>

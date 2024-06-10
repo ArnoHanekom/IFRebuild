@@ -1,0 +1,91 @@
+﻿<UserControl x:Class="Infinity.Roulette.Controls.DashboardTableSettingsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:convert="clr-namespace:Infinity.Roulette.Converters"
+             mc:Ignorable="d" MinWidth="390" Background="Transparent">
+    <UserControl.Resources>
+        <convert:NullableValueConverter x:Key="NullableValueConverter" x:Name="NullableValueConverter" />
+    </UserControl.Resources>
+    <Grid Margin="5" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" HorizontalContentAlignment="Right" VerticalAlignment="Center">
+            <Label.Content>
+                <TextBlock Text="Tables: " />
+            </Label.Content>
+        </Label>
+        <TextBox x:Name="tbTables" Grid.Row="0" Grid.Column="1" Padding="2,0,0,0" Margin="5,5" UseLayoutRounding="True" HorizontalAlignment="Left" TabIndex="0" 
+                 Text="{Binding CurrentSetting.TablesToPlay, Converter={StaticResource NullableValueConverter}, Mode=TwoWay}" ForceCursor="True" />
+
+        <Label Grid.Row="1" Grid.Column="0" HorizontalContentAlignment="Right" VerticalAlignment="Center">
+            <Label.Content>
+                <TextBlock Text="Randomize: " />
+            </Label.Content>
+        </Label>
+        <TextBox Grid.Row="1" Grid.Column="1" Padding="2,0,0,0" Margin="5,5" UseLayoutRounding="True" HorizontalAlignment="Left" TabIndex="1" 
+                 Text="{Binding CurrentSetting.Randomize, Converter={StaticResource NullableValueConverter}, Mode=TwoWay}" />
+
+        <Label Grid.Row="0" Grid.Column="2" HorizontalContentAlignment="Right" VerticalAlignment="Center">
+            <Label.Content>
+                <TextBlock Text="TW: " />
+            </Label.Content>
+        </Label>
+        <TextBox Grid.Row="0" Grid.Column="3" Padding="2,0,0,0" Margin="5,5" UseLayoutRounding="True" HorizontalAlignment="Left" TabIndex="4" 
+                 Text="{Binding CurrentSetting.TWLimit, Converter={StaticResource NullableValueConverter}, Mode=TwoWay}" />
+
+        <Label Grid.Row="1" Grid.Column="2" HorizontalContentAlignment="Right" VerticalAlignment="Center">
+            <Label.Content>
+                <TextBlock Text="Count: " />
+            </Label.Content>
+        </Label>
+        <TextBox Grid.Row="1" Grid.Column="3" Padding="2,0,0,0" Margin="5,5" UseLayoutRounding="True" HorizontalAlignment="Left" TabIndex="5" 
+                Text="{Binding CurrentSetting.CountLimit, Converter={StaticResource NullableValueConverter}, Mode=TwoWay}" />
+
+        <Label Grid.Row="2" Grid.Column="0" HorizontalContentAlignment="Right" VerticalAlignment="Center">
+            <Label.Content>
+                <TextBlock Text="Row: " />
+            </Label.Content>
+        </Label>
+        <TextBox Grid.Row="2" Grid.Column="1" Padding="2,0,0,0" Margin="5,5" UseLayoutRounding="True" HorizontalAlignment="Left" TabIndex="2" 
+                 Text="{Binding CurrentSetting.RowLimit, Converter={StaticResource NullableValueConverter}, Mode=TwoWay}" />
+
+        <Label Grid.Row="2" Grid.Column="2" HorizontalContentAlignment="Right" VerticalAlignment="Center">
+            <Label.Content>
+                <TextBlock Text="GS: " />
+            </Label.Content>
+        </Label>
+        <TextBox Grid.Row="2" Grid.Column="3" Padding="2,0,0,0" Margin="5,5" UseLayoutRounding="True" HorizontalAlignment="Left" TabIndex="6" 
+                Text="{Binding CurrentSetting.GSLimit, Converter={StaticResource NullableValueConverter}, Mode=TwoWay}" />
+
+        <Label Grid.Row="3" Grid.Column="0" HorizontalContentAlignment="Right" VerticalAlignment="Center">
+            <Label.Content>
+                <TextBlock Text="R1W: " />
+            </Label.Content>
+        </Label>
+        <TextBox Grid.Row="3" Grid.Column="1" Padding="2,0,0,0" Margin="5,5" UseLayoutRounding="True" HorizontalAlignment="Left" TabIndex="3" 
+               Text="{Binding CurrentSetting.R1WLimit, Converter={StaticResource NullableValueConverter}, Mode=TwoWay}" />
+
+        <Label x:Name="lblSelectAutoplays" Grid.Row="3" Grid.Column="2" HorizontalContentAlignment="Right" VerticalAlignment="Center" Visibility="Collapsed">
+            <Label.Content>
+                <TextBlock Text="Autoplays: " />
+            </Label.Content>    
+        </Label>
+        <ComboBox x:Name="cbSelectAutoplays" Grid.Row="3" Grid.Column="3" Padding="2,0,0,0" Margin="5,5" UseLayoutRounding="True" HorizontalAlignment="Left" VerticalAlignment="Center" MinHeight="20" Height="20"
+                 ItemsSource="{Binding Autoplays}" TabIndex="7" Visibility="Collapsed"
+                 SelectedItem="{Binding SelectedAutoplay, Converter={StaticResource NullableValueConverter}, Mode=TwoWay}"></ComboBox>
+
+    </Grid>
+</UserControl>

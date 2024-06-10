@@ -1,0 +1,1213 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Style x:Key="NeonLabel" TargetType="{x:Type Label}">
+    <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="True"/>
+    <Setter Property="Control.FontFamily" Value="Century Gothic"/>
+    <Setter Property="Control.FontSize" Value="14"/>
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type Label}">
+          <Grid>
+            <TextBlock Text="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center"
+                       VerticalAlignment="Center" Foreground="{TemplateBinding Control.Foreground}"
+                       FontSize="{TemplateBinding Control.FontSize}" FontWeight="{TemplateBinding Control.FontWeight}">
+              <UIElement.Effect>
+                <BlurEffect Radius="5"/>
+              </UIElement.Effect>
+            </TextBlock>
+            <TextBlock Text="{TemplateBinding ContentControl.Content}" HorizontalAlignment="Center"
+                       VerticalAlignment="Center" Foreground="{TemplateBinding Control.Foreground}"
+                       FontSize="{TemplateBinding Control.FontSize}" FontWeight="{TemplateBinding Control.FontWeight}"/>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style x:Key="neon-textbox" TargetType="{x:Type TextBox}">
+    <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="True"/>
+    <Setter Property="FrameworkElement.Cursor" Value="Hand"/>
+    <Setter Property="Control.FontFamily" Value="Century Gothic"/>
+    <Setter Property="FrameworkElement.MinWidth" Value="70"/>
+    <Setter Property="FrameworkElement.Width" Value="70"/>
+    <Setter Property="FrameworkElement.VerticalAlignment" Value="Center"/>
+    <Setter Property="FrameworkElement.HorizontalAlignment" Value="Left"/>
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type TextBoxBase}">
+          <Grid>
+            <Border BorderBrush="{TemplateBinding Control.Foreground}" CornerRadius="5" BorderThickness="2"
+                    Background="Black">
+              <UIElement.Effect>
+                <BlurEffect Radius="5"/>
+              </UIElement.Effect>
+            </Border>
+            <Border BorderBrush="{TemplateBinding Control.Foreground}" CornerRadius="5" BorderThickness="1" Margin="1"/>
+            <ScrollViewer x:Name="PART_ContentHost" FontFamily="Century Gothic"
+                          Foreground="{TemplateBinding Control.Foreground}" FontWeight="Bold" Margin="0,0,0,0"
+                          HorizontalAlignment="Left" VerticalAlignment="Center"/>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <ControlTemplate x:Key="cbtb-neon-light-blue" TargetType="{x:Type ToggleButton}">
+    <Grid Height="18" Margin="0,3,0,0" Cursor="Hand">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition/>
+        <ColumnDefinition Width="20"/>
+      </Grid.ColumnDefinitions>
+      <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup x:Name="CommonStates">
+          <VisualState x:Name="Normal"/>
+          <VisualState x:Name="MouseOver">
+            <Storyboard>
+              <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[1].(GradientStop.Color)"
+                                            Storyboard.TargetName="Border2">
+                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource neon-light-blue-color}"/>
+              </ColorAnimationUsingKeyFrames>
+            </Storyboard>
+          </VisualState>
+          <VisualState x:Name="Pressed"/>
+          <VisualState x:Name="Disabled">
+            <Storyboard>
+              <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[1].(GradientStop.Color)"
+                                            Storyboard.TargetName="Border2">
+                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource DisabledControlDarkColor}"/>
+              </ColorAnimationUsingKeyFrames>
+              <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="Arrow">
+                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource DisabledForegroundColor}"/>
+              </ColorAnimationUsingKeyFrames>
+              <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(GradientBrush.GradientStops)[1].(GradientStop.Color)"
+                                            Storyboard.TargetName="Border2">
+                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource DisabledBorderDarkColor}"/>
+              </ColorAnimationUsingKeyFrames>
+            </Storyboard>
+          </VisualState>
+        </VisualStateGroup>
+        <VisualStateGroup x:Name="CheckStates">
+          <VisualState x:Name="Checked">
+            <Storyboard>
+              <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[1].(GradientStop.Color)"
+                                            Storyboard.TargetName="Border2">
+                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource neon-light-blue-color}"/>
+              </ColorAnimationUsingKeyFrames>
+            </Storyboard>
+          </VisualState>
+          <VisualState x:Name="Unchecked"/>
+          <VisualState x:Name="Indeterminate"/>
+        </VisualStateGroup>
+      </VisualStateManager.VisualStateGroups>
+      <Border x:Name="Border" Grid.ColumnSpan="2" CornerRadius="2" BorderThickness="2"
+              BorderBrush="{StaticResource neon-light-blue}">
+        <UIElement.Effect>
+          <BlurEffect Radius="5"/>
+        </UIElement.Effect>
+      </Border>
+      <Border x:Name="Border2" Grid.ColumnSpan="2" CornerRadius="2" Margin="1" BorderThickness="1"
+              BorderBrush="{StaticResource neon-light-blue}">
+        <Border.Background>
+          <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientBrush.GradientStops>
+              <GradientStopCollection>
+                <GradientStop Color="Black"/>
+                <GradientStop Color="Black" Offset="1.0"/>
+              </GradientStopCollection>
+            </GradientBrush.GradientStops>
+          </LinearGradientBrush>
+        </Border.Background>
+      </Border>
+      <Border Grid.Column="0" CornerRadius="2,0,0,2" Margin="1" Background="{StaticResource neon-light-blue}"/>
+      <Path x:Name="Arrow" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+            Data="M 0,0 L 4,4 8,0 Z">
+        <Shape.Fill>
+          <SolidColorBrush Color="{DynamicResource neon-light-blue-color}"/>
+        </Shape.Fill>
+        <UIElement.Effect>
+          <BlurEffect Radius="5"/>
+        </UIElement.Effect>
+      </Path>
+      <Path x:Name="Arrow2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+            Data="M 0,0 L 4,4 8,0 Z">
+        <Shape.Fill>
+          <SolidColorBrush Color="{DynamicResource neon-light-blue-color}"/>
+        </Shape.Fill>
+      </Path>
+    </Grid>
+  </ControlTemplate>
+  <ControlTemplate x:Key="cbtb-neon-red" TargetType="{x:Type ToggleButton}">
+    <Grid Height="18" Margin="0,3,0,0" Cursor="Hand">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition/>
+        <ColumnDefinition Width="20"/>
+      </Grid.ColumnDefinitions>
+      <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup x:Name="CommonStates">
+          <VisualState x:Name="Normal"/>
+          <VisualState x:Name="MouseOver">
+            <Storyboard>
+              <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[1].(GradientStop.Color)"
+                                            Storyboard.TargetName="Border2">
+                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource neon-red-color}"/>
+              </ColorAnimationUsingKeyFrames>
+            </Storyboard>
+          </VisualState>
+          <VisualState x:Name="Pressed"/>
+          <VisualState x:Name="Disabled">
+            <Storyboard>
+              <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[1].(GradientStop.Color)"
+                                            Storyboard.TargetName="Border2">
+                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource DisabledControlDarkColor}"/>
+              </ColorAnimationUsingKeyFrames>
+              <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="Arrow">
+                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource DisabledForegroundColor}"/>
+              </ColorAnimationUsingKeyFrames>
+              <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(GradientBrush.GradientStops)[1].(GradientStop.Color)"
+                                            Storyboard.TargetName="Border2">
+                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource DisabledBorderDarkColor}"/>
+              </ColorAnimationUsingKeyFrames>
+            </Storyboard>
+          </VisualState>
+        </VisualStateGroup>
+        <VisualStateGroup x:Name="CheckStates">
+          <VisualState x:Name="Checked">
+            <Storyboard>
+              <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[1].(GradientStop.Color)"
+                                            Storyboard.TargetName="Border2">
+                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource neon-red-color}"/>
+              </ColorAnimationUsingKeyFrames>
+            </Storyboard>
+          </VisualState>
+          <VisualState x:Name="Unchecked"/>
+          <VisualState x:Name="Indeterminate"/>
+        </VisualStateGroup>
+      </VisualStateManager.VisualStateGroups>
+      <Border x:Name="Border" Grid.ColumnSpan="2" CornerRadius="2" BorderThickness="2"
+              BorderBrush="{StaticResource neon-red}">
+        <UIElement.Effect>
+          <BlurEffect Radius="5"/>
+        </UIElement.Effect>
+      </Border>
+      <Border x:Name="Border2" Grid.ColumnSpan="2" CornerRadius="2" Margin="1" BorderThickness="1"
+              BorderBrush="{StaticResource neon-red}">
+        <Border.Background>
+          <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientBrush.GradientStops>
+              <GradientStopCollection>
+                <GradientStop Color="Black"/>
+                <GradientStop Color="Black" Offset="1.0"/>
+              </GradientStopCollection>
+            </GradientBrush.GradientStops>
+          </LinearGradientBrush>
+        </Border.Background>
+      </Border>
+      <Border Grid.Column="0" CornerRadius="2,0,0,2" Margin="1" Background="{StaticResource neon-red}"/>
+      <Path x:Name="Arrow" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+            Data="M 0,0 L 4,4 8,0 Z">
+        <Shape.Fill>
+          <SolidColorBrush Color="{DynamicResource neon-red-color}"/>
+        </Shape.Fill>
+        <UIElement.Effect>
+          <BlurEffect Radius="5"/>
+        </UIElement.Effect>
+      </Path>
+      <Path x:Name="Arrow2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+            Data="M 0,0 L 4,4 8,0 Z">
+        <Shape.Fill>
+          <SolidColorBrush Color="{DynamicResource neon-red-color}"/>
+        </Shape.Fill>
+      </Path>
+    </Grid>
+  </ControlTemplate>
+  <ControlTemplate x:Key="cbtb-neon-orange" TargetType="{x:Type ToggleButton}">
+    <Grid Height="18" Margin="0,3,0,0" Cursor="Hand">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition/>
+        <ColumnDefinition Width="20"/>
+      </Grid.ColumnDefinitions>
+      <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup x:Name="CommonStates">
+          <VisualState x:Name="Normal"/>
+          <VisualState x:Name="MouseOver">
+            <Storyboard>
+              <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[1].(GradientStop.Color)"
+                                            Storyboard.TargetName="Border2">
+                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource neon-orange-color}"/>
+              </ColorAnimationUsingKeyFrames>
+            </Storyboard>
+          </VisualState>
+          <VisualState x:Name="Pressed"/>
+          <VisualState x:Name="Disabled">
+            <Storyboard>
+              <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[1].(GradientStop.Color)"
+                                            Storyboard.TargetName="Border2">
+                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource DisabledControlDarkColor}"/>
+              </ColorAnimationUsingKeyFrames>
+              <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="Arrow">
+                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource DisabledForegroundColor}"/>
+              </ColorAnimationUsingKeyFrames>
+              <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(GradientBrush.GradientStops)[1].(GradientStop.Color)"
+                                            Storyboard.TargetName="Border2">
+                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource DisabledBorderDarkColor}"/>
+              </ColorAnimationUsingKeyFrames>
+            </Storyboard>
+          </VisualState>
+        </VisualStateGroup>
+        <VisualStateGroup x:Name="CheckStates">
+          <VisualState x:Name="Checked">
+            <Storyboard>
+              <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[1].(GradientStop.Color)"
+                                            Storyboard.TargetName="Border2">
+                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource neon-orange-color}"/>
+              </ColorAnimationUsingKeyFrames>
+            </Storyboard>
+          </VisualState>
+          <VisualState x:Name="Unchecked"/>
+          <VisualState x:Name="Indeterminate"/>
+        </VisualStateGroup>
+      </VisualStateManager.VisualStateGroups>
+      <Border x:Name="Border" Grid.ColumnSpan="2" CornerRadius="2" BorderThickness="2"
+              BorderBrush="{StaticResource neon-orange}">
+        <UIElement.Effect>
+          <BlurEffect Radius="5"/>
+        </UIElement.Effect>
+      </Border>
+      <Border x:Name="Border2" Grid.ColumnSpan="2" CornerRadius="2" Margin="1" BorderThickness="1"
+              BorderBrush="{StaticResource neon-orange}">
+        <Border.Background>
+          <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientBrush.GradientStops>
+              <GradientStopCollection>
+                <GradientStop Color="Black"/>
+                <GradientStop Color="Black" Offset="1.0"/>
+              </GradientStopCollection>
+            </GradientBrush.GradientStops>
+          </LinearGradientBrush>
+        </Border.Background>
+      </Border>
+      <Border Grid.Column="0" CornerRadius="2,0,0,2" Margin="1" Background="{StaticResource neon-orange}"/>
+      <Path x:Name="Arrow" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+            Data="M 0,0 L 4,4 8,0 Z">
+        <Shape.Fill>
+          <SolidColorBrush Color="{DynamicResource neon-orange-color}"/>
+        </Shape.Fill>
+        <UIElement.Effect>
+          <BlurEffect Radius="5"/>
+        </UIElement.Effect>
+      </Path>
+      <Path x:Name="Arrow2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+            Data="M 0,0 L 4,4 8,0 Z">
+        <Shape.Fill>
+          <SolidColorBrush Color="{DynamicResource neon-orange-color}"/>
+        </Shape.Fill>
+      </Path>
+    </Grid>
+  </ControlTemplate>
+  <ControlTemplate x:Key="ComboBoxTextBox" TargetType="{x:Type TextBox}">
+    <Border x:Name="PART_ContentHost" Focusable="False" Background="{TemplateBinding Control.Background}"/>
+  </ControlTemplate>
+  <Style x:Key="cb-neon-light-blue" TargetType="{x:Type ComboBox}">
+    <Setter Property="UIElement.SnapsToDevicePixels" Value="true"/>
+    <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="true"/>
+    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+    <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+    <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+    <Setter Property="Control.Foreground" Value="{StaticResource neon-light-blue}"/>
+    <Setter Property="FrameworkElement.MinWidth" Value="80"/>
+    <Setter Property="Control.FontFamily" Value="Century Gothic"/>
+    <Setter Property="FrameworkElement.MinHeight" Value="30"/>
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type ComboBox}">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="2*"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <VisualStateManager.VisualStateGroups>
+              <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal"/>
+                <VisualState x:Name="MouseOver"/>
+                <VisualState x:Name="Disabled">
+                  <Storyboard>
+                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="PART_EditableTextBox"
+                                                  Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)">
+                      <EasingColorKeyFrame KeyTime="0" Value="{StaticResource DisabledForegroundColor}"/>
+                    </ColorAnimationUsingKeyFrames>
+                  </Storyboard>
+                </VisualState>
+              </VisualStateGroup>
+              <VisualStateGroup x:Name="EditStates">
+                <VisualState x:Name="Editable">
+                  <Storyboard>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="PART_EditableTextBox">
+                      <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                    </ObjectAnimationUsingKeyFrames>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="ContentSite">
+                      <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Hidden}"/>
+                    </ObjectAnimationUsingKeyFrames>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Uneditable"/>
+              </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+            <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="1,4,1,1" Background="Black"
+                    BorderThickness="2" BorderBrush="{StaticResource neon-light-blue}" CornerRadius="5">
+              <UIElement.Effect>
+                <BlurEffect Radius="5"/>
+              </UIElement.Effect>
+            </Border>
+            <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="2,5,2,2" Background="Black"
+                    BorderThickness="1" BorderBrush="{StaticResource neon-light-blue}" CornerRadius="5"/>
+            <ToggleButton x:Name="ToggleButton" Template="{StaticResource cbtb-neon-light-blue}" Grid.Column="2"
+                          HorizontalAlignment="Right" Margin="0,0,5,0" Focusable="false" ClickMode="Press"
+                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+            <ContentPresenter x:Name="ContentSite" IsHitTestVisible="False" Content="{TemplateBinding ComboBox.SelectionBoxItem}"
+                              ContentTemplate="{TemplateBinding ComboBox.SelectionBoxItemTemplate}"
+                              ContentTemplateSelector="{TemplateBinding ItemsControl.ItemTemplateSelector}" Margin="7,6,5,3"
+                              VerticalAlignment="Stretch" HorizontalAlignment="Left">
+              <FrameworkElement.Resources>
+                <Style TargetType="{x:Type TextBlock}">
+                  <Setter Property="TextBlock.Foreground" Value="{StaticResource neon-light-blue}"/>
+                </Style>
+              </FrameworkElement.Resources>
+              <UIElement.Effect>
+                <BlurEffect Radius="5"/>
+              </UIElement.Effect>
+            </ContentPresenter>
+            <ContentPresenter x:Name="ContentSite2" IsHitTestVisible="False"
+                              Content="{TemplateBinding ComboBox.SelectionBoxItem}"
+                              ContentTemplate="{TemplateBinding ComboBox.SelectionBoxItemTemplate}"
+                              ContentTemplateSelector="{TemplateBinding ItemsControl.ItemTemplateSelector}" Margin="7,8,5,3"
+                              VerticalAlignment="Stretch" HorizontalAlignment="Left">
+              <FrameworkElement.Resources>
+                <Style TargetType="{x:Type TextBlock}">
+                  <Setter Property="TextBlock.Foreground" Value="{StaticResource neon-light-blue}"/>
+                </Style>
+              </FrameworkElement.Resources>
+              <UIElement.Effect>
+                <BlurEffect Radius="0"/>
+              </UIElement.Effect>
+            </ContentPresenter>
+            <TextBox x:Name="PART_EditableTextBox" Template="{StaticResource ComboBoxTextBox}"
+                     HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="7,8,5,3" Focusable="True"
+                     Foreground="{StaticResource neon-light-blue}" Background="Transparent" Visibility="Hidden"
+                     IsReadOnly="{TemplateBinding ComboBox.IsReadOnly}" Style="{x:Null}"/>
+            <Popup x:Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding ComboBox.IsDropDownOpen}"
+                   AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">
+              <Grid x:Name="DropDown" SnapsToDevicePixels="True"
+                    MinWidth="{TemplateBinding FrameworkElement.ActualWidth}"
+                    MaxHeight="{TemplateBinding ComboBox.MaxDropDownHeight}">
+                <Border x:Name="DropDownBorder" BorderThickness="2">
+                  <Border.BorderBrush>
+                    <SolidColorBrush Color="{DynamicResource neon-light-blue-color}"/>
+                  </Border.BorderBrush>
+                  <Border.Background>
+                    <SolidColorBrush Color="Black"/>
+                  </Border.Background>
+                </Border>
+                <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
+                  <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
+                </ScrollViewer>
+              </Grid>
+            </Popup>
+          </Grid>
+          <ControlTemplate.Triggers>
+            <Trigger Property="ItemsControl.HasItems" Value="false">
+              <Setter TargetName="DropDownBorder" Property="FrameworkElement.MinHeight" Value="95"/>
+            </Trigger>
+            <Trigger Property="ItemsControl.IsGrouping" Value="true">
+              <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+            </Trigger>
+            <Trigger SourceName="Popup" Property="Popup.AllowsTransparency" Value="true">
+              <Setter TargetName="DropDownBorder" Property="Border.CornerRadius" Value="4"/>
+              <Setter TargetName="DropDownBorder" Property="FrameworkElement.Margin" Value="0,2,0,0"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style x:Key="cb-neon-red" TargetType="{x:Type ComboBox}">
+    <Setter Property="UIElement.SnapsToDevicePixels" Value="true"/>
+    <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="true"/>
+    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+    <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+    <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+    <Setter Property="Control.Foreground" Value="{StaticResource neon-red}"/>
+    <Setter Property="FrameworkElement.MinWidth" Value="80"/>
+    <Setter Property="Control.FontFamily" Value="Century Gothic"/>
+    <Setter Property="FrameworkElement.MinHeight" Value="30"/>
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type ComboBox}">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="2*"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <VisualStateManager.VisualStateGroups>
+              <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal"/>
+                <VisualState x:Name="MouseOver"/>
+                <VisualState x:Name="Disabled">
+                  <Storyboard>
+                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="PART_EditableTextBox"
+                                                  Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)">
+                      <EasingColorKeyFrame KeyTime="0" Value="{StaticResource DisabledForegroundColor}"/>
+                    </ColorAnimationUsingKeyFrames>
+                  </Storyboard>
+                </VisualState>
+              </VisualStateGroup>
+              <VisualStateGroup x:Name="EditStates">
+                <VisualState x:Name="Editable">
+                  <Storyboard>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="PART_EditableTextBox">
+                      <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                    </ObjectAnimationUsingKeyFrames>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="ContentSite">
+                      <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Hidden}"/>
+                    </ObjectAnimationUsingKeyFrames>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Uneditable"/>
+              </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+            <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="1,4,1,1" Background="Black"
+                    BorderThickness="2" BorderBrush="{StaticResource neon-red}" CornerRadius="5">
+              <UIElement.Effect>
+                <BlurEffect Radius="5"/>
+              </UIElement.Effect>
+            </Border>
+            <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="2,5,2,2" Background="Black"
+                    BorderThickness="1" BorderBrush="{StaticResource neon-red}" CornerRadius="5"/>
+            <ToggleButton x:Name="ToggleButton" Template="{StaticResource cbtb-neon-red}" Grid.Column="2"
+                          HorizontalAlignment="Right" Margin="0,0,5,0" Focusable="false" ClickMode="Press"
+                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+            <ContentPresenter x:Name="ContentSite" IsHitTestVisible="False" Content="{TemplateBinding ComboBox.SelectionBoxItem}"
+                              ContentTemplate="{TemplateBinding ComboBox.SelectionBoxItemTemplate}"
+                              ContentTemplateSelector="{TemplateBinding ItemsControl.ItemTemplateSelector}" Margin="7,8,5,3"
+                              VerticalAlignment="Stretch" HorizontalAlignment="Left">
+              <FrameworkElement.Resources>
+                <Style TargetType="{x:Type TextBlock}">
+                  <Setter Property="TextBlock.Foreground" Value="{StaticResource neon-red}"/>
+                  <Setter Property="TextBlock.Padding" Value="1"/>
+                </Style>
+              </FrameworkElement.Resources>
+              <UIElement.Effect>
+                <BlurEffect Radius="5"/>
+              </UIElement.Effect>
+            </ContentPresenter>
+            <ContentPresenter x:Name="ContentSite2" IsHitTestVisible="False"
+                              Content="{TemplateBinding ComboBox.SelectionBoxItem}"
+                              ContentTemplate="{TemplateBinding ComboBox.SelectionBoxItemTemplate}"
+                              ContentTemplateSelector="{TemplateBinding ItemsControl.ItemTemplateSelector}" Margin="7,8,5,3"
+                              VerticalAlignment="Stretch" HorizontalAlignment="Left">
+              <FrameworkElement.Resources>
+                <Style TargetType="{x:Type TextBlock}">
+                  <Setter Property="TextBlock.Foreground" Value="{StaticResource neon-red}"/>
+                  <Setter Property="TextBlock.Padding" Value="1"/>
+                </Style>
+              </FrameworkElement.Resources>
+              <UIElement.Effect>
+                <BlurEffect Radius="0"/>
+              </UIElement.Effect>
+            </ContentPresenter>
+            <TextBox x:Name="PART_EditableTextBox" Template="{StaticResource ComboBoxTextBox}"
+                     HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="7,8,5,3" Focusable="True"
+                     Foreground="{StaticResource neon-red}" Background="Transparent" Visibility="Hidden"
+                     IsReadOnly="{TemplateBinding ComboBox.IsReadOnly}" Style="{x:Null}"/>
+            <Popup x:Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding ComboBox.IsDropDownOpen}"
+                   AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">
+              <Grid x:Name="DropDown" SnapsToDevicePixels="True"
+                    MinWidth="{TemplateBinding FrameworkElement.ActualWidth}"
+                    MaxHeight="{TemplateBinding ComboBox.MaxDropDownHeight}">
+                <Border x:Name="DropDownBorder" BorderThickness="2">
+                  <Border.BorderBrush>
+                    <SolidColorBrush Color="{DynamicResource neon-red-color}"/>
+                  </Border.BorderBrush>
+                  <Border.Background>
+                    <SolidColorBrush Color="Black"/>
+                  </Border.Background>
+                </Border>
+                <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
+                  <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
+                </ScrollViewer>
+              </Grid>
+            </Popup>
+          </Grid>
+          <ControlTemplate.Triggers>
+            <Trigger Property="ItemsControl.HasItems" Value="false">
+              <Setter TargetName="DropDownBorder" Property="FrameworkElement.MinHeight" Value="95"/>
+            </Trigger>
+            <Trigger Property="ItemsControl.IsGrouping" Value="true">
+              <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+            </Trigger>
+            <Trigger SourceName="Popup" Property="Popup.AllowsTransparency" Value="true">
+              <Setter TargetName="DropDownBorder" Property="Border.CornerRadius" Value="4"/>
+              <Setter TargetName="DropDownBorder" Property="FrameworkElement.Margin" Value="0,2,0,0"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style x:Key="cb-neon-orange" TargetType="{x:Type ComboBox}">
+    <Setter Property="UIElement.SnapsToDevicePixels" Value="true"/>
+    <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="true"/>
+    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+    <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+    <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+    <Setter Property="Control.Foreground" Value="{StaticResource neon-orange}"/>
+    <Setter Property="FrameworkElement.MinWidth" Value="80"/>
+    <Setter Property="Control.FontFamily" Value="Century Gothic"/>
+    <Setter Property="FrameworkElement.MinHeight" Value="30"/>
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type ComboBox}">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="2*"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <VisualStateManager.VisualStateGroups>
+              <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal"/>
+                <VisualState x:Name="MouseOver"/>
+                <VisualState x:Name="Disabled">
+                  <Storyboard>
+                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="PART_EditableTextBox"
+                                                  Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)">
+                      <EasingColorKeyFrame KeyTime="0" Value="{StaticResource DisabledForegroundColor}"/>
+                    </ColorAnimationUsingKeyFrames>
+                  </Storyboard>
+                </VisualState>
+              </VisualStateGroup>
+              <VisualStateGroup x:Name="EditStates">
+                <VisualState x:Name="Editable">
+                  <Storyboard>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="PART_EditableTextBox">
+                      <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                    </ObjectAnimationUsingKeyFrames>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="ContentSite">
+                      <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Hidden}"/>
+                    </ObjectAnimationUsingKeyFrames>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Uneditable"/>
+              </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+            <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="1,4,1,1" Background="Black"
+                    BorderThickness="2" BorderBrush="{StaticResource neon-orange}" CornerRadius="5">
+              <UIElement.Effect>
+                <BlurEffect Radius="5"/>
+              </UIElement.Effect>
+            </Border>
+            <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="2,5,2,2" Background="Black"
+                    BorderThickness="1" BorderBrush="{StaticResource neon-orange}" CornerRadius="5"/>
+            <ToggleButton x:Name="ToggleButton" Template="{StaticResource cbtb-neon-orange}" Grid.Column="2"
+                          HorizontalAlignment="Right" Margin="0,0,5,0" Focusable="false" ClickMode="Press"
+                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+            <ContentPresenter x:Name="ContentSite" IsHitTestVisible="False" Content="{TemplateBinding ComboBox.SelectionBoxItem}"
+                              ContentTemplate="{TemplateBinding ComboBox.SelectionBoxItemTemplate}"
+                              ContentTemplateSelector="{TemplateBinding ItemsControl.ItemTemplateSelector}" Margin="7,8,5,3"
+                              VerticalAlignment="Stretch" HorizontalAlignment="Left">
+              <FrameworkElement.Resources>
+                <Style TargetType="{x:Type TextBlock}">
+                  <Setter Property="TextBlock.Foreground" Value="{StaticResource neon-orange}"/>
+                  <Setter Property="TextBlock.Padding" Value="1"/>
+                </Style>
+              </FrameworkElement.Resources>
+              <UIElement.Effect>
+                <BlurEffect Radius="5"/>
+              </UIElement.Effect>
+            </ContentPresenter>
+            <ContentPresenter x:Name="ContentSite2" IsHitTestVisible="False"
+                              Content="{TemplateBinding ComboBox.SelectionBoxItem}"
+                              ContentTemplate="{TemplateBinding ComboBox.SelectionBoxItemTemplate}"
+                              ContentTemplateSelector="{TemplateBinding ItemsControl.ItemTemplateSelector}" Margin="7,8,5,3"
+                              VerticalAlignment="Stretch" HorizontalAlignment="Left">
+              <FrameworkElement.Resources>
+                <Style TargetType="{x:Type TextBlock}">
+                  <Setter Property="TextBlock.Foreground" Value="{StaticResource neon-orange}"/>
+                  <Setter Property="TextBlock.Padding" Value="1"/>
+                </Style>
+              </FrameworkElement.Resources>
+              <UIElement.Effect>
+                <BlurEffect Radius="0"/>
+              </UIElement.Effect>
+            </ContentPresenter>
+            <TextBox x:Name="PART_EditableTextBox" Template="{StaticResource ComboBoxTextBox}"
+                     HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="7,8,5,3" Focusable="True"
+                     Foreground="{StaticResource neon-orange}" Background="Transparent" Visibility="Hidden"
+                     IsReadOnly="{TemplateBinding ComboBox.IsReadOnly}" Style="{x:Null}"/>
+            <Popup x:Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding ComboBox.IsDropDownOpen}"
+                   AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">
+              <Grid x:Name="DropDown" SnapsToDevicePixels="True"
+                    MinWidth="{TemplateBinding FrameworkElement.ActualWidth}"
+                    MaxHeight="{TemplateBinding ComboBox.MaxDropDownHeight}">
+                <Border x:Name="DropDownBorder" BorderThickness="2">
+                  <Border.BorderBrush>
+                    <SolidColorBrush Color="{DynamicResource neon-orange-color}"/>
+                  </Border.BorderBrush>
+                  <Border.Background>
+                    <SolidColorBrush Color="Black"/>
+                  </Border.Background>
+                </Border>
+                <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
+                  <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
+                </ScrollViewer>
+              </Grid>
+            </Popup>
+          </Grid>
+          <ControlTemplate.Triggers>
+            <Trigger Property="ItemsControl.HasItems" Value="false">
+              <Setter TargetName="DropDownBorder" Property="FrameworkElement.MinHeight" Value="95"/>
+            </Trigger>
+            <Trigger Property="ItemsControl.IsGrouping" Value="true">
+              <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+            </Trigger>
+            <Trigger SourceName="Popup" Property="Popup.AllowsTransparency" Value="true">
+              <Setter TargetName="DropDownBorder" Property="Border.CornerRadius" Value="4"/>
+              <Setter TargetName="DropDownBorder" Property="FrameworkElement.Margin" Value="0,2,0,0"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style x:Key="cbi-neon-light-blue" TargetType="{x:Type ComboBoxItem}">
+    <Setter Property="UIElement.SnapsToDevicePixels" Value="true"/>
+    <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="true"/>
+    <Setter Property="FrameworkElement.Cursor" Value="Hand"/>
+    <Setter Property="Control.FontFamily" Value="Century Gothic"/>
+    <Setter Property="Control.Foreground" Value="{StaticResource neon-light-blue}"/>
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Border x:Name="Border" CornerRadius="5" Padding="2" Margin="1" SnapsToDevicePixels="true"
+                    BorderThickness="2" BorderBrush="Transparent" Background="Transparent">
+              <UIElement.Effect>
+                <BlurEffect Radius="5"/>
+              </UIElement.Effect>
+            </Border>
+            <Border x:Name="Border5" CornerRadius="5" Padding="2" Margin="2" SnapsToDevicePixels="true"
+                    BorderThickness="1" BorderBrush="Transparent" Background="Transparent"/>
+            <Border x:Name="Border4" CornerRadius="5" Padding="2" Margin="1" SnapsToDevicePixels="true"
+                    BorderThickness="2" BorderBrush="Transparent" Background="Transparent"/>
+            <ContentPresenter x:Name="Presenter1" Margin="2">
+              <FrameworkElement.Resources>
+                <Style TargetType="{x:Type TextBlock}">
+                  <Setter Property="TextBlock.Foreground" Value="{StaticResource neon-light-blue}"/>
+                  <Setter Property="FrameworkElement.Margin" Value="4"/>
+                  <Setter Property="TextBlock.Padding" Value="2"/>
+                </Style>
+              </FrameworkElement.Resources>
+              <UIElement.Effect>
+                <BlurEffect Radius="5"/>
+              </UIElement.Effect>
+            </ContentPresenter>
+            <ContentPresenter x:Name="Presenter2" Margin="2">
+              <FrameworkElement.Resources>
+                <Style TargetType="{x:Type TextBlock}">
+                  <Setter Property="TextBlock.Foreground" Value="{StaticResource neon-light-blue}"/>
+                  <Setter Property="FrameworkElement.Margin" Value="4"/>
+                  <Setter Property="TextBlock.Padding" Value="2"/>
+                </Style>
+              </FrameworkElement.Resources>
+              <UIElement.Effect>
+                <BlurEffect Radius="0"/>
+              </UIElement.Effect>
+            </ContentPresenter>
+            <VisualStateManager.VisualStateGroups>
+              <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal"/>
+                <VisualState x:Name="Disabled"/>
+                <VisualState x:Name="MouseOver">
+                  <Storyboard>
+                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border4"
+                                                  Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)">
+                      <EasingColorKeyFrame KeyTime="0" Value="{StaticResource neon-light-blue-color}"/>
+                    </ColorAnimationUsingKeyFrames>
+                  </Storyboard>
+                </VisualState>
+              </VisualStateGroup>
+              <VisualStateGroup x:Name="SelectionStates">
+                <VisualState x:Name="Unselected"/>
+                <VisualState x:Name="Selected">
+                  <Storyboard>
+                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                  Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)">
+                      <EasingColorKeyFrame KeyTime="0" Value="{StaticResource neon-purple-color}"/>
+                    </ColorAnimationUsingKeyFrames>
+                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border5"
+                                                  Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)">
+                      <EasingColorKeyFrame KeyTime="0" Value="{StaticResource neon-purple-color}"/>
+                    </ColorAnimationUsingKeyFrames>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="SelectedUnfocused"/>
+              </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style x:Key="cbi-neon-red" TargetType="{x:Type ComboBoxItem}">
+    <Setter Property="UIElement.SnapsToDevicePixels" Value="true"/>
+    <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="true"/>
+    <Setter Property="FrameworkElement.Cursor" Value="Hand"/>
+    <Setter Property="Control.FontFamily" Value="Century Gothic"/>
+    <Setter Property="Control.Foreground" Value="{StaticResource neon-red}"/>
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Border x:Name="Border" CornerRadius="5" Padding="2" Margin="1" SnapsToDevicePixels="true"
+                    BorderThickness="2" BorderBrush="Transparent" Background="Transparent">
+              <UIElement.Effect>
+                <BlurEffect Radius="5"/>
+              </UIElement.Effect>
+            </Border>
+            <Border x:Name="Border5" CornerRadius="5" Padding="2" Margin="2" SnapsToDevicePixels="true"
+                    BorderThickness="1" BorderBrush="Transparent" Background="Transparent"/>
+            <Border x:Name="Border4" CornerRadius="5" Padding="2" Margin="1" SnapsToDevicePixels="true"
+                    BorderThickness="2" BorderBrush="Transparent" Background="Transparent"/>
+            <ContentPresenter x:Name="Presenter1" Margin="4">
+              <FrameworkElement.Resources>
+                <Style TargetType="{x:Type TextBlock}">
+                  <Setter Property="TextBlock.Foreground" Value="{StaticResource neon-red}"/>
+                  <Setter Property="FrameworkElement.Margin" Value="4"/>
+                  <Setter Property="TextBlock.Padding" Value="2"/>
+                </Style>
+              </FrameworkElement.Resources>
+              <UIElement.Effect>
+                <BlurEffect Radius="5"/>
+              </UIElement.Effect>
+            </ContentPresenter>
+            <ContentPresenter x:Name="Presenter2" Margin="4">
+              <FrameworkElement.Resources>
+                <Style TargetType="{x:Type TextBlock}">
+                  <Setter Property="TextBlock.Foreground" Value="{StaticResource neon-red}"/>
+                  <Setter Property="FrameworkElement.Margin" Value="4"/>
+                  <Setter Property="TextBlock.Padding" Value="2"/>
+                </Style>
+              </FrameworkElement.Resources>
+              <UIElement.Effect>
+                <BlurEffect Radius="0"/>
+              </UIElement.Effect>
+            </ContentPresenter>
+            <VisualStateManager.VisualStateGroups>
+              <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal"/>
+                <VisualState x:Name="Disabled"/>
+                <VisualState x:Name="MouseOver">
+                  <Storyboard>
+                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border4"
+                                                  Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)">
+                      <EasingColorKeyFrame KeyTime="0" Value="{StaticResource neon-red-color}"/>
+                    </ColorAnimationUsingKeyFrames>
+                  </Storyboard>
+                </VisualState>
+              </VisualStateGroup>
+              <VisualStateGroup x:Name="SelectionStates">
+                <VisualState x:Name="Unselected"/>
+                <VisualState x:Name="Selected">
+                  <Storyboard>
+                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                  Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)">
+                      <EasingColorKeyFrame KeyTime="0" Value="{StaticResource neon-red-color}"/>
+                    </ColorAnimationUsingKeyFrames>
+                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border5"
+                                                  Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)">
+                      <EasingColorKeyFrame KeyTime="0" Value="{StaticResource neon-red-color}"/>
+                    </ColorAnimationUsingKeyFrames>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="SelectedUnfocused"/>
+              </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style x:Key="cbi-neon-orange" TargetType="{x:Type ComboBoxItem}">
+    <Setter Property="UIElement.SnapsToDevicePixels" Value="true"/>
+    <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="true"/>
+    <Setter Property="FrameworkElement.Cursor" Value="Hand"/>
+    <Setter Property="Control.FontFamily" Value="Century Gothic"/>
+    <Setter Property="Control.Foreground" Value="{StaticResource neon-orange}"/>
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Border x:Name="Border" CornerRadius="5" Padding="2" Margin="1" SnapsToDevicePixels="true"
+                    BorderThickness="2" BorderBrush="Transparent" Background="Transparent">
+              <UIElement.Effect>
+                <BlurEffect Radius="5"/>
+              </UIElement.Effect>
+            </Border>
+            <Border x:Name="Border5" CornerRadius="5" Padding="2" Margin="2" SnapsToDevicePixels="true"
+                    BorderThickness="1" BorderBrush="Transparent" Background="Transparent"/>
+            <Border x:Name="Border4" CornerRadius="5" Padding="2" Margin="1" SnapsToDevicePixels="true"
+                    BorderThickness="2" BorderBrush="Transparent" Background="Transparent"/>
+            <ContentPresenter x:Name="Presenter1" Margin="4">
+              <FrameworkElement.Resources>
+                <Style TargetType="{x:Type TextBlock}">
+                  <Setter Property="TextBlock.Foreground" Value="{StaticResource neon-orange}"/>
+                  <Setter Property="FrameworkElement.Margin" Value="4"/>
+                  <Setter Property="TextBlock.Padding" Value="2"/>
+                </Style>
+              </FrameworkElement.Resources>
+              <UIElement.Effect>
+                <BlurEffect Radius="5"/>
+              </UIElement.Effect>
+            </ContentPresenter>
+            <ContentPresenter x:Name="Presenter2" Margin="4">
+              <FrameworkElement.Resources>
+                <Style TargetType="{x:Type TextBlock}">
+                  <Setter Property="TextBlock.Foreground" Value="{StaticResource neon-orange}"/>
+                  <Setter Property="FrameworkElement.Margin" Value="4"/>
+                  <Setter Property="TextBlock.Padding" Value="2"/>
+                </Style>
+              </FrameworkElement.Resources>
+              <UIElement.Effect>
+                <BlurEffect Radius="0"/>
+              </UIElement.Effect>
+            </ContentPresenter>
+            <VisualStateManager.VisualStateGroups>
+              <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal"/>
+                <VisualState x:Name="Disabled"/>
+                <VisualState x:Name="MouseOver">
+                  <Storyboard>
+                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border4"
+                                                  Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)">
+                      <EasingColorKeyFrame KeyTime="0" Value="{StaticResource neon-orange-color}"/>
+                    </ColorAnimationUsingKeyFrames>
+                  </Storyboard>
+                </VisualState>
+              </VisualStateGroup>
+              <VisualStateGroup x:Name="SelectionStates">
+                <VisualState x:Name="Unselected"/>
+                <VisualState x:Name="Selected">
+                  <Storyboard>
+                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                  Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)">
+                      <EasingColorKeyFrame KeyTime="0" Value="{StaticResource neon-orange-color}"/>
+                    </ColorAnimationUsingKeyFrames>
+                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border5"
+                                                  Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)">
+                      <EasingColorKeyFrame KeyTime="0" Value="{StaticResource neon-orange-color}"/>
+                    </ColorAnimationUsingKeyFrames>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="SelectedUnfocused"/>
+              </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style x:Key="neon-button" TargetType="{x:Type Button}">
+    <Setter Property="FrameworkElement.Cursor" Value="Hand"/>
+    <Setter Property="Control.FontFamily" Value="Century Gothic"/>
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type Button}">
+          <Grid>
+            <Border x:Name="btnBorder1" Background="{TemplateBinding Control.Background}"
+                    BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="3" CornerRadius="5"
+                    Margin="10,5,10,5" Grid.Row="5" Grid.Column="1">
+              <UIElement.Effect>
+                <BlurEffect Radius="5"/>
+              </UIElement.Effect>
+            </Border>
+            <Border x:Name="btnBorder2" Background="{TemplateBinding Control.Background}" Opacity="1"
+                    BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="5"
+                    Margin="11,6,11,6" Grid.Row="5" Grid.Column="1">
+              <Label x:Name="btnContent" Grid.Row="4" Grid.Column="0"
+                     VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" FontSize="14"
+                     HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
+                     Style="{StaticResource NeonLabel}" Foreground="{TemplateBinding Control.Foreground}"
+                     Content="{TemplateBinding ContentControl.Content}" FontWeight="Bold" Margin="10"/>
+            </Border>
+          </Grid>
+          <ControlTemplate.Triggers>
+            <Trigger Property="UIElement.IsMouseOver" Value="True">
+              <Setter TargetName="btnBorder1" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background}"
+                      Property="Border.BorderBrush"/>
+              <Setter TargetName="btnBorder2" Value="{Binding RelativeSource={RelativeSource Self}, Path=BorderBrush}"
+                      Property="Border.Background"/>
+              <Setter TargetName="btnBorder2" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background}"
+                      Property="Border.BorderBrush"/>
+              <Setter TargetName="btnContent" Value="{Binding ElementName=btnBorder1, Path=Background}"
+                      Property="Control.Foreground"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style x:Key="ResultsGridHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
+          <TextBlock FontSize="18" Foreground="{TemplateBinding Control.Foreground}" FontWeight="SemiBold" Margin="10"
+                     VerticalAlignment="Bottom" HorizontalAlignment="Center" Text="{Binding}"/>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style x:Key="cbGreen" TargetType="{x:Type CheckBox}">
+    <Setter Property="UIElement.SnapsToDevicePixels" Value="true"/>
+    <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="true"/>
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type CheckBox}">
+          <BulletDecorator Background="Transparent">
+            <BulletDecorator.Bullet>
+              <Border x:Name="Border" Width="13" Height="13" CornerRadius="0" BorderThickness="1">
+                <Border.BorderBrush>
+                  <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientBrush.GradientStops>
+                      <GradientStopCollection>
+                        <GradientStop Color="{DynamicResource neon-green-color}" Offset="0.0"/>
+                        <GradientStop Color="{DynamicResource neon-green-color}" Offset="1.0"/>
+                      </GradientStopCollection>
+                    </GradientBrush.GradientStops>
+                  </LinearGradientBrush>
+                </Border.BorderBrush>
+                <Border.Background>
+                  <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientBrush.GradientStops>
+                      <GradientStopCollection>
+                        <GradientStop Color="Transparent"/>
+                        <GradientStop Color="Transparent" Offset="1.0"/>
+                      </GradientStopCollection>
+                    </GradientBrush.GradientStops>
+                  </LinearGradientBrush>
+                </Border.Background>
+                <Grid>
+                  <Path x:Name="CheckMark" Visibility="Collapsed" Width="7" Height="7" SnapsToDevicePixels="False"
+                        StrokeThickness="2" Data="M 0,0 L 7,7 M 0,7 L 7,0 ">
+                    <Shape.Stroke>
+                      <SolidColorBrush Color="{DynamicResource neon-green-color}"/>
+                    </Shape.Stroke>
+                  </Path>
+                  <Path x:Name="InderminateMark" Visibility="Collapsed" Width="7" Height="7" SnapsToDevicePixels="False"
+                        StrokeThickness="2" Data="M 0,7 L 7,0 ">
+                    <Shape.Stroke>
+                      <SolidColorBrush Color="{DynamicResource neon-green-color}"/>
+                    </Shape.Stroke>
+                  </Path>
+                </Grid>
+              </Border>
+            </BulletDecorator.Bullet>
+            <VisualStateManager.VisualStateGroups>
+              <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal"/>
+                <VisualState x:Name="MouseOver">
+                  <Storyboard>
+                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                  Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[1].(GradientStop.Color)">
+                      <EasingColorKeyFrame KeyTime="0" Value="{StaticResource neon-purple-color}"/>
+                    </ColorAnimationUsingKeyFrames>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Pressed">
+                  <Storyboard>
+                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                  Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[1].(GradientStop.Color)">
+                      <EasingColorKeyFrame KeyTime="0" Value="{StaticResource neon-green-color}"/>
+                    </ColorAnimationUsingKeyFrames>
+                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                  Storyboard.TargetProperty="(Border.BorderBrush).(GradientBrush.GradientStops)[0].(GradientStop.Color)">
+                      <EasingColorKeyFrame KeyTime="0" Value="{StaticResource neon-green-color}"/>
+                    </ColorAnimationUsingKeyFrames>
+                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                  Storyboard.TargetProperty="(Border.BorderBrush).(GradientBrush.GradientStops)[1].(GradientStop.Color)">
+                      <EasingColorKeyFrame KeyTime="0" Value="{StaticResource neon-green-color}"/>
+                    </ColorAnimationUsingKeyFrames>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Disabled"/>
+              </VisualStateGroup>
+              <VisualStateGroup x:Name="CheckStates">
+                <VisualState x:Name="Checked">
+                  <Storyboard>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="CheckMark">
+                      <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                    </ObjectAnimationUsingKeyFrames>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Unchecked"/>
+                <VisualState x:Name="Indeterminate">
+                  <Storyboard>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="InderminateMark">
+                      <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                    </ObjectAnimationUsingKeyFrames>
+                  </Storyboard>
+                </VisualState>
+              </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+            <TextBlock Text="{TemplateBinding ContentControl.Content}" Foreground="{StaticResource neon-green}"
+                       Margin="5,0,10,0"/>
+          </BulletDecorator>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style x:Key="cbBlue" TargetType="{x:Type CheckBox}">
+    <Setter Property="UIElement.SnapsToDevicePixels" Value="true"/>
+    <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="true"/>
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type CheckBox}">
+          <BulletDecorator Background="Transparent">
+            <BulletDecorator.Bullet>
+              <Border x:Name="Border" Width="13" Height="13" CornerRadius="0" BorderThickness="1">
+                <Border.BorderBrush>
+                  <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientBrush.GradientStops>
+                      <GradientStopCollection>
+                        <GradientStop Color="{DynamicResource neon-light-blue-color}" Offset="0.0"/>
+                        <GradientStop Color="{DynamicResource neon-light-blue-color}" Offset="1.0"/>
+                      </GradientStopCollection>
+                    </GradientBrush.GradientStops>
+                  </LinearGradientBrush>
+                </Border.BorderBrush>
+                <Border.Background>
+                  <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientBrush.GradientStops>
+                      <GradientStopCollection>
+                        <GradientStop Color="Transparent"/>
+                        <GradientStop Color="Transparent" Offset="1.0"/>
+                      </GradientStopCollection>
+                    </GradientBrush.GradientStops>
+                  </LinearGradientBrush>
+                </Border.Background>
+                <Grid>
+                  <Path x:Name="CheckMark" Visibility="Collapsed" Width="7" Height="7" SnapsToDevicePixels="False"
+                        StrokeThickness="2" Data="M 0,0 L 7,7 M 0,7 L 7,0 ">
+                    <Shape.Stroke>
+                      <SolidColorBrush Color="{DynamicResource neon-light-blue-color}"/>
+                    </Shape.Stroke>
+                  </Path>
+                  <Path x:Name="InderminateMark" Visibility="Collapsed" Width="7" Height="7" SnapsToDevicePixels="False"
+                        StrokeThickness="2" Data="M 0,7 L 7,0 ">
+                    <Shape.Stroke>
+                      <SolidColorBrush Color="{DynamicResource neon-light-blue-color}"/>
+                    </Shape.Stroke>
+                  </Path>
+                </Grid>
+              </Border>
+            </BulletDecorator.Bullet>
+            <VisualStateManager.VisualStateGroups>
+              <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal"/>
+                <VisualState x:Name="MouseOver">
+                  <Storyboard>
+                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                  Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[1].(GradientStop.Color)">
+                      <EasingColorKeyFrame KeyTime="0" Value="{StaticResource neon-purple-color}"/>
+                    </ColorAnimationUsingKeyFrames>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Pressed">
+                  <Storyboard>
+                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                  Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[1].(GradientStop.Color)">
+                      <EasingColorKeyFrame KeyTime="0" Value="{StaticResource neon-light-blue-color}"/>
+                    </ColorAnimationUsingKeyFrames>
+                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                  Storyboard.TargetProperty="(Border.BorderBrush).(GradientBrush.GradientStops)[0].(GradientStop.Color)">
+                      <EasingColorKeyFrame KeyTime="0" Value="{StaticResource neon-light-blue-color}"/>
+                    </ColorAnimationUsingKeyFrames>
+                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                  Storyboard.TargetProperty="(Border.BorderBrush).(GradientBrush.GradientStops)[1].(GradientStop.Color)">
+                      <EasingColorKeyFrame KeyTime="0" Value="{StaticResource neon-light-blue-color}"/>
+                    </ColorAnimationUsingKeyFrames>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Disabled"/>
+              </VisualStateGroup>
+              <VisualStateGroup x:Name="CheckStates">
+                <VisualState x:Name="Checked">
+                  <Storyboard>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="CheckMark">
+                      <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                    </ObjectAnimationUsingKeyFrames>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Unchecked"/>
+                <VisualState x:Name="Indeterminate">
+                  <Storyboard>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="InderminateMark">
+                      <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                    </ObjectAnimationUsingKeyFrames>
+                  </Storyboard>
+                </VisualState>
+              </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+            <TextBlock Text="{TemplateBinding ContentControl.Content}" Foreground="{TemplateBinding Control.Foreground}"
+                       Margin="5,0,10,0"/>
+          </BulletDecorator>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <ControlTemplate x:Key="TabItemControlStyle" TargetType="{x:Type TabItem}">
+    <Border x:Name="PanelBorder" BorderThickness="2,2,2,0" CornerRadius="5,5,0,0" Padding="10">
+      <Grid x:Name="Panel">
+        <TextBlock x:Name="HeaderText" Text="{TemplateBinding HeaderedContentControl.Header}"/>
+      </Grid>
+    </Border>
+    <ControlTemplate.Triggers>
+      <Trigger Property="TabItem.IsSelected" Value="True">
+        <Setter TargetName="Panel" Property="Panel.Background" Value="Transparent"/>
+        <Setter TargetName="PanelBorder" Value="{StaticResource neon-light-blue}" Property="Border.BorderBrush"/>
+        <Setter TargetName="HeaderText" Value="{StaticResource neon-light-blue}" Property="TextBlock.Foreground"/>
+      </Trigger>
+      <Trigger Property="TabItem.IsSelected" Value="False">
+        <Setter TargetName="Panel" Property="Panel.Background" Value="Transparent"/>
+        <Setter TargetName="PanelBorder" Value="{StaticResource neon-orange}" Property="Border.BorderBrush"/>
+        <Setter TargetName="HeaderText" Value="{StaticResource neon-orange}" Property="TextBlock.Foreground"/>
+      </Trigger>
+    </ControlTemplate.Triggers>
+  </ControlTemplate>
+  <Style TargetType="{x:Type TabItem}">
+    <Setter Property="Control.Template" Value="{DynamicResource TabItemControlStyle}"/>
+  </Style>
+  <SolidColorBrush x:Key="TabViewBackground" Color="Transparent"/>
+</ResourceDictionary>
