@@ -1,15 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: Infinity.Engine.BoardLayout
-// Assembly: Infinity.Engine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-// MVID: 8AAEFEEA-051B-4395-AA02-B0DBC05BFF91
-// Assembly location: C:\Users\ArnoHanekom\Downloads\Release_20221202_v2\Release_20221202_v2\Release\Infinity.Engine.dll
-
-using Infinity.Engine.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-
+﻿using Infinity.Engine.Services;
 
 #nullable enable
 namespace Infinity.Engine
@@ -26,30 +15,16 @@ namespace Infinity.Engine
                 return 6 - (matrixColumn - boardCode);
             return boardCode > matrixColumn ? boardCode - matrixColumn : 0;
         };
-
-        private List<BoardColumn> _columns { get; set; } = new List<BoardColumn>(6);
-
-        private Matrix _matrix { get; set; } = new Matrix();
-
-        private List<TrackingMatrix> _matrices { get; set; } = new List<TrackingMatrix>(50);
-
-        private BettingStrategy _bettingStrategy { get; set; }
-
-        private Dictionary<int, int> _codeWins { get; set; }
-
+        private List<BoardColumn> _columns { get; set; } = new(6);
+        private Matrix _matrix { get; set; } = new();
+        private List<TrackingMatrix> _matrices { get; set; } = new(50);
+        private BettingStrategy _bettingStrategy { get; set; } = default!;
+        private Dictionary<int, int> _codeWins { get; set; } = [];
         public Dictionary<int, int> CodeWins => _codeWins;
 
-        public event MatrixSpinEventHandler MatrixSpin;
-
-        private SpinPhase _phase { get; set; } = new();
-        private List<SpinPhase> _phases { get; set; } = new();
-        public SpinPhase Phase => _phase;
-        public List<SpinPhase> Phases => _phases;
-
+        public event MatrixSpinEventHandler MatrixSpin = default!;
         private int? _countSpinType { get; set; } = null;
-
         public int? CountSpinType => _countSpinType;
-
         public void ResetCodeWins() => resetCodeWins();
         private void resetCodeWins()
         {
@@ -57,34 +32,13 @@ namespace Infinity.Engine
             for (int key = 0; key < 6; ++key)
                 _codeWins.Add(key, 0);
         }
-
         public void ResetCountSpinType() => resetCountSpinType();
-
         private void resetCountSpinType()
         {
             _countSpinType = null;
         }
         public void UpdateCountSpinType(int spinType) => updateCountSpinType(spinType);
         private void updateCountSpinType(int spinType) => _countSpinType = spinType;
-
-        public void EndPhase() => endPhase();
-        private void endPhase()
-        {
-            lock (_phases)
-            {
-                var prevPhaseId = 0;
-                _phases.Where(p => p.Started && !p.Ended)
-                    .ToList()
-                    .ForEach(p => {
-                        p.Ended = true;
-                        prevPhaseId = p.Id;
-                    });
-
-                var nextPhaseId = prevPhaseId + 1;
-                var nextPhase = new SpinPhase(id: nextPhaseId, key: $"Phase {nextPhaseId}", startedBy: CountSpinType) { Started = true, Ended = false };
-                _phases.Add(nextPhase);
-            }
-        }
         private readonly IEngineService _engineService;
         public BoardLayout(IEngineService engineService)
         {
@@ -96,38 +50,22 @@ namespace Infinity.Engine
                 MatrixSpin += new MatrixSpinEventHandler(trackingMatrix.OnSpin);
                 _matrices.Add(trackingMatrix);
             }
-            _maxVerticalGapMatrix = 0;
-            
+            _maxVerticalGapMatrix = 0;            
         }
-
-        private bool isReset { get; set; }
-        public bool IsReset => isReset;
-
-        public void SetReset(bool reset)
-        {
-            isReset = reset;
-        }
-
         public int LayoutWins => _layoutWins;
-
         public int LayoutCode => _layoutCode;
-
         public List<BoardColumn> Columns
         {
             get => _columns;
             set => _columns = value;
         }
-
         public Matrix Matrix => _matrix;
-
         public List<TrackingMatrix> TrackingMatrices => _matrices;
-
         public int BettingStrategyGapSize
         {
             get => _bettingStategyGap;
             set => _bettingStategyGap = value;
         }
-
         public int MaxGapSize
         {
             get
@@ -136,7 +74,6 @@ namespace Infinity.Engine
                 return _matrix.GapSize <= maxVerticalGapSize ? maxVerticalGapSize : Matrix.GapSize;
             }
         }
-
         public int MaxVerticalGapSize
         {
             get
@@ -155,9 +92,7 @@ namespace Infinity.Engine
                 return maxVerticalGapSize;
             }
         }
-
         public int MaxVerticalGapMatrix => _maxVerticalGapMatrix;
-
         public List<BoardNumber>? BetOnNumbers
         {
             get
@@ -167,9 +102,7 @@ namespace Infinity.Engine
                 return GetBoardColumn(_matrix.CurrentColumn == 6 ? 1 : _matrix.CurrentColumn + 1)?.Numbers;
             }
         }
-
         public BoardColumn? GetBoardColumn(int boardCode) => _columns.FirstOrDefault(c => c.Code == boardCode);
-
         public bool BettingActive
         {
             get
@@ -187,28 +120,19 @@ namespace Infinity.Engine
                 return false;
             }
         }
-
         public BettingStrategy BettingStrategy
         {
             get => _bettingStrategy;
             set => _bettingStrategy = value;
         }
-
         public void Initialize(int bettingStategyGap, int layoutCode)
         {
-            lock (_phases)
-            {
-                _phases.Clear();
-                var nextPhaseId = 1;
-                _phase = new(nextPhaseId, $"Phase {nextPhaseId}", -1) { Started = true, Ended = false };
-                _phases.Add(_phase);
-            }
             List<int> current = Permutations.CurrentList[layoutCode - 1];
             _layoutCode = layoutCode;
             int boardNumber = 1;
             foreach (int boardCode in current)
             {
-                List<BoardNumber> boardNumberList = new List<BoardNumber>(6);
+                List<BoardNumber> boardNumberList = new(6);
                 boardNumberList.CreateBoardNumbers(boardNumber, boardCode);
                 boardNumber = boardNumberList.GetLastBoardNumber() + 1;
                 _columns.CreateAddBoards(boardNumberList, boardCode);
@@ -230,7 +154,7 @@ namespace Infinity.Engine
                         int number1 = matrixRow.Numbers[i - 1].Number;
                         BoardNumber number2 = FindNumber(number1);
                         int num = _matrix.IsInColumn(number1, i, 1) ? 1 : 0;
-                        bool flag = _matrix.IsInColumn(number1, i, matrixRow.Numbers[i - 1].Row + 1, rows);
+                        bool flag = Matrix.IsInColumn(number1, i, matrixRow.Numbers[i - 1].Row + 1, rows);
                         if (num == 0 && !flag && !number2.Codes.Any(c => c == i))
                             number2.Codes.Add(i);
                     }
@@ -238,35 +162,19 @@ namespace Infinity.Engine
             }
             ResetCodeWins();
             ResetColumnsWins();
-            SetReset(true);
-            EndPhase();
             ResetCountSpinType();            
             return boardNumber;
         }
 
         private void ResetColumnsWins() => _columns.ForEach(c => c.ResetWins());
-
         public BoardNumber? FindNumber(int number) => _columns.FirstOrDefault(c => c.Numbers.Any(n => n.Number == number))?.FindNumber(number);
-
-        public void OnSpin(object sender, SpinEventArgs e) => CaptureSpin(e.Number, e.TableId, e.GameId, e.SpinType, e.PhaseType, e.SpinId);
-
-        private void ProcessGameEndPhase(Guid tableId, Guid gameId, int spinType, int phaseType, Guid spinId)
+        public void OnSpin(object sender, SpinEventArgs e) => CaptureSpin(e.Number);
+        public void CaptureSpin(int winningNumber)
         {
-            Task.Run(async() => 
-            {
-                await _engineService.IncreaseResetCountAsync(tableId, gameId);
-                await _engineService.UpdatePhaseEndAsync(tableId, gameId, spinType);                
-                await _engineService.AddGamePhaseAsync(tableId, gameId, phaseType, spinType);
-            });
-        }
-
-        public void CaptureSpin(int winningNumber, Guid tableId, Guid gameId, int spinType, int phaseType, Guid spinId)
-        {
-            SetReset(false);
             if (winningNumber != 0)
             {
                 BoardNumber boardNumber = FindNumber(winningNumber);
-                MatrixNumber matrixNumber = _matrix.EnterSpin(winningNumber, boardNumber.BoardCode);
+                MatrixNumber matrixNumber = _matrix.EnterSpin(winningNumber, boardNumber.BoardCode, _selectedBettingCode.HasValue ? _selectedBettingCode.Value : 0, _boardArrangement);
                 int column = matrixNumber.Column;
                 if (boardNumber == null)
                     throw new Exception("Computational Error: Number " + winningNumber.ToString() + " not found in board! ");
@@ -278,9 +186,6 @@ namespace Infinity.Engine
                 {
                     matrixNumber.Win = true;
                     GetBoardColumn(boardNumber.BoardCode)!.AddWin();
-
-                    if (boardNumber.Codes.Count == 0)
-                        ProcessGameEndPhase(tableId, gameId, spinType, phaseType, spinId);
 
                     if (boardNumber.Codes.Count == 0)
                         boardNumber = ApplyImmovabilty(boardNumber);
@@ -307,7 +212,6 @@ namespace Infinity.Engine
                 _bettingStrategy.Spin(false);
             }
         }
-
         public bool Swap(BoardNumber originalNumber)
         {
             List<BoardNumber> boardNumberList = _columns.SearchBoardForValidSwapNumbers(originalNumber.BoardCode);
@@ -324,7 +228,6 @@ namespace Infinity.Engine
             }
             return flag || DoubleSwap(originalNumber) || TripleSwap(originalNumber);
         }
-
         private bool TripleSwap(BoardNumber originalNumber)
         {
             bool flag = false;
@@ -405,7 +308,6 @@ namespace Infinity.Engine
             }
             return flag;
         }
-
         private bool DoubleSwap(BoardNumber originalNumber)
         {
             bool flag = false;
@@ -439,7 +341,6 @@ namespace Infinity.Engine
             }
             return flag;
         }
-
         private void SwapNumbers(BoardNumber originalNumber, BoardNumber swapNumber)
         {
             BoardColumn boardColumn1 = GetBoardColumn(originalNumber.BoardCode);
@@ -456,6 +357,17 @@ namespace Infinity.Engine
                     boardColumn2.Numbers.Add(originalNumber);
                 }
             }
+        }
+
+        private int? _selectedBettingCode { get; set; } = null;
+        public void SetBettingCode(int boardCode)
+        {
+            _selectedBettingCode = boardCode;
+        }
+        private int[] _boardArrangement { get; set; } = [1, 2, 3, 4, 5, 6];
+        public void SetBoardArrangement(int[] betBoardArrangement)
+        {
+            _boardArrangement = betBoardArrangement;
         }
     }
 }

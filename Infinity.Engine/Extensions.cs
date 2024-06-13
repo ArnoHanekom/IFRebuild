@@ -142,12 +142,6 @@ namespace Infinity.Engine
 
         public static int GetMaxGS(this RouletteGame game) => game.BoardLayouts[0].Matrix.MaxGapSize;
 
-        public static SpinPhase GetActiveSpinPhase(this BoardLayout boardLayout)
-        {
-            return boardLayout.Phases
-                .First(p => p.Started && !p.Ended);
-        }
-
         public static void UpdateTableGuid(this RouletteGame game, Guid tableGuid)
         {
             game.TableUniqueId = tableGuid;

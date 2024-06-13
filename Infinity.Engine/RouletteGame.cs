@@ -19,19 +19,20 @@ namespace Infinity.Engine
         public Guid GameId { get; set; } = Guid.NewGuid();
         private int _bettingGapSize { get; set; }
 
-        private List<BoardLayout> _boardLayouts { get; set; } = new List<BoardLayout>();
+        private List<BoardLayout> _boardLayouts { get; set; } = [];
 
-        private List<int> _spinHistory { get; set; } = new List<int>();
+        private List<int> _spinHistory { get; set; } = [];
 
         private int _spins { get; set; }
 
-        private event SpinEventHandler Spin;
+        private event SpinEventHandler Spin = default!;
         private readonly IEngineService _engineService;
         public RouletteGame(int bettingGapSize, IEngineService engineService)
-        {
+        {            
             _engineService = engineService;
             _bettingGapSize = bettingGapSize;
             InitializeBoards();
+            SetBettingBoard(0);
         }
 
         private void InitializeBoards()
@@ -40,12 +41,12 @@ namespace Infinity.Engine
             for (int index = 1; index <= 6; ++index)
                 nums[index] = index;
             Permutations.Permut(1, 6, nums);
-            BoardLayout boardLayout = new BoardLayout(_engineService);
+            BoardLayout boardLayout = new(_engineService);
             boardLayout.Initialize(_bettingGapSize, 1);
             Spin += new SpinEventHandler(boardLayout.OnSpin);
             _boardLayouts.Add(boardLayout);
             _spinType = 0;
-            _spinTypeHistory = new();
+            _spinTypeHistory = [];
         }
 
         public int Spins
@@ -61,20 +62,17 @@ namespace Infinity.Engine
         }
 
         public List<int> SpinHistory => _spinHistory;
-
         private int _spinType { get; set; } = 0;
         public int SpinType => _spinType;
-
-        private List<int> _spinTypeHistory { get; set; } = new();
+        private List<int> _spinTypeHistory { get; set; } = [];
         public List<int> SpinTypeHistory => _spinTypeHistory;
-
         public void AddSpinTypeHistory(int spinType)
         {
             lock(_spinTypeHistory)
             {
                 _spinType = spinType;
                 _spinTypeHistory.Add(spinType);
-                this.BoardLayouts[0].UpdateCountSpinType(spinType);
+                BoardLayouts[0].UpdateCountSpinType(spinType);
             }
         }
 
@@ -83,63 +81,27 @@ namespace Infinity.Engine
             ++_spins;
             _spinHistory.Add(winningNumber);
             var spinEntity = new SpinEntity() { TableId = TableUniqueId, GameId = GameId, WinningNumber = winningNumber, Type = SpinType };
-            Spin(this, new SpinEventArgs()
-            {
-                Number = winningNumber,
-                TableId = TableUniqueId,
-                GameId = GameId,
-                SpinType = SpinType,
-                PhaseType = phaseType,
-                SpinId = spinEntity.Id
-            });
-
-            lock (this.BoardLayouts[0])
-            {
-                lock (this.BoardLayouts[0].Columns)
-                {
-                    var boardNumbers = this.BoardLayouts[0].Columns.SelectMany(c => c.Numbers).ToList();
-                    lock (boardNumbers)
-                    {
-                        if (boardNumbers.Any(bn => bn.Codes.Count() <= 1))
-                        {
-                            spinEntity.CountNumbers = boardNumbers.Where(bn => bn.Codes.Count() <= 1).Select(bn => bn.ToCountNumber()).ToList();
-                            Task.Run(async () => await _engineService.AddSpinEntityAsync(spinEntity));
-                        }                        
-                    }
-                }
-            }
-
-            lock (_engineService)
-            {
-                Task.Run(async () =>
-                {
-                    var lastOpenPhase = await _engineService.GetLastOpenPhase(TableUniqueId, GameId);
-                    if (lastOpenPhase is not null)
-                    {
-                        await _engineService.AddUpdatePhaseSpin(lastOpenPhase.Id, spinEntity.Id);
-                    }
-                });
-            }
+            Spin(this, new SpinEventArgs() { Number = winningNumber });
         }
 
         public string BettingSummary()
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new();
             short num1 = 0;
-            List<KeyValuePair<int, Decimal>> keyValuePairList1 = new List<KeyValuePair<int, Decimal>>();
-            Hashtable hashtable = new Hashtable();
+            List<KeyValuePair<int, decimal>> keyValuePairList1 = [];
+            Hashtable hashtable = [];
             lock (BoardLayouts)
             {
                 foreach (BoardLayout boardLayout in BoardLayouts)
                 {
                     if (boardLayout.BettingActive && boardLayout.BetOnNumbers != null)
                     {
-                        List<KeyValuePair<int, Decimal>> keyValuePairList2 = keyValuePairList1;
-                        KeyValuePair<int, Decimal> spinBet = boardLayout.BettingStrategy.SpinBet;
+                        List<KeyValuePair<int, decimal>> keyValuePairList2 = keyValuePairList1;
+                        KeyValuePair<int, decimal> spinBet = boardLayout.BettingStrategy.SpinBet;
                         int key = spinBet.Key;
                         spinBet = boardLayout.BettingStrategy.SpinBet;
-                        Decimal num2 = spinBet.Value;
-                        KeyValuePair<int, Decimal> keyValuePair = new KeyValuePair<int, Decimal>(key, num2);
+                        decimal num2 = spinBet.Value;
+                        KeyValuePair<int, decimal> keyValuePair = new(key, num2);
                         keyValuePairList2.Add(keyValuePair);
                         lock (boardLayout.BetOnNumbers)
                         {
@@ -159,7 +121,7 @@ namespace Infinity.Engine
                 }
             }
             stringBuilder.AppendFormat("{0} Total boards were found\n", num1);
-            List<Counter> counterList = new List<Counter>();
+            List<Counter> counterList = [];
             lock (hashtable)
             {
                 foreach (DictionaryEntry dictionaryEntry in hashtable)
@@ -198,6 +160,22 @@ namespace Infinity.Engine
         internal void UpdateCurrentSpinNo(int spinNo)
         {
             currentSpinNo = spinNo;
+        }
+        private int _bettingBoard { get; set; }
+        public void SetBettingBoard(int bettingBoard)
+        {
+            _bettingBoard = bettingBoard;
+            BoardLayouts[0].SetBettingCode(_bettingBoard);
+        }
+
+        public int BettingBoard => _bettingBoard;
+
+        private int[] _betBoardArrangement { get; set; } = [1, 2, 3, 4, 5, 6];
+        
+        public void SetBetBoardArrangement(int idx, int boardCode)
+        {
+            _betBoardArrangement[idx] = boardCode;
+            BoardLayouts[0].SetBoardArrangement(_betBoardArrangement);
         }
     }
 }
