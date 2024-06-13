@@ -115,14 +115,15 @@
                         <TabItem x:Name="AvailableResultsPage" Padding="8" Style="{StaticResource SearchResults}" IsSelected="True"
                      Header="Results" Background="Transparent" BorderBrush="Black" UseLayoutRounding="True"
                      FontFamily="{Binding ElementName=fontFan, Path=Text, Converter={StaticResource FontFamilyConverter}}">
-                            <DataGrid MouseDoubleClick="ResultsGrid_MouseDoubleClick" Loaded="ResultsGrid_Loaded"
-                        LoadingRow="ResultsGrid_LoadingRow" x:Name="ResultsGrid" AutoGenerateColumns="False"
-                        Margin="7,0,0,0" CanUserReorderColumns="False" IsReadOnly="True" SelectionMode="Single"
-                        SelectionUnit="FullRow" Background="Transparent" Foreground="White" MaxHeight="450" MinWidth="1055"
-                        CanUserResizeColumns="False" CanUserResizeRows="False" HorizontalContentAlignment="Stretch"
-                        VerticalContentAlignment="Stretch" UseLayoutRounding="True" EnableColumnVirtualization="True"
-                        FontFamily="{Binding ElementName=fontFan, Path=Text, Converter={StaticResource FontFamilyConverter}}"
-                        ItemsSource="{Binding LoadedResults}" SelectionChanged="ResultsGrid_SelectionChanged">
+                            <Grid>
+                                <DataGrid MouseDoubleClick="ResultsGrid_MouseDoubleClick" Loaded="ResultsGrid_Loaded"
+                                    LoadingRow="ResultsGrid_LoadingRow" x:Name="ResultsGrid" AutoGenerateColumns="False"
+                                    Margin="7,0,0,0" CanUserReorderColumns="False" IsReadOnly="True" SelectionMode="Single"
+                                    SelectionUnit="FullRow" Background="Transparent" Foreground="White" MaxHeight="450" MinWidth="1055"
+                                    CanUserResizeColumns="False" CanUserResizeRows="False" HorizontalContentAlignment="Stretch"
+                                    VerticalContentAlignment="Stretch" UseLayoutRounding="True" EnableColumnVirtualization="True"
+                                    FontFamily="{Binding ElementName=fontFan, Path=Text, Converter={StaticResource FontFamilyConverter}}"
+                                    ItemsSource="{Binding LoadedResults}" SourceUpdated="ResultsGrid_SourceUpdated" TargetUpdated="ResultsGrid_TargetUpdated">
                                 <DataGrid.ColumnHeaderStyle>
                                     <Style TargetType="{x:Type DataGridColumnHeader}">
                                         <Setter Property="Control.Background" Value="Black"/>
@@ -175,17 +176,8 @@
                                             </Style>
                                         </DataGridColumn.CellStyle>
                                     </DataGridTextColumn>
-                                    <DataGridTextColumn MinWidth="80" Width="1*" Header="Resets" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
-                                      Binding="{Binding GameBoardResets}">
-                                        <DataGridColumn.CellStyle>
-                                            <Style TargetType="{x:Type DataGridCell}">
-                                                <Setter Property="TextBlock.TextAlignment" Value="Center"/>
-                                                <Setter Property="Control.FontWeight" Value="Bold"/>
-                                            </Style>
-                                        </DataGridColumn.CellStyle>
-                                    </DataGridTextColumn>
                                     <DataGridTextColumn MinWidth="60" Width="1*" Header="R1W" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
-                                      Binding="{Binding TableFirstRowWins}">
+                                      Binding="{Binding FirstRowWin}">
                                         <DataGridColumn.CellStyle>
                                             <Style TargetType="{x:Type DataGridCell}">
                                                 <Setter Property="TextBlock.TextAlignment" Value="Center"/>
@@ -194,7 +186,7 @@
                                         </DataGridColumn.CellStyle>
                                     </DataGridTextColumn>
                                     <DataGridTextColumn MinWidth="60" Width="1*" Header="TW" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
-                                      Binding="{Binding TableHighestColumnWin}">
+                                      Binding="{Binding HighestColumnWin}">
                                         <DataGridColumn.CellStyle>
                                             <Style TargetType="{x:Type DataGridCell}">
                                                 <Setter Property="TextBlock.TextAlignment" Value="Center"/>
@@ -203,7 +195,7 @@
                                         </DataGridColumn.CellStyle>
                                     </DataGridTextColumn>
                                     <DataGridTextColumn MinWidth="70" Width="1*" Header="TW 0s" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
-                                      Binding="{Binding TableColumnWinZeroCount}">
+                                      Binding="{Binding ColumnWinZeroCount}">
                                         <DataGridColumn.CellStyle>
                                             <Style TargetType="{x:Type DataGridCell}">
                                                 <Setter Property="TextBlock.TextAlignment" Value="Center"/>
@@ -212,7 +204,7 @@
                                         </DataGridColumn.CellStyle>
                                     </DataGridTextColumn>
                                     <DataGridTextColumn MinWidth="70" Width="1*" Header="TW 1s" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
-                                      Binding="{Binding TableColumnWinOneCount}">
+                                      Binding="{Binding ColumnWinOneCount}">
                                         <DataGridColumn.CellStyle>
                                             <Style TargetType="{x:Type DataGridCell}">
                                                 <Setter Property="TextBlock.TextAlignment" Value="Center"/>
@@ -305,6 +297,7 @@
                                     </DataGridTemplateColumn>
                                 </DataGrid.Columns>
                             </DataGrid>
+                            </Grid>
                         </TabItem>
                         <TabItem x:Name="OpenedResultsPage" Style="{StaticResource SearchResults}" Header="Opened Results"
                      Background="Transparent" BorderBrush="Transparent" HorizontalAlignment="Left"
@@ -372,7 +365,7 @@
                                         </DataGridColumn.CellStyle>
                                     </DataGridTextColumn>
                                     <DataGridTextColumn MinWidth="60" Width="*" Header="R1W" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
-                                      Binding="{Binding TableFirstRowWins}">
+                                      Binding="{Binding FirstRowWin}">
                                         <DataGridColumn.CellStyle>
                                             <Style TargetType="{x:Type DataGridCell}">
                                                 <Setter Property="TextBlock.TextAlignment" Value="Center"/>
@@ -381,7 +374,7 @@
                                         </DataGridColumn.CellStyle>
                                     </DataGridTextColumn>
                                     <DataGridTextColumn MinWidth="60" Width="*" Header="TW" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
-                                      Binding="{Binding TableHighestColumnWin}">
+                                      Binding="{Binding HighestColumnWin}">
                                         <DataGridColumn.CellStyle>
                                             <Style TargetType="{x:Type DataGridCell}">
                                                 <Setter Property="TextBlock.TextAlignment" Value="Center"/>
@@ -390,7 +383,7 @@
                                         </DataGridColumn.CellStyle>
                                     </DataGridTextColumn>
                                     <DataGridTextColumn MinWidth="70" Width="*" Header="TW 0s" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
-                                      Binding="{Binding TableColumnWinZeroCount}">
+                                      Binding="{Binding ColumnWinZeroCount}">
                                         <DataGridColumn.CellStyle>
                                             <Style TargetType="{x:Type DataGridCell}">
                                                 <Setter Property="TextBlock.TextAlignment" Value="Center"/>
@@ -399,7 +392,7 @@
                                         </DataGridColumn.CellStyle>
                                     </DataGridTextColumn>
                                     <DataGridTextColumn MinWidth="70" Width="*" Header="TW 1s" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
-                                      Binding="{Binding TableColumnWinOneCount}">
+                                      Binding="{Binding ColumnWinOneCount}">
                                         <DataGridColumn.CellStyle>
                                             <Style TargetType="{x:Type DataGridCell}">
                                                 <Setter Property="TextBlock.TextAlignment" Value="Center"/>

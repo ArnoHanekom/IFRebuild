@@ -8,14 +8,9 @@ using Infinity.Data.Constants;
 using Infinity.Data.Models;
 using Infinity.Services.Interfaces;
 using Infinity.Engine;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Xml;
 using Infinity.Engine.Services;
+using System.Collections.ObjectModel;
 
 
 #nullable enable
@@ -27,8 +22,8 @@ namespace Infinity.Roulette.ViewModels
         private readonly ISearchService _searches;
         private readonly IEngineService _engineService;
         
-        private CancellationTokenSource cancellationToken;
-        private Func<int, int, bool> WinsLimitReached = (val, valLimit) => val >= valLimit;
+        private CancellationTokenSource _cancellationToken;
+        private readonly Func<int, int, bool> _winsLimitReached = (val, valLimit) => val >= valLimit;
 
         public SearchResultsViewModel(ITableService tables, ISearchService searches, IEngineService engineService)
         {            
@@ -37,16 +32,15 @@ namespace Infinity.Roulette.ViewModels
             _engineService = engineService;
             
             Spinning = false;
-            cancellationToken = new CancellationTokenSource();
+            _cancellationToken = new CancellationTokenSource();
             LoadResults();
         }
 
         private void LoadResults()
         {
             LoadedResults = _searches.GetSpinResults();
-            OpenedResults = new List<Table>();
+            OpenedResults = [];
         }
-
         private double _GridSize { get; set; }
 
         public double GridSize
@@ -218,8 +212,8 @@ namespace Infinity.Roulette.ViewModels
 
         public async Task<CancellationToken> GetNewCancellationToken()
         {
-            cancellationToken = new CancellationTokenSource();
-            return await Task.Run(() => cancellationToken.Token);
+            _cancellationToken = new CancellationTokenSource();
+            return await Task.Run(() => _cancellationToken.Token);
         }
 
         public void StartSpinfileSpins(IEnumerable<Table> tables, SearchResults resultsWindow)
@@ -232,7 +226,7 @@ namespace Infinity.Roulette.ViewModels
             _searches.NewSpinSearch();
             Spinning = true;
             _tables.SetTotalCalculatedSpins(tables.Count() * Spinfile.Count());
-            RunSpinfileSpins(tables, cancellationToken.Token, resultsWindow);
+            RunSpinfileSpins(tables, _cancellationToken.Token, resultsWindow);
         }
 
         public async void RunSpinfileSpins(
@@ -384,8 +378,8 @@ namespace Infinity.Roulette.ViewModels
 
         private void StopTableRuns()
         {
-            if (cancellationToken != null)
-                cancellationToken.Cancel();
+            if (_cancellationToken != null)
+                _cancellationToken.Cancel();
             SpinProgress = 100.0;
         }
 
@@ -414,7 +408,7 @@ namespace Infinity.Roulette.ViewModels
                 int? r1Wlimit = table.R1Wlimit;
                 if (!r1Wlimit.HasValue)
                     return false;
-                Func<int, int, bool> winsLimitReached = WinsLimitReached;
+                Func<int, int, bool> winsLimitReached = _winsLimitReached;
                 int firstRowWin = table.FirstRowWin;
                 r1Wlimit = table.R1Wlimit;
                 int num = r1Wlimit!.Value;
@@ -429,7 +423,7 @@ namespace Infinity.Roulette.ViewModels
                 int? twlimit = table.TWlimit;
                 if (!twlimit.HasValue)
                     return false;
-                Func<int, int, bool> winsLimitReached = WinsLimitReached;
+                Func<int, int, bool> winsLimitReached = _winsLimitReached;
                 int highestColumnWin = table.HighestColumnWin;
                 twlimit = table.TWlimit;
                 int num = twlimit!.Value;

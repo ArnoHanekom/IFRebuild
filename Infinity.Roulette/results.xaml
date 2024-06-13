@@ -215,7 +215,7 @@
                       </DataGridColumn.CellStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="R1W" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
-                                        Binding="{Binding TableFirstRowWins, IsAsync=True}">
+                                        Binding="{Binding FirstRowWin, IsAsync=True}">
                       <DataGridColumn.CellStyle>
                         <Style TargetType="{x:Type DataGridCell}">
                           <Setter Property="TextBlock.TextAlignment" Value="Center"/>
@@ -224,7 +224,7 @@
                       </DataGridColumn.CellStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="TW" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
-                                        Binding="{Binding TableHighestColumnWin, IsAsync=True}">
+                                        Binding="{Binding HighestColumnWin, IsAsync=True}">
                       <DataGridColumn.CellStyle>
                         <Style TargetType="{x:Type DataGridCell}">
                           <Setter Property="TextBlock.TextAlignment" Value="Center"/>
@@ -233,7 +233,7 @@
                       </DataGridColumn.CellStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="TW 0s" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
-                                        Binding="{Binding TableColumnWinZeroCount, IsAsync=True}">
+                                        Binding="{Binding ColumnWinZeroCount, IsAsync=True}">
                       <DataGridColumn.CellStyle>
                         <Style TargetType="{x:Type DataGridCell}">
                           <Setter Property="TextBlock.TextAlignment" Value="Center"/>
@@ -242,7 +242,7 @@
                       </DataGridColumn.CellStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="TW 1s" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
-                                        Binding="{Binding TableColumnWinOneCount, IsAsync=True}">
+                                        Binding="{Binding ColumnWinOneCount, IsAsync=True}">
                       <DataGridColumn.CellStyle>
                         <Style TargetType="{x:Type DataGridCell}">
                           <Setter Property="TextBlock.TextAlignment" Value="Center"/>

@@ -24,6 +24,8 @@ using System.IO;
 using Newtonsoft.Json;
 using Microsoft.Win32;
 using Infinity.Engine.Services;
+using System.Diagnostics;
+using Infinity.Roulette.Statics;
 
 namespace Infinity.Roulette
 {
@@ -75,14 +77,8 @@ namespace Infinity.Roulette
         {
             if (IsValidNumber)
             {
-                if (!ntvm.IsManual)
-                {
-                    ntvm.SetOtherCountStyle();
-                }
-                await Task.Run(delegate
-                {
-                    ntvm.StartSpin();
-                });
+                if (!ntvm.IsManual) ntvm.SetOtherCountStyle();
+                await Task.Run(() => ntvm.StartSpin());
             }
         }
 
@@ -254,5 +250,13 @@ namespace Infinity.Roulette
             ntvm.ReloadSettings(newSetting);
         }
 
+        private async void cbBettingBoard_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            await Dispatcher.InvokeAsync(() =>
+            {
+                ntvm.GameTable.Game.SetBettingBoard(ntvm.SelectedBoardIndex);
+                BetWindow.Game = ntvm.GameTable.Game;
+            });
+        }
     }
 }

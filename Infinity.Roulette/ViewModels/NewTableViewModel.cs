@@ -5,18 +5,11 @@ using Infinity.Engine.Services;
 using Infinity.Roulette.LayoutModels;
 using Infinity.Roulette.Statics;
 using Infinity.Services.Interfaces;
-using System;
-using System.Buffers;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Xml;
 
 namespace Infinity.Roulette.ViewModels
 {
@@ -45,7 +38,8 @@ namespace Infinity.Roulette.ViewModels
             _searches = searches;
             _countColorService = countColorService;
             _engineService = engineService;
-            
+            LoadBettingBoards();
+
             cancellationToken = new CancellationTokenSource();            
         }
 
@@ -624,6 +618,9 @@ namespace Infinity.Roulette.ViewModels
             cancellationToken = new CancellationTokenSource();
             SpinProgress = 0.0;
             Spinning = true;
+
+            GameTable.Game.SetBettingBoard(_selectedBoardIndex);
+
             if (IsManual)
             {
                 StartManualSpin();
@@ -1135,5 +1132,50 @@ namespace Infinity.Roulette.ViewModels
                 };
             });
         }
+
+        private List<ComboBoxItem> _bettingBoards { get; set; } = [];
+        public List<ComboBoxItem> BettingBoards
+        {
+            get => _bettingBoards;
+            set
+            {
+                _bettingBoards = value;
+                OnPropertyChanged(nameof(BettingBoards));
+            }
+        }
+
+        private ComboBoxItem _selectedBettingBoard { get; set; } = null!;
+        public ComboBoxItem SelectedBettingBoard
+        {
+            get => _selectedBettingBoard;
+            set
+            {
+                _selectedBettingBoard = value;
+                OnPropertyChanged(nameof(SelectedBettingBoard));
+            }
+        }
+
+        private void LoadBettingBoards()
+        {
+            BettingBoards = [];
+            for (int i = 0; i < 6; i++)
+            {
+                var betBoard = new ComboBoxItem()
+                {
+                    Content = $"Row {i + 1}",
+                    IsSelected = false
+                };
+
+                if (i == 0)
+                {
+                    betBoard.IsSelected = true;
+                    SelectedBettingBoard = betBoard;
+                }
+                BettingBoards.Add(betBoard);
+            }
+        }
+
+        private int _selectedBoardIndex => BettingBoards.IndexOf(SelectedBettingBoard);
+        public int SelectedBoardIndex => _selectedBoardIndex;
     }
 }
