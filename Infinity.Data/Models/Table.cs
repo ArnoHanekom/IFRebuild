@@ -7,28 +7,15 @@ namespace Infinity.Data.Models
     {
         private Func<KeyValuePair<int, int>?, bool> _r1wAndHighest = R1Rows => R1Rows.HasValue && R1Rows.Value.Key == 0;
         private Func<KeyValuePair<int, int>?, int, bool> _r1wLimitReached = (R1Rows, r1limit) => R1Rows.HasValue && R1Rows.Value.Value >= r1limit;
-
+        private BoardLayout _gameBoard => Game.BoardLayouts[0];
         private readonly IEngineService _engineService;        
-        //public Table(IEngineService engineService, IOddWinService oddWinService)
-        //{
-        //    _engineService = engineService;            
-        //    Game = new RouletteGame(36, uniqueTableId, _engineService, oddWinService);            
-        //}
-
         public Table(IEngineService engineService)
         {
             _engineService = engineService;
             Game = new RouletteGame(36, engineService);
             Game.UpdateTableGuid(UniqueTableId);
         }
-        private KeyValuePair<int, int>? R1Rows
-        {
-            get
-            {
-                RouletteGame game = Game;
-                return game == null ? new KeyValuePair<int, int>?() : new KeyValuePair<int, int>?(game.BoardLayouts[0].CodeWins.OrderByDescending(cw => cw.Value).FirstOrDefault());
-            }
-        }
+        private KeyValuePair<int, int>? R1Rows => new KeyValuePair<int, int>?(_gameBoard.CodeWins.OrderByDescending(cw => cw.Value).FirstOrDefault());
 
         private Guid uniqueTableId = Guid.NewGuid();
         public Guid UniqueTableId => uniqueTableId;
@@ -37,47 +24,22 @@ namespace Infinity.Data.Models
         public bool ExactMatch { get; set; }
         public bool WinsMatch { get; set; }
         public bool RunSpinfile { get; set; }
-        public int FirstRowWin
-        {
-            get
-            {
-                RouletteGame game = Game;
-                return game == null ? 0 : game.BoardLayouts[0].CodeWins[0];
-            }
-        }
-        public int HighestColumnWin
-        {
-            get
-            {
-                RouletteGame game = Game;
-                return game == null ? 0 : game.BoardLayouts[0].Columns.HighestColumnWin();
-            }
-        }
-        //public int ColumnWinZeroCount
-        //{
-        //    get
-        //    {
-        //        RouletteGame game = Game;
-        //        return game == null ? 0 : game.BoardLayouts[0].Columns.ColumnWinZeroCount();
-        //    }
-        //}
-        //public int ColumnWinOneCount
-        //{
-        //    get
-        //    {
-        //        RouletteGame game = Game;
-        //        return game == null ? 0 : game.BoardLayouts[0].Columns.ColumnWinOneCount();
-        //    }
-        //}
-        //public bool HighlightR1WRow => R1Wlimit.HasValue && _r1wAndHighest(R1Rows) && _r1wLimitReached(R1Rows, R1Wlimit.Value);
-        //public bool HighlightTWRow { get; }
+
+        public int Rows => _gameBoard.Matrix.Rows.Count;
+        public int GS => _gameBoard.Matrix.GapSize;
+        public int MaxGS => _gameBoard.Matrix.MaxGapSize;
+        public int Counts => _gameBoard.Columns.SelectMany(col => col.Numbers).Count(num => num.Codes.Count <= 1);
+        public int FirstRowWin => _gameBoard.CodeWins[0];
+        private KeyValuePair<int, int> R1Row => _gameBoard.CodeWins.OrderByDescending(cw => cw.Value).FirstOrDefault();
+        public int HighestColumnWin => _gameBoard.Columns.OrderByDescending(c => c.ColumnWins).First().ColumnWins;
+        public int ColumnWinZeroCount => _gameBoard.Columns.Count(col => col.ColumnWins == 0);
+        public int ColumnWinOneCount => _gameBoard.Columns.Count(col => col.ColumnWins == 1);
         public bool R1WMatch => R1Wlimit.HasValue && FirstRowWin >= R1Wlimit.Value && _r1wAndHighest(R1Rows);
         public bool TWMatch => TWlimit.HasValue && HighestColumnWin >= TWlimit.Value;
         //public bool Spinned { get; set; }
         public int? R1Wlimit { get; set; }
         public int? TWlimit { get; set; }
         public RouletteGame Game { get; private set; }
-        public int Rows => Game.GetRows();
         public int Spins => Game.Spins;
         //public int Counts => Game.GetCounts();
         //public int GS => Game.GetGS();
