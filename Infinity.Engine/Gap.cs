@@ -14,9 +14,9 @@ namespace Infinity.Engine
   public class Gap
   {
     private int _gapSize;
-    private Decimal _betSize;
+    private decimal _betSize;
     private int _spinSize;
-    private List<KeyValuePair<int, Decimal>> _spinBets;
+    private List<KeyValuePair<int, decimal>> _spinBets;
 
     private int[] _betIncrementSequence { get; set; } = new int[35]
     {
@@ -57,7 +57,7 @@ namespace Infinity.Engine
       400
     };
 
-    public Gap(int gapSize, Decimal betSize, int spinSize)
+    public Gap(int gapSize, decimal betSize, int spinSize)
     {
       _gapSize = gapSize;
       _betSize = betSize;
@@ -67,7 +67,7 @@ namespace Infinity.Engine
 
     public static Gap GetNewGap(int gapSize)
     {
-      Decimal betSize;
+      decimal betSize;
       int spinSize;
       switch (gapSize)
       {
@@ -119,7 +119,7 @@ namespace Infinity.Engine
       return new Gap(gapSize, betSize, spinSize);
     }
 
-    public List<KeyValuePair<int, Decimal>> SpinBets => _spinBets;
+    public List<KeyValuePair<int, decimal>> SpinBets => _spinBets;
 
     public int GapSize
     {
@@ -134,15 +134,15 @@ namespace Infinity.Engine
       }
     }
 
-    public Decimal BetSize => _betSize;
+    public decimal BetSize => _betSize;
 
     public int SpinSize => _spinSize;
 
     private void InitializeSpinBets()
     {
-      _spinBets = new List<KeyValuePair<int, Decimal>>();
+      _spinBets = new List<KeyValuePair<int, decimal>>();
       for (int key = 1; key <= _spinSize; ++key)
-        _spinBets.Add(new KeyValuePair<int, Decimal>(key, _betIncrementSequence[key - 1] * _betSize));
+        _spinBets.Add(new KeyValuePair<int, decimal>(key, _betIncrementSequence[key - 1] * _betSize));
     }
   }
 }

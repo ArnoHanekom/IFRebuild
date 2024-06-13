@@ -35,7 +35,7 @@ namespace Infinity.Engine
       }
     }
 
-    public KeyValuePair<int, Decimal> SpinBet => _currentGap.SpinBets[_cursor];
+    public KeyValuePair<int, decimal> SpinBet => _currentGap.SpinBets[_cursor];
 
     public Gap CurrentGap => _currentGap;
 
