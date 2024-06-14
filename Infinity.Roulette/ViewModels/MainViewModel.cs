@@ -1,23 +1,8 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: Infinity.Roulette.ViewModels.MainViewModel
-// Assembly: Infinity.Roulette, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-// MVID: 3CFA51E1-B583-4CD4-A8C2-1C8E6C514381
-// Assembly location: C:\Users\ArnoHanekom\Downloads\Release_20221202_v2\Release_20221202_v2\Release\Infinity.Roulette.dll
-
-using Infinity.Data.Constants;
-using Infinity.Data.Extensions;
+﻿using Infinity.Data.Constants;
 using Infinity.Data.Models;
 using Infinity.Engine;
 using Infinity.Engine.Services;
 using Infinity.Services.Interfaces;
-using Newtonsoft.Json;
-using System;
-using System.Buffers;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -965,6 +950,13 @@ namespace Infinity.Roulette.ViewModels
             newTable.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             newTable.Show();
             newTable.Owner = null;
+        }
+
+        private bool _searching;
+        public bool Searching
+        {
+            get => _searching;
+            private set => _searching = value;
         }
     }
 }

@@ -175,17 +175,8 @@
                                             </Style>
                                         </DataGridColumn.CellStyle>
                                     </DataGridTextColumn>
-                                    <DataGridTextColumn MinWidth="80" Width="1*" Header="Resets" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
-                                      Binding="{Binding GameBoardResets}">
-                                        <DataGridColumn.CellStyle>
-                                            <Style TargetType="{x:Type DataGridCell}">
-                                                <Setter Property="TextBlock.TextAlignment" Value="Center"/>
-                                                <Setter Property="Control.FontWeight" Value="Bold"/>
-                                            </Style>
-                                        </DataGridColumn.CellStyle>
-                                    </DataGridTextColumn>
                                     <DataGridTextColumn MinWidth="60" Width="1*" Header="R1W" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
-                                      Binding="{Binding TableFirstRowWins}">
+                                      Binding="{Binding FirstRowWin}">
                                         <DataGridColumn.CellStyle>
                                             <Style TargetType="{x:Type DataGridCell}">
                                                 <Setter Property="TextBlock.TextAlignment" Value="Center"/>
@@ -194,7 +185,7 @@
                                         </DataGridColumn.CellStyle>
                                     </DataGridTextColumn>
                                     <DataGridTextColumn MinWidth="60" Width="1*" Header="TW" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
-                                      Binding="{Binding TableHighestColumnWin}">
+                                      Binding="{Binding HighestColumnWin}">
                                         <DataGridColumn.CellStyle>
                                             <Style TargetType="{x:Type DataGridCell}">
                                                 <Setter Property="TextBlock.TextAlignment" Value="Center"/>
@@ -203,7 +194,7 @@
                                         </DataGridColumn.CellStyle>
                                     </DataGridTextColumn>
                                     <DataGridTextColumn MinWidth="70" Width="1*" Header="TW 0s" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
-                                      Binding="{Binding TableColumnWinZeroCount}">
+                                      Binding="{Binding ColumnWinZeroCount}">
                                         <DataGridColumn.CellStyle>
                                             <Style TargetType="{x:Type DataGridCell}">
                                                 <Setter Property="TextBlock.TextAlignment" Value="Center"/>
@@ -212,7 +203,7 @@
                                         </DataGridColumn.CellStyle>
                                     </DataGridTextColumn>
                                     <DataGridTextColumn MinWidth="70" Width="1*" Header="TW 1s" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
-                                      Binding="{Binding TableColumnWinOneCount}">
+                                      Binding="{Binding ColumnWinOneCount}">
                                         <DataGridColumn.CellStyle>
                                             <Style TargetType="{x:Type DataGridCell}">
                                                 <Setter Property="TextBlock.TextAlignment" Value="Center"/>

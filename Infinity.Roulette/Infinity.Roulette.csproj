@@ -19,6 +19,11 @@
     <Content Include="images\roulette.ico" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    <PackageReference Include="log4net" Version="2.0.17" />
+    <PackageReference Include="MediatR" Version="12.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
     <PackageReference Include="ModernWpfUI" Version="0.9.6" />
     <PackageReference Include="Unity" Version="5.11.10" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />

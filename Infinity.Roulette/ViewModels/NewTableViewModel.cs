@@ -5,18 +5,11 @@ using Infinity.Engine.Services;
 using Infinity.Roulette.LayoutModels;
 using Infinity.Roulette.Statics;
 using Infinity.Services.Interfaces;
-using System;
-using System.Buffers;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Xml;
 
 namespace Infinity.Roulette.ViewModels
 {
@@ -228,14 +221,14 @@ namespace Infinity.Roulette.ViewModels
                     _tableGame = value;
                 if (_tableGame != null)
                 {
-                    List<int> spinHistory = new List<int>(_tableGame.SpinHistory.TakeLast(100));
+                    List<int> spinHistory = new(_tableGame.SpinHistory.TakeLast(100));
                     spinHistory.Reverse();
-                    _gameHistory = new List<Label>(new GameSpinHistory(spinHistory));
-                    _totalGameSpins = _tableGame.Spins;
-                    _gameRows = _tableGame.GetRows();
-                    _gameCounts = _tableGame.GetCounts();
-                    _gameGS = _tableGame.GetGS();
-                    _gameMaxGS = _tableGame.GetMaxGS();                    
+                    GameHistory = new List<Label>(new GameSpinHistory(spinHistory));
+                    TotalGameSpins = _tableGame.Spins;
+                    GameRows = _tableGame.GetRows();
+                    GameCounts = _tableGame.GetCounts();
+                    GameGS = _tableGame.GetGS();
+                    GameMaxGS = _tableGame.GetMaxGS();                    
                 }
                 OnPropertyChanged(nameof(TableGame));
             }
@@ -260,13 +253,9 @@ namespace Infinity.Roulette.ViewModels
             Spinning = false;
             GameTypeOptions = new ObservableCollection<ComboBoxItem>(_gameTypeService.GetTypes().Where(gt => gt != GameType.Spinfile && gt != 0).Select(gt =>
             {
-                return new ComboBoxItem()
-                {
-                    Content = gt.ToString()
-                };
+                return new ComboBoxItem(){Content = gt.ToString()};
             }));
-            SelectedGameType = _gameTypeOptions.FirstOrDefault(gto => gto.Content.ToString() == GameType.Random.ToString())!;
-            TotalGameSpins = 0;
+            SelectedGameType = _gameTypeOptions.FirstOrDefault(gto => gto.Content.ToString() == GameType.Random.ToString())!;            
             PrepareAutoplayOptions();
             CheckAndLoadAutoplaySettings();
             GetLatestSetting();

@@ -8,15 +8,8 @@ using Infinity.Data.Constants;
 using Infinity.Data.Models;
 using Infinity.Services.Interfaces;
 using Infinity.Engine;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Xml;
 using Infinity.Engine.Services;
-
 
 #nullable enable
 namespace Infinity.Roulette.ViewModels
@@ -64,7 +57,7 @@ namespace Infinity.Roulette.ViewModels
 
         public List<Table> LoadedResults
         {
-            get => _loadedResults;
+            get => _loadedResults.OrderBy(t => t.Order).ToList();
             set
             {
                 if (_loadedResults != value)
@@ -186,9 +179,9 @@ namespace Infinity.Roulette.ViewModels
 
         public void LoadSpinfile(string filename)
         {
-            Spinfile = new List<int>();
+            Spinfile = [];
             using FileStream fileStream = File.Open(filename, FileMode.Open);
-            using StreamReader streamReader = new StreamReader(fileStream);
+            using StreamReader streamReader = new(fileStream);
             while (!streamReader.EndOfStream)
             {
                 string str = streamReader.ReadLine()!;

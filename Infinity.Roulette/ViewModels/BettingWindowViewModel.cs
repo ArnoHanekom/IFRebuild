@@ -80,7 +80,7 @@ namespace Infinity.Roulette.ViewModels
         private Style defaultCountTextBlock => (Style)Application.Current.FindResource("BetWindowLabelTextBlockRandomSpinCount");
         private Style otherCountTextBlock => (Style)Application.Current.FindResource("BetWindowLabelTextBlockOtherSpinCount");
 
-        private Style GetNumberStyle(BoardNumber boardNumber, int rowIdx, CounterNumber[] prevCounts, int currSpinType, Style otherCountStyle)
+        private Style GetNumberStyle(BoardNumber boardNumber, int rowIdx)
         {
             if (!boardNumber.IsCount())
             {
@@ -89,152 +89,16 @@ namespace Infinity.Roulette.ViewModels
                 else
                     return defaultTextBlock;
             }
-
-            //Debug.WriteLine($"Row: {rowIdx}\tNumber: {boardNumber.Number}\tNumber Codes: {boardNumber.Codes.Count}\tPrev counts: {prevCounts.Count()}\tSpin Type: {currSpinType}");
-
-            var currSpin = currSpinType > 0 ? (GameType)currSpinType : GameType.Random;
-            if (currSpin == GameType.Random || currSpin == GameType.Autoplay)
-                return defaultCountTextBlock;
-            else
-            {
-                if (prevCounts.Any(pc => pc.Number == boardNumber.Number))
-                    return (Style)(prevCounts.First(pc => pc.Number == boardNumber.Number).TextBlockStyle ?? defaultCountTextBlock);
-                else
-                    return otherCountStyle;
-            }
+            return defaultCountTextBlock;
         }
 
         public void PrepareTableLayout()
         {
             BettingWindowLayout[] collection = new BettingWindowLayout[6];
             int index1 = Game.BoardLayouts[0].Matrix.CurrentColumn;
-
-            //Task.Run(async() =>
-            //{
-            //    var spins = await _engineService.GetSpinEntitiesAsync(Game.TableUniqueId, Game.GameId);
-            //    if (spins.Count > 0)
-            //    {
-            //        Debug.WriteLine($"SPINS: ");
-            //        for (int i = 0; i < spins.Count; i++)
-            //        {
-            //            var spin = spins[i];
-            //            Debug.WriteLine($"Id: {spin.Id}\tWinning Number: {spin.WinningNumber}");
-            //            if (i == spins.Count - 2)
-            //            {
-            //                Debug.WriteLine($"");
-            //                Debug.WriteLine($"PREV Counts:");
-            //                foreach (var num in spin.CountNumbers)
-            //                {
-            //                    Debug.WriteLine($"Number: {num.ToString()}");
-            //                }
-            //                Debug.WriteLine($"");
-            //            }
-            //            if (i == spins.Count - 1)
-            //            {
-            //                Debug.WriteLine($"");
-            //                Debug.WriteLine($"Counts:");
-            //                foreach (var num in spin.CountNumbers)
-            //                {
-            //                    Debug.WriteLine($"Number: {num.ToString()}");
-            //                }
-            //                Debug.WriteLine($"");
-            //            }
-            //        }
-            //    }
-            //});
-
-
-
-            var activePhase = Game.BoardLayouts[0].GetActiveSpinPhase();
-            bool reset = Game.BoardLayouts[0].IsReset;
-            if (reset)
-            {
-                _countColorService.ResetOtherStyle();
-            }
-
-            var otherStyle = _countColorService.GetOtherStyle();
-            Style countOtherStyle = otherStyle is null ? defaultCountTextBlock : (Style)otherStyle;
-
-            //var selectedStyleKey = ResourceHelper.KeyFromResource(countOtherStyle);
             BoardNumber[] spinResults = Game.BoardLayouts[0].Columns.SelectMany(c => c.Numbers).ToArray();
-            ProcessCountNumbers(spinResults, activePhase.StartedBy.HasValue ? activePhase.StartedBy.Value : -1, Game.TableUniqueId, Game.CurrentSpinNo, reset);
+            
             Guid gameTable = Game.TableUniqueId;
-            var prevSpinCounts = _countLabelService.GetPreviousSpinCountNumbers(gameTable);
-            var spinCounts = _countLabelService.GetCountNumbers(gameTable);
-
-            //var countStyle = _engineService.GetGameBoardCountStyle(Game.TableUniqueId, Game.RouletteGameId);
-            //var gameSpinType = _engineService.GetGameBoardSpinType(Game.TableUniqueId, Game.RouletteGameId);
-            //var isBoardReset = _engineService.GetGameBoardIsReset(Game.TableUniqueId, Game.RouletteGameId);
-
-            //Debug.WriteLine($"");
-            //Debug.WriteLine($"");
-            //Debug.WriteLine($"\t\t\tGame Info");
-            //Debug.WriteLine($"Count Style: '{countStyle}'\tSpin type: {gameSpinType}\tBoard Reset: {isBoardReset}");            
-            ////var openPhases = _engineService.GetOpenPhases(gameTable, Game.RouletteGameId);
-            //Debug.WriteLine($"");
-            //Debug.WriteLine($"\t\t\tGame Open Phases ({openPhases.Count})");
-            //foreach (var openPhase in openPhases)
-            //{
-            //    Debug.WriteLine($"Phase: {openPhase.Id}\tSpin Type: {(GameType)openPhase.SpinType}\tEnd Type: {(GameType)openPhase.EndType}\tStart: {openPhase.Start}\tDrawn: {openPhase.Drawn}");
-            //}
-            //
-            //var phases = _engineService.GetPhases(gameTable, Game.RouletteGameId);
-            //Debug.WriteLine($"");
-            //Debug.WriteLine($"\t\t\tGame Phases ({phases.Count})");
-            //foreach (var phase in phases)
-            //{
-            //    Debug.WriteLine($"Phase: {phase.Id}\tSpin Type: {(GameType)phase.SpinType}\tEnd Type: {(GameType)phase.EndType}\tStart: {phase.Start}\tDrawn: {phase.Drawn}");
-            //}
-            //
-            //var lastEnded = _engineService.GetLastEndedPhase(gameTable, Game.RouletteGameId);
-            //Debug.WriteLine($"");
-            //Debug.WriteLine($"\t\t\tLast Ended Phase");
-            //if (lastEnded is not null)
-            //{
-            //    Debug.WriteLine($"Phase: {lastEnded.Id}\tSpin Type: {(GameType)lastEnded.SpinType}\tEnd Type: {(GameType)lastEnded.EndType}\tStart: {lastEnded.Start}\tDrawn: {lastEnded.Drawn}");
-            //    _engineService.DrawPhase(lastEnded);
-            //    Debug.WriteLine($"Phase: {lastEnded.Id}\tSpin Type: {(GameType)lastEnded.SpinType}\tEnd Type: {(GameType)lastEnded.EndType}\tStart: {lastEnded.Start}\tDrawn: {lastEnded.Drawn}");
-            //}
-            //
-            //var current = _engineService.GetCurrentOpenPhase(gameTable, Game.RouletteGameId);
-            //Debug.WriteLine($"");
-            //Debug.WriteLine($"\t\t\tLast Ended Phase");
-            //if (current is not null)
-            //{
-            //    Debug.WriteLine($"Phase: {current.Id}\tSpin Type: {(GameType)current.SpinType}\tEnd Type: {(GameType)current.EndType}\tStart: {current.Start}\tDrawn: {current.Drawn}");
-            //    _engineService.DrawPhase(current);
-            //    Debug.WriteLine($"Phase: {current.Id}\tSpin Type: {(GameType)current.SpinType}\tEnd Type: {(GameType)current.EndType}\tStart: {current.Start}\tDrawn: {current.Drawn}");
-            //}
-            //var gameInfo = _engineService.GetGameInfo(Game.TableUniqueId, Game.RouletteGameId);
-            //if (gameInfo is null)
-            //{
-            //    Debug.WriteLine($"Error: No game info found for Table: {Game.TableUniqueId}, Game: {Game.RouletteGameId}");
-            //}
-            //else
-            //{
-            //    var winnerInfo = gameInfo.SpinInfo.SpinNumberDetail;
-            //    Debug.WriteLine($"Winning Number: {winnerInfo.WinningNumber}\tBoard Number: {winnerInfo.GameNumber.Number}\tNumber board: {winnerInfo.BoardCode}");
-            //    Debug.WriteLine($"Number Codes: {winnerInfo.CodeCount}\tEstimated Codes: {winnerInfo.EstimatedCodeCount}\tActual Codes: {winnerInfo.ActualCodeCount}");
-            //    var fullGameInfo = JsonConvert.SerializeObject(gameInfo, Formatting.Indented);
-            //    Debug.WriteLine("JSON FULL GAME INFO:");
-            //    Debug.WriteLine($"{fullGameInfo}");
-            //}
-            //
-            //var gameSwapInfo = _engineService.GetGameSwapInfo(Game.TableUniqueId, Game.RouletteGameId);
-            //if (gameInfo is null)
-            //{
-            //    Debug.WriteLine($"Error: No game swap info found for Table: {Game.TableUniqueId}, Game: {Game.RouletteGameId}");
-            //}
-            //else
-            //{
-            //    Debug.WriteLine($"");
-            //    Debug.WriteLine($"");
-            //    Debug.WriteLine($"\t\t\tSWAP Info");
-            //    var fullSwapInfo = JsonConvert.SerializeObject(gameSwapInfo, Formatting.Indented);
-            //    Debug.WriteLine("JSON FULL GAME SWAP INFO:");
-            //    Debug.WriteLine($"{fullSwapInfo}");
-            //}
-
             for (int index2 = 0; index2 < 6; ++index2)
             {
                 int code = Game.BoardLayouts[0].Columns[index1].Code;
@@ -247,12 +111,12 @@ namespace Infinity.Roulette.ViewModels
                 bool flag2 = Game.BoardLayouts[0].Columns.HighestColumnWin() == columnWins;
                 BoardNumber[] array = ReOrderedColumnNumbers(Game.BoardLayouts[0].Columns[index1]).ToArray();
                 Style[] rowNumbersStyles = new Style[6];
-                rowNumbersStyles[0] = GetNumberStyle(array[0], index2, prevSpinCounts, Game.SpinType, countOtherStyle);
-                rowNumbersStyles[1] = GetNumberStyle(array[1], index2, prevSpinCounts, Game.SpinType, countOtherStyle);
-                rowNumbersStyles[2] = GetNumberStyle(array[2], index2, prevSpinCounts, Game.SpinType, countOtherStyle);
-                rowNumbersStyles[3] = GetNumberStyle(array[3], index2, prevSpinCounts, Game.SpinType, countOtherStyle);
-                rowNumbersStyles[4] = GetNumberStyle(array[4], index2, prevSpinCounts, Game.SpinType, countOtherStyle);
-                rowNumbersStyles[5] = GetNumberStyle(array[5], index2, prevSpinCounts, Game.SpinType, countOtherStyle);
+                rowNumbersStyles[0] = GetNumberStyle(array[0], index2);
+                rowNumbersStyles[1] = GetNumberStyle(array[1], index2);
+                rowNumbersStyles[2] = GetNumberStyle(array[2], index2);
+                rowNumbersStyles[3] = GetNumberStyle(array[3], index2);
+                rowNumbersStyles[4] = GetNumberStyle(array[4], index2);
+                rowNumbersStyles[5] = GetNumberStyle(array[5], index2);
 
                 TextBlock textBlock1 = new TextBlock()
                 {
@@ -353,10 +217,6 @@ namespace Infinity.Roulette.ViewModels
                 index1 = num > 5 ? 0 : num;
             }
             TableLayout = new ObservableCollection<BettingWindowLayout>(collection);
-
-            _countLabelService.ClearPrevSpinCountNumbers();
-            _countLabelService.AddPrevSpinCountNumbers(spinCounts.ToList());
-            _countLabelService.ClearCountNumbers();
         }
 
         private Style GetNumberStyle(int i, BoardNumber num) => num.IsCount() ? GetCountNumberStyle(i) : GetNormalNumberStyle(i);
