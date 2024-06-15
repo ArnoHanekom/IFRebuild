@@ -2,6 +2,7 @@
 using Infinity.Roulette.Containers;
 using Infinity.Roulette.ViewModels;
 using Microsoft.Win32;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -36,12 +37,12 @@ namespace Infinity.Roulette
 
         private void ResultsGrid_LoadingRow(object sender, DataGridRowEventArgs e)
         {
-            if (!(e.Row.Item is Table table))
+            if (e.Row.Item is not Table table)
                 return;
             e.Row.Style = Application.Current.FindResource("NormalResultRow") as Style;
-            if (!table.R1WMatch && !table.TWMatch)
-                return;
-            e.Row.Style = Application.Current.FindResource("HighlightWinsMatch") as Style;
+
+            if (table.R1WMatch || table.TWMatch)
+                e.Row.Style = Application.Current.FindResource("HighlightWinsMatch") as Style;
         }
 
         private void ResultsGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
