@@ -73,7 +73,7 @@ namespace Infinity.Roulette.ViewModels
         private Style firstRowCountLabel => (Style)Application.Current.FindResource("BetWindowLabelCountFirstRow");
         private Style rowWinsLabel => (Style)Application.Current.FindResource("BetWindowLabelRowWins");
         private Style tableWinsLabel => (Style)Application.Current.FindResource("BetWindowLabelTableWins");
-        private Style rowWinsHighestAndFirstLabel => (Style)Application.Current.FindResource("BetWindowLabelRowWinsHighestAndFirst");
+        private Style rowWinsHighestLabel => (Style)Application.Current.FindResource("BetWindowLabelRowWinsHighestAndFirst");
         private Style tableWinsHighestLabel => (Style)Application.Current.FindResource("BetWindowLabelTableWinsHighest");
         private Style defaultTextBlock => (Style)Application.Current.FindResource("BetWindowLabelTextBlock");
         private Style defaultFirstRowTextBlock => (Style)Application.Current.FindResource("BetWindowLabelFirstRowTextBlock");
@@ -103,116 +103,146 @@ namespace Infinity.Roulette.ViewModels
             {
                 int code = Game.BoardLayouts[0].Columns[index1].Code;
                 int codeWin = Game.BoardLayouts[0].CodeWins[index2];                
-                KeyValuePair<int, int>? nullable = new KeyValuePair<int, int>?(Game.BoardLayouts[0].CodeWins.OrderByDescending(cw => cw.Value).FirstOrDefault());
-                bool flag1 = false;
-                if (index2 == 0 && nullable.HasValue)
-                    flag1 = nullable.Value.Key == index2;
-                int columnWins = Game.BoardLayouts[0].Columns[index1].ColumnWins;
-                bool flag2 = Game.BoardLayouts[0].Columns.HighestColumnWin() == columnWins;
-                BoardNumber[] array = ReOrderedColumnNumbers(Game.BoardLayouts[0].Columns[index1]).ToArray();
-                Style[] rowNumbersStyles = new Style[6];
-                rowNumbersStyles[0] = GetNumberStyle(array[0], index2);
-                rowNumbersStyles[1] = GetNumberStyle(array[1], index2);
-                rowNumbersStyles[2] = GetNumberStyle(array[2], index2);
-                rowNumbersStyles[3] = GetNumberStyle(array[3], index2);
-                rowNumbersStyles[4] = GetNumberStyle(array[4], index2);
-                rowNumbersStyles[5] = GetNumberStyle(array[5], index2);
+                var rowWinsHighest = new KeyValuePair<int, int>?(Game.BoardLayouts[0].CodeWins.OrderByDescending(cw => cw.Value).FirstOrDefault());
+                
+                bool highestRowWin = false;
+                if (rowWinsHighest.HasValue)
+                    highestRowWin = rowWinsHighest.Value.Key == index2;
 
-                TextBlock textBlock1 = new TextBlock()
+                int columnWins = Game.BoardLayouts[0].Columns[index1].ColumnWins;
+                bool highestTableWin = Game.BoardLayouts[0].Columns.HighestColumnWin() == columnWins;
+                BoardNumber[] boardCodeNumbers = ReOrderedColumnNumbers(Game.BoardLayouts[0].Columns[index1]).ToArray();
+                Style[] rowNumbersStyles =
+                [
+                    GetNumberStyle(boardCodeNumbers[0], index2),
+                    GetNumberStyle(boardCodeNumbers[1], index2),
+                    GetNumberStyle(boardCodeNumbers[2], index2),
+                    GetNumberStyle(boardCodeNumbers[3], index2),
+                    GetNumberStyle(boardCodeNumbers[4], index2),
+                    GetNumberStyle(boardCodeNumbers[5], index2),
+                ];
+
+                TextBlock textBlock1 = new()
                 {
                     Text = string.Format("{0}", code),
                     Style = GetDefaultNumberTextBlock(index2)
                 };
                 
-                TextBlock textBlock2 = new TextBlock()
+                TextBlock textBlock2 = new()
                 {
-                    Text = string.Format("{0}", array[0].Number),
+                    Text = string.Format("{0}", boardCodeNumbers[0].Number),
                     Style = rowNumbersStyles[0]
                 };
-                _countLabelService.UpdateCountNumberStyle(gameTable, array[0].Number, rowNumbersStyles[0]);
+                _countLabelService.UpdateCountNumberStyle(gameTable, boardCodeNumbers[0].Number, rowNumbersStyles[0]);
                 
-                TextBlock textBlock3 = new TextBlock()
+                TextBlock textBlock3 = new()
                 {
-                    Text = string.Format("{0}", array[1].Number),
+                    Text = string.Format("{0}", boardCodeNumbers[1].Number),
                     Style = rowNumbersStyles[1]
                 };
-                _countLabelService.UpdateCountNumberStyle(gameTable, array[1].Number, rowNumbersStyles[1]);
+                _countLabelService.UpdateCountNumberStyle(gameTable, boardCodeNumbers[1].Number, rowNumbersStyles[1]);
 
-                TextBlock textBlock4 = new TextBlock()
+                TextBlock textBlock4 = new()
                 {
-                    Text = string.Format("{0}", array[2].Number),
+                    Text = string.Format("{0}", boardCodeNumbers[2].Number),
                     Style = rowNumbersStyles[2]
                 };
-                _countLabelService.UpdateCountNumberStyle(gameTable, array[2].Number, rowNumbersStyles[2]);
+                _countLabelService.UpdateCountNumberStyle(gameTable, boardCodeNumbers[2].Number, rowNumbersStyles[2]);
 
-                TextBlock textBlock5 = new TextBlock()
+                TextBlock textBlock5 = new()
                 {
-                    Text = string.Format("{0}", array[3].Number),
+                    Text = string.Format("{0}", boardCodeNumbers[3].Number),
                     Style = rowNumbersStyles[3]
                 };
-                _countLabelService.UpdateCountNumberStyle(gameTable, array[3].Number, rowNumbersStyles[3]);
+                _countLabelService.UpdateCountNumberStyle(gameTable, boardCodeNumbers[3].Number, rowNumbersStyles[3]);
 
-                TextBlock textBlock6 = new TextBlock()
+                TextBlock textBlock6 = new()
                 {
-                    Text = string.Format("{0}", array[4].Number),
+                    Text = string.Format("{0}", boardCodeNumbers[4].Number),
                     Style = rowNumbersStyles[4]
                 };
-                _countLabelService.UpdateCountNumberStyle(gameTable, array[4].Number, rowNumbersStyles[4]);
+                _countLabelService.UpdateCountNumberStyle(gameTable, boardCodeNumbers[4].Number, rowNumbersStyles[4]);
 
-                TextBlock textBlock7 = new TextBlock()
+                TextBlock textBlock7 = new()
                 {
-                    Text = string.Format("{0}", array[5].Number),
+                    Text = string.Format("{0}", boardCodeNumbers[5].Number),
                     Style = rowNumbersStyles[5]
                 };
-                _countLabelService.UpdateCountNumberStyle(gameTable, array[5].Number, rowNumbersStyles[5]);
+                _countLabelService.UpdateCountNumberStyle(gameTable, boardCodeNumbers[5].Number, rowNumbersStyles[5]);
 
-                TextBlock textBlock8 = new TextBlock()
+                TextBlock textBlock8 = new()
                 {
                     Text = string.Format("{0}", codeWin)
                 };
-                TextBlock textBlock9 = new TextBlock()
+                TextBlock textBlock9 = new()
                 {
                     Text = string.Format("{0}", columnWins)
                 };
                 BettingWindowLayout bettingWindowLayout1 = new BettingWindowLayout();
-                Label label1 = new Label();
-                label1.Content = textBlock1;
-                label1.Style = index2 == 0 ? firstRowLabel : defaultLabel;
+                Label label1 = new()
+                {
+                    Content = textBlock1,
+                    Style = index2 == 0 ? firstRowLabel : defaultLabel
+                };
                 bettingWindowLayout1.Code = label1;
-                Label label2 = new Label();
-                label2.Content = textBlock2;
-                label2.Style = GetNumberStyle(index2, array[0]);
+
+                Label label2 = new()
+                {
+                    Content = textBlock2,
+                    Style = GetNumberStyle(index2, boardCodeNumbers[0])
+                };
                 bettingWindowLayout1.Number1 = label2;
-                Label label3 = new Label();
-                label3.Content = textBlock3;
-                label3.Style = GetNumberStyle(index2, array[1]);
+
+                Label label3 = new()
+                {
+                    Content = textBlock3,
+                    Style = GetNumberStyle(index2, boardCodeNumbers[1])
+                };
                 bettingWindowLayout1.Number2 = label3;
-                Label label4 = new Label();
-                label4.Content = textBlock4;
-                label4.Style = GetNumberStyle(index2, array[2]);
+
+                Label label4 = new()
+                {
+                    Content = textBlock4,
+                    Style = GetNumberStyle(index2, boardCodeNumbers[2])
+                };
                 bettingWindowLayout1.Number3 = label4;
-                Label label5 = new Label();
-                label5.Content = textBlock5;
-                label5.Style = GetNumberStyle(index2, array[3]);
+
+                Label label5 = new()
+                {
+                    Content = textBlock5,
+                    Style = GetNumberStyle(index2, boardCodeNumbers[3])
+                };
                 bettingWindowLayout1.Number4 = label5;
-                Label label6 = new Label();
-                label6.Content = textBlock6;
-                label6.Style = GetNumberStyle(index2, array[4]);
+
+                Label label6 = new()
+                {
+                    Content = textBlock6,
+                    Style = GetNumberStyle(index2, boardCodeNumbers[4])
+                };
                 bettingWindowLayout1.Number5 = label6;
-                Label label7 = new Label();
-                label7.Content = textBlock7;
-                label7.Style = GetNumberStyle(index2, array[5]);
+
+                Label label7 = new()
+                {
+                    Content = textBlock7,
+                    Style = GetNumberStyle(index2, boardCodeNumbers[5])
+                };
                 bettingWindowLayout1.Number6 = label7;
-                Label label8 = new Label();
-                label8.Content = textBlock8;
-                label8.Style = flag1 ? rowWinsHighestAndFirstLabel : rowWinsLabel;
+
+                Label label8 = new()
+                {
+                    Content = textBlock8,
+                    Style = highestRowWin ? rowWinsHighestLabel : rowWinsLabel
+                };
                 bettingWindowLayout1.RowWins = label8;
-                Label label9 = new Label();
-                label9.Content = textBlock9;
-                label9.Style = flag2 ? tableWinsHighestLabel : tableWinsLabel;
+
+                Label label9 = new()
+                {
+                    Content = textBlock9,
+                    Style = highestTableWin ? tableWinsHighestLabel : tableWinsLabel
+                };
                 bettingWindowLayout1.ColumnWins = label9;
-                BettingWindowLayout bettingWindowLayout2 = bettingWindowLayout1;
-                collection[index2] = bettingWindowLayout2;
+                
+                collection[index2] = bettingWindowLayout1;
                 int num = index1 + 1;
                 index1 = num > 5 ? 0 : num;
             }
