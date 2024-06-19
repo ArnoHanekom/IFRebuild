@@ -50,7 +50,10 @@ namespace Infinity.Data.Models
         {
             uniqueTableId = tableId;
         }
-        public bool TableR1Match(int? limit) => limit.HasValue && FirstRowWin >= limit.Value && _r1wAndHighest(R1Rows);        
+        public bool TableR1Match(int? limit) => limit.HasValue && FirstRowWin >= limit.Value && _r1wAndHighest(R1Rows);
+
+        public int Matched => ExactMatch ? 1 : WinsMatch ? 1 : R1WMatch ? 1 : TWMatch ? 1 : 0;
         public int Order => ExactMatch ? 0 : WinsMatch ? 1 : R1WMatch ? 2 : TWMatch ? 3 : 99;
+        public int ColumnWithHighestRowWin => (Game.BoardLayouts[0].CodeWins.OrderByDescending(cw => cw.Value).FirstOrDefault()).Key + 1;
     }
 }

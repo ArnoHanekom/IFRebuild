@@ -281,7 +281,7 @@
         <ui:MenuFlyout>
             <MenuItem Click="mnuDefaultSettings_Click" x:Name="mnuDefaultSettings" Header="Default Settings" Cursor="Hand" Margin="5,0,5,0"/>
             <MenuItem Click="mnuGenerateSpinfile_Click" x:Name="mnuGenerateSpinfile" Header="Generate Spinfile" Cursor="Hand" Margin="5,0,5,0"/>
-            <!--<MenuItem x:Name="mnuReworkTester" Header="Rework Test" Cursor="Hand" Margin="5,0,5,0" Click="mnuReworkTester_Click" />-->
+            <MenuItem x:Name="mnuReworkTester" Header="Rework Test" Cursor="Hand" Margin="5,0,5,0" Click="mnuReworkTester_Click" />
         </ui:MenuFlyout>
     </ui:ContextFlyoutService.ContextFlyout>
 </Window>

@@ -10,13 +10,7 @@
     <PackageIcon>matrix.ico</PackageIcon>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="5c165542b0164202f1cf04d9 %281%29.png" />
     <None Remove="autoplay btn.png" />
-    <None Remove="exclamation-512.png" />
-    <None Remove="file-upload-icon.png" />
-    <None Remove="images\5c165542b0164202f1cf04d9 %281%29.png" />
-    <None Remove="images\exclamation-512.png" />
-    <None Remove="images\file-upload-icon.png" />
     <None Remove="Images\grey_gradient_background_darkest.jpg" />
     <None Remove="Images\RI_Logo.png" />
     <None Remove="matrix.ico" />
@@ -28,16 +22,12 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.0" />
     <PackageReference Include="log4net" Version="2.0.17" />
     <PackageReference Include="MediatR" Version="12.3.0" />
+    <PackageReference Include="Microsoft.Expression.Blend.SDK.WPF" Version="4.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Maui.Graphics" Version="8.0.60" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.122" />
     <PackageReference Include="ModernWpfUI" Version="0.9.6" />
-    <PackageReference Include="System.Drawing.Common" Version="8.0.6" />
-    <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
     <PackageReference Include="Unity" Version="5.11.10" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
@@ -53,21 +43,7 @@
     <ProjectReference Include="..\Infinity.Services\Infinity.Services.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="5c165542b0164202f1cf04d9 (1).png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="autoplay btn.png" />
-    <Resource Include="exclamation-512.png" />
-    <Resource Include="file-upload-icon.png" />
-    <Resource Include="images\5c165542b0164202f1cf04d9 (1).png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="images\exclamation-512.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="images\file-upload-icon.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Images\grey_gradient_background_darkest.jpg" />
     <Resource Include="Images\Matrix.ico" />
     <Resource Include="Images\RI_Logo.png">

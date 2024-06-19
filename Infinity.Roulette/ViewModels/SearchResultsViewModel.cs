@@ -36,7 +36,7 @@ namespace Infinity.Roulette.ViewModels
 
         private void LoadResults()
         {
-            LoadedResults = _searches.GetSpinResults();
+            LoadedResults = [.. _searches.GetSpinResults().OrderByDescending(t => t.Rows).OrderBy(t => t.Order).Where(t => t.Matched == 1)];
             OpenedResults = new List<Table>();
         }
 
@@ -57,7 +57,7 @@ namespace Infinity.Roulette.ViewModels
 
         public List<Table> LoadedResults
         {
-            get => _loadedResults.OrderBy(t => t.Order).ToList();
+            get => _loadedResults;
             set
             {
                 if (_loadedResults != value)
@@ -143,6 +143,7 @@ namespace Infinity.Roulette.ViewModels
                     _Spinning = value;
                 ShowRunBtn = !_Spinning;
                 ShowStopBtn = _Spinning;
+                IsPlaying = Spinning;
                 OnPropertyChanged(nameof(Spinning));
             }
         }
@@ -194,7 +195,21 @@ namespace Infinity.Roulette.ViewModels
                     }
                 }
             }
+
+            FileLoaded = true;
         }
+
+        private bool _fileLoaded { get; set; }
+        public bool FileLoaded
+        {
+            get => _fileLoaded;
+            set
+            {
+                _fileLoaded = value;
+                OnPropertyChanged(nameof(FileLoaded));
+            }
+        }
+        public bool FileNotLoaded => !FileLoaded;
 
         private List<Table> _SpinFileTables { get; set; } = default!;
 
@@ -227,11 +242,20 @@ namespace Infinity.Roulette.ViewModels
             _tables.SetTotalCalculatedSpins(tables.Count() * Spinfile.Count());
             RunSpinfileSpins(tables, cancellationToken.Token, resultsWindow);
         }
-
-        public async void RunSpinfileSpins(
-          IEnumerable<Table> tables,
-          CancellationToken token,
-          SearchResults resultsWindow)
+        public void StartNewSpinfileSpins(IEnumerable<Table> tables, NewSearchResults resultsWindow)
+        {
+            FileLoaded = false;
+            SpinProgress = 0.0;
+            SelectedAutoplayValue = 1;
+            SpinFileTables = tables.ToList();
+            _tables.NewPlaySearch();
+            _tables.ResetCounters();
+            _searches.NewSpinSearch();
+            Spinning = true;
+            _tables.SetTotalCalculatedSpins(tables.Count() * Spinfile.Count());
+            RunNewSpinfileSpins(tables, cancellationToken.Token, resultsWindow);
+        }
+        public async void RunSpinfileSpins(IEnumerable<Table> tables, CancellationToken token, SearchResults resultsWindow)
         {
             List<Table> list = tables.ToList();
             List<Task> tasks = new();
@@ -259,7 +283,34 @@ namespace Infinity.Roulette.ViewModels
                 }
             }
         }
+        public async void RunNewSpinfileSpins(IEnumerable<Table> tables, CancellationToken token, NewSearchResults resultsWindow)
+        {
+            List<Table> list = tables.ToList();
+            List<Task> tasks = new();
+            for (int idx = 0; idx < list.Count; ++idx)
+            {
+                tasks.Add(SpinfileTableSpinTask(idx, token));
+                if (token.IsCancellationRequested)
+                    break;
+            }
+            await Task.WhenAll(tasks);
+            //await _engineService.CompileTableSpinsIfnoAsync();
 
+            lock (tasks)
+            {
+                int num1 = tasks.Count(t => t.IsCanceled);
+                int num2 = tasks.Count(t => t.IsCompleted);
+                if (num1 <= 0 && num2 != tasks.Count)
+                {
+                    tasks = null;
+                }
+                else
+                {
+                    FinalizeNewCancellationSpin(resultsWindow);
+                    tasks = null;
+                }
+            }
+        }
         private Task SpinfileTableSpinTask(int idx, CancellationToken token) => Task.Run(async () => await RunSpinfileTableAutoplays(idx, token));
 
         private async Task<Task> RunSpinfileTableAutoplays(int idx, CancellationToken token)
@@ -389,6 +440,13 @@ namespace Infinity.Roulette.ViewModels
             LoadResults();
             resultsWindow.ReloadGrid();
         }
+        private void FinalizeNewCancellationSpin(NewSearchResults resultsWindow)
+        {
+            if (SpinProgress != 100.0)
+                SpinProgress = 100.0;
+            LoadResults();
+            resultsWindow.ReloadGrid();
+        }
 
         private bool CheckWinsLimit(Table table)
         {
@@ -429,5 +487,18 @@ namespace Infinity.Roulette.ViewModels
                 return winsLimitReached(highestColumnWin, num);
             }
         }
+
+        private bool _isPlaying { get; set; }
+        public bool IsPlaying
+        {
+            get => _isPlaying;
+            set
+            {
+                _isPlaying = value;
+                OnPropertyChanged(nameof(IsPlaying));
+                OnPropertyChanged(nameof(IsNotPlaying));
+            }
+        }
+        public bool IsNotPlaying => !IsPlaying;
     }
 }

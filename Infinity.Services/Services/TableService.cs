@@ -16,7 +16,7 @@ namespace Infinity.Services.Services
 {
     public class TableService : ITableService
     {
-        private List<Table> spinTables { get; set; } = new();
+        private List<Table> spinTables { get; set; } = [];
 
         private int TotalCalculatedSpins { get; set; }
 
@@ -82,6 +82,13 @@ namespace Infinity.Services.Services
         public void AddDoneSpins(int remainingCount) => CurrentOverallSpins += remainingCount;
 
         public int GetCurrentOverallSpins() => CurrentOverallSpins;
+        public async Task<List<Table>> StillRunning()
+        {
+            return await Task.Run(() =>
+            {
+                return spinTables.Where(st => !st.DoneSpinning).ToList();
+            });
+        }
 
         public double GetCurrentPercentage() => Math.Round(100.0 * CurrentOverallSpins / TotalCalculatedSpins, 2);
     }

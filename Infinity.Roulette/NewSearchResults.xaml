@@ -1,0 +1,396 @@
+﻿<Window x:Class="Infinity.Roulette.NewSearchResults"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Infinity.Roulette"
+        xmlns:convert="clr-namespace:Infinity.Roulette.Converters"
+        xmlns:controls="clr-namespace:Infinity.Roulette.Controls"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:constants="clr-namespace:Infinity.Data.Constants;assembly=Infinity.Data"
+        SizeChanged="Window_SizeChanged" x:Name="ResultsWindow" ui:WindowHelper.UseModernWindowStyle="True"
+        WindowStartupLocation="CenterScreen" UseLayoutRounding="True" AllowsTransparency="True"
+        WindowStyle="None" BorderThickness="0" ui:TitleBar.ExtendViewIntoTitleBar="True"
+        Background="Transparent" Title="Results" MinHeight="400" SizeToContent="WidthAndHeight"
+        MinWidth="590" SnapsToDevicePixels="True">
+    <FrameworkElement.Resources>
+        <convert:GameTypeConverter x:Key="GameTypeConverter"/>
+        <convert:VisibilityConverter x:Key="VisibilityConverter"/>
+        <convert:NullableValueConverter x:Key="NullableValueConverter"/>
+        <convert:FontFamilyConverter x:Key="FontFamilyConverter"/>
+    </FrameworkElement.Resources>
+    <ui:TitleBar.Style>
+        <Style TargetType="{x:Type ui:TitleBarControl}">
+            <Setter Property="FrameworkElement.Margin" Value="2"/>
+        </Style>
+    </ui:TitleBar.Style>
+    <Grid Margin="-2">
+        <Border BorderBrush="Black" Background="Black" BorderThickness="4" CornerRadius="10">
+            <Grid Margin="2" Background="#FF282828">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Background="Black" Row="0">
+                    <Image Source="{StaticResource redesign-background-image}" 
+                           MaxHeight="35" Margin="5,0,0,0" HorizontalAlignment="Left"/>
+                </Grid>                
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="80" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition />                        
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2"
+                                VerticalAlignment="Center" HorizontalAlignment="Right" 
+                                Margin="0,0,10,0">
+                        <Button x:Name="btnLoadFile" Click="btnSpinFile_Click" Grid.Row="3" Grid.Column="3" 
+                                ToolTip="Load Spinfile"
+                            Style="{StaticResource fileUploadButton}" Width="65" Height="65" Margin="5">            
+                            <Button.Content>
+                                <Viewbox Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Image Source="/file-upload-icon.png" Margin="0,0,-50,0" />
+                                </Viewbox>
+                            </Button.Content>
+                        </Button>
+
+                        <Button x:Name="btnPlay" Click="btnPlay_Click"
+                            VerticalAlignment="Top" HorizontalAlignment="Center"
+                            Style="{StaticResource playButton}" Width="65" Height="65" Margin="5" 
+                            IsEnabled="{Binding IsNotPlaying}"> 
+                            <Button.Content>
+                                <TextBlock Text="Play" Foreground="White" FontSize="22" FontWeight="Bold"  FontFamily="Verdana">
+                                    <TextBlock.Effect>
+                                        <DropShadowEffect BlurRadius="2" ShadowDepth="1" />
+                                    </TextBlock.Effect>
+                                </TextBlock>
+                            </Button.Content>
+                        </Button>
+
+                        
+                    </StackPanel> 
+                    
+                    <CheckBox Grid.Row="1" Grid.Column="0" Checked="cbR1Wonly_Checked" Unchecked="cbR1Wonly_Unchecked" 
+                              x:Name="cbR1Wonly" Margin="15,5,10,0" VerticalAlignment="Top"
+                        Style="{StaticResource WhiteCheckBox}" Content="R1W Only?"
+                        HorizontalAlignment="Left" MinWidth="0" Width="Auto" FontWeight="SemiBold" Cursor="Hand"
+                        FontFamily="{Binding ElementName=fontFan, Path=Text, Converter={StaticResource FontFamilyConverter}}"/>
+
+                    <Grid x:Name="resultsContainer" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition Height="35"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>                                                
+                        <TextBlock x:Name="fontFan" Visibility="Collapsed" Text="Century Gothic"/>
+                        <TabControl x:Name="SearchResultsTabs" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Margin="0,0,8,0" UseLayoutRounding="True"
+      FontFamily="{Binding ElementName=fontFan, Path=Text, Converter={StaticResource FontFamilyConverter}}">
+                            <TabItem x:Name="AvailableResultsPage" Padding="8" Style="{StaticResource SearchResults}" IsSelected="True"
+     Header="Results" Background="Transparent" BorderBrush="Black" UseLayoutRounding="True"
+     FontFamily="{Binding ElementName=fontFan, Path=Text, Converter={StaticResource FontFamilyConverter}}">
+                                <DataGrid MouseDoubleClick="ResultsGrid_MouseDoubleClick" Loaded="ResultsGrid_Loaded"
+        LoadingRow="ResultsGrid_LoadingRow" x:Name="ResultsGrid" AutoGenerateColumns="False"
+        Margin="7,0,0,0" CanUserReorderColumns="False" IsReadOnly="True" SelectionMode="Single"
+        SelectionUnit="FullRow" Background="Transparent" Foreground="White" MaxHeight="450" MinWidth="590"
+        CanUserResizeColumns="False" CanUserResizeRows="False" HorizontalContentAlignment="Stretch"
+        VerticalContentAlignment="Stretch" UseLayoutRounding="True" EnableColumnVirtualization="True"
+        FontFamily="{Binding ElementName=fontFan, Path=Text, Converter={StaticResource FontFamilyConverter}}"
+        ItemsSource="{Binding LoadedResults}">
+                                    <DataGrid.ColumnHeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="Control.Background" Value="Black"/>
+                                            <Setter Property="Control.VerticalContentAlignment" Value="Bottom"/>
+                                        </Style>
+                                    </DataGrid.ColumnHeaderStyle>
+                                    <DataGrid.RowHeaderStyle>
+                                        <Style TargetType="{x:Type DataGridRowHeader}">
+                                            <Setter Property="Control.Background" Value="Transparent"/>
+                                        </Style>
+                                    </DataGrid.RowHeaderStyle>
+                                    <DataGrid.CellStyle>
+                                        <Style TargetType="{x:Type DataGridCell}">
+                                            <Setter Property="Control.Background" Value="Transparent"/>
+                                            <Style.Triggers>
+                                                <Trigger Property="DataGridCell.IsSelected" Value="True">
+                                                    <Setter Property="Control.Background" Value="Transparent"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </DataGrid.CellStyle>
+                                    <DataGrid.RowStyle>
+                                        <Style TargetType="{x:Type DataGridRow}">
+                                            <Style.Resources>
+                                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{StaticResource logo-orange-color-01}"/>
+                                            </Style.Resources>
+                                            <Style.Triggers>
+                                                <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                                                    <Setter Property="Control.Background" Value="Transparent"/>
+                                                </Trigger>
+                                                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                                                    <Setter Property="Control.Background" Value="Transparent"/>
+                                                </Trigger>
+                                                <Trigger Property="UIElement.IsMouseOver" Value="true">
+                                                    <Setter Property="Control.Background" Value="{StaticResource solid-color-brush-logo-orange-01}"/>
+                                                </Trigger>
+                                                <Trigger Property="DataGridRow.IsSelected" Value="true">
+                                                    <Setter Property="Control.Background" Value="{StaticResource solid-color-brush-logo-orange-01}"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </DataGrid.RowStyle>
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn MinWidth="80" Width="1*" Header="RW Col" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
+                                            Binding="{Binding ColumnWithHighestRowWin}">
+                                            <DataGridColumn.CellStyle>
+                                                <Style TargetType="{x:Type DataGridCell}">
+                                                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                                    <Setter Property="Control.FontWeight" Value="Bold"/>
+                                                </Style>
+                                            </DataGridColumn.CellStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn MinWidth="60" Width="1*" Header="R1W" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
+                                            Binding="{Binding FirstRowWin}">
+                                            <DataGridColumn.CellStyle>
+                                                <Style TargetType="{x:Type DataGridCell}">
+                                                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                                    <Setter Property="Control.FontWeight" Value="Bold"/>
+                                                </Style>
+                                            </DataGridColumn.CellStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn MinWidth="80" Width="1*" Header="Counts" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
+                      Binding="{Binding Counts}">
+                                            <DataGridColumn.CellStyle>
+                                                <Style TargetType="{x:Type DataGridCell}">
+                                                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                                    <Setter Property="Control.FontWeight" Value="Bold"/>
+                                                    <Setter Property="Control.Foreground" Value="{StaticResource solid-color-brush-orange-base}"/>
+                                                </Style>
+                                            </DataGridColumn.CellStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn MinWidth="65" Width="1*" Header="Rows" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
+                      Binding="{Binding Rows}">
+                                            <DataGridColumn.CellStyle>
+                                                <Style TargetType="{x:Type DataGridCell}">
+                                                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                                    <Setter Property="Control.FontWeight" Value="Bold"/>
+                                                    <Setter Property="Control.Foreground" Value="{StaticResource solid-color-brush-yellow}"/>
+                                                </Style>
+                                            </DataGridColumn.CellStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn MinWidth="55" Width="1*" Header="GS" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
+                      Binding="{Binding GS}">
+                                            <DataGridColumn.CellStyle>
+                                                <Style TargetType="{x:Type DataGridCell}">
+                                                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                                    <Setter Property="Control.FontWeight" Value="Bold"/>
+                                                    <Setter Property="Control.Foreground" Value="{StaticResource solid-color-brush-blue-base}"/>
+                                                </Style>
+                                            </DataGridColumn.CellStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn MinWidth="90" Width="1*" Header="Max GS" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
+                      Binding="{Binding MaxGS}">
+                                            <DataGridColumn.CellStyle>
+                                                <Style TargetType="{x:Type DataGridCell}">
+                                                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                                    <Setter Property="Control.FontWeight" Value="Bold"/>
+                                                </Style>
+                                            </DataGridColumn.CellStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTemplateColumn MinWidth="140" Width="4*">
+                                            <DataGridColumn.CellStyle>
+                                                <Style TargetType="{x:Type DataGridCell}">
+                                                    <Setter Property="FrameworkElement.HorizontalAlignment" Value="Center"/>
+                                                    <Setter Property="FrameworkElement.HorizontalAlignment" Value="Stretch"/>
+                                                </Style>
+                                            </DataGridColumn.CellStyle>
+                                            <DataGridColumn.Header>
+                                                <Grid Background="Transparent" Margin="5" VerticalAlignment="Bottom">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition/>
+                                                        <RowDefinition/>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Text="Run Spinfile?" FontSize="18"
+                   FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                                                    <CheckBox Checked="cbRunSpinfileAll_Checked" Unchecked="cbRunSpinfileAll_Unchecked" x:Name="cbRunSpinfileAll"
+                  Margin="10,5,10,0" Style="{StaticResource WhiteCheckBox}" Grid.Row="1" Grid.Column="0"
+                  Content="All?" HorizontalAlignment="Left" MinWidth="0" Width="Auto" FontWeight="SemiBold"
+                  Cursor="Hand"/>
+                                                    <CheckBox Checked="cbRunSpinfileLimit_Checked" Unchecked="cbRunSpinfileLimit_Unchecked"
+                  x:Name="cbRunSpinfileLimit" Margin="10,5,10,0" Style="{StaticResource WhiteCheckBox}" Grid.Row="1"
+                  Grid.Column="1" HorizontalAlignment="Right" Width="Auto" Content="Limits?" FontWeight="SemiBold"
+                  Cursor="Hand"/>
+                                                </Grid>
+                                            </DataGridColumn.Header>
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <CheckBox Style="{StaticResource WhiteCheckBox}" Cursor="Hand" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"
+                  IsChecked="{Binding RunSpinfile, Mode=TwoWay, NotifyOnTargetUpdated=True, IsAsync=True}" />
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </TabItem>
+                            <TabItem x:Name="OpenedResultsPage" Style="{StaticResource SearchResults}" Header="Opened Results"
+     Background="Transparent" BorderBrush="Transparent" HorizontalAlignment="Left"
+     FontFamily="{Binding ElementName=fontFan, Path=Text, Converter={StaticResource FontFamilyConverter}}">
+                                <DataGrid MouseDoubleClick="ResultsGrid_MouseDoubleClick" 
+                      x:Name="OpenResultsGrid" AutoGenerateColumns="False"
+        Margin="7,0,0,0" CanUserReorderColumns="False" IsReadOnly="True" SelectionMode="Single"
+        SelectionUnit="FullRow" Background="Transparent" Foreground="White" MaxHeight="450" MinWidth="590"
+        CanUserResizeColumns="False" CanUserResizeRows="False" HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        FontFamily="{Binding ElementName=fontFan, Path=Text, Converter={StaticResource FontFamilyConverter}}"
+        ItemsSource="{Binding OpenedResults}">
+                                    <DataGrid.ColumnHeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="Control.Background" Value="Black"/>
+                                            <Setter Property="Control.VerticalContentAlignment" Value="Bottom"/>
+                                        </Style>
+                                    </DataGrid.ColumnHeaderStyle>
+                                    <DataGrid.RowHeaderStyle>
+                                        <Style TargetType="{x:Type DataGridRowHeader}">
+                                            <Setter Property="Control.Background" Value="Transparent"/>
+                                        </Style>
+                                    </DataGrid.RowHeaderStyle>
+                                    <DataGrid.CellStyle>
+                                        <Style TargetType="{x:Type DataGridCell}">
+                                            <Setter Property="Control.Background" Value="Transparent"/>
+                                            <Style.Triggers>
+                                                <Trigger Property="DataGridCell.IsSelected" Value="True">
+                                                    <Setter Property="Control.Background" Value="Transparent"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </DataGrid.CellStyle>
+                                    <DataGrid.RowStyle>
+                                        <Style TargetType="{x:Type DataGridRow}">
+                                            <Setter Property="Control.FontFamily"
+            Value="{Binding ElementName=fontFan, Path=Text, Converter={StaticResource FontFamilyConverter}}"/>
+                                            <Style.Resources>
+                                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{StaticResource logo-orange-color-01}"/>
+                                            </Style.Resources>
+                                            <Style.Triggers>
+                                                <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                                                    <Setter Property="Control.Background" Value="Transparent"/>
+                                                </Trigger>
+                                                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                                                    <Setter Property="Control.Background" Value="Transparent"/>
+                                                </Trigger>
+                                                <Trigger Property="UIElement.IsMouseOver" Value="true">
+                                                    <Setter Property="Control.Background" Value="{StaticResource solid-color-brush-logo-orange-01}"/>
+                                                </Trigger>
+                                                <Trigger Property="DataGridRow.IsSelected" Value="true">
+                                                    <Setter Property="Control.Background" Value="{StaticResource solid-color-brush-logo-orange-01}"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </DataGrid.RowStyle>
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn MinWidth="80" Width="1*" Header="RW Col" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
+    Binding="{Binding ColumnWithHighestRowWin}">
+                                            <DataGridColumn.CellStyle>
+                                                <Style TargetType="{x:Type DataGridCell}">
+                                                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                                    <Setter Property="Control.FontWeight" Value="Bold"/>
+                                                </Style>
+                                            </DataGridColumn.CellStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn MinWidth="60" Width="*" Header="R1W" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
+                                            Binding="{Binding FirstRowWin}">
+                                            <DataGridColumn.CellStyle>
+                                                <Style TargetType="{x:Type DataGridCell}">
+                                                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                                    <Setter Property="Control.FontWeight" Value="Bold"/>
+                                                </Style>
+                                            </DataGridColumn.CellStyle>
+                                        </DataGridTextColumn>                                        
+                                        <DataGridTextColumn MinWidth="80" Width="*" Header="Counts" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
+                                            Binding="{Binding Counts}">
+                                            <DataGridColumn.CellStyle>
+                                                <Style TargetType="{x:Type DataGridCell}">
+                                                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                                    <Setter Property="Control.FontWeight" Value="Bold"/>
+                                                    <Setter Property="Control.Foreground" Value="{StaticResource solid-color-brush-orange-base}"/>
+                                                </Style>
+                                            </DataGridColumn.CellStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn MinWidth="65" Width="*" Header="Rows" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
+                                            Binding="{Binding Rows}">
+                                            <DataGridColumn.CellStyle>
+                                                <Style TargetType="{x:Type DataGridCell}">
+                                                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                                    <Setter Property="Control.FontWeight" Value="Bold"/>
+                                                    <Setter Property="Control.Foreground" Value="{StaticResource solid-color-brush-yellow}"/>
+                                                </Style>
+                                            </DataGridColumn.CellStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn MinWidth="55" Width="*" Header="GS" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
+                      Binding="{Binding GS}">
+                                            <DataGridColumn.CellStyle>
+                                                <Style TargetType="{x:Type DataGridCell}">
+                                                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                                    <Setter Property="Control.FontWeight" Value="Bold"/>
+                                                    <Setter Property="Control.Foreground" Value="{StaticResource solid-color-brush-blue-base}"/>
+                                                </Style>
+                                            </DataGridColumn.CellStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn MinWidth="90" Width="*" Header="Max GS" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
+                      Binding="{Binding MaxGS}">
+                                            <DataGridColumn.CellStyle>
+                                                <Style TargetType="{x:Type DataGridCell}">
+                                                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                                    <Setter Property="Control.FontWeight" Value="Bold"/>
+                                                </Style>
+                                            </DataGridColumn.CellStyle>
+                                        </DataGridTextColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </TabItem>
+                        </TabControl>
+                        <Grid Row="2" Column="1">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Column="1">
+                                    <Label FontSize="10" VerticalContentAlignment="Center" HorizontalContentAlignment="Right">
+                                        <TextBlock Text="Total: "
+             FontFamily="{Binding ElementName=fontFan, Path=Text, Converter={StaticResource FontFamilyConverter}}"/>
+                                    </Label>
+                                    <Label FontSize="10" VerticalContentAlignment="Center" HorizontalContentAlignment="Right">
+                                        <TextBlock Text="{Binding SearchResultsCount}"
+             FontFamily="{Binding ElementName=fontFan, Path=Text, Converter={StaticResource FontFamilyConverter}}"/>
+                                    </Label>
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+                        <Grid Row="2" Column="0" Margin="0,0,0,0" ColumnSpan="2"
+Visibility="{Binding Spinning, Converter={StaticResource VisibilityConverter}}">
+                            <ProgressBar x:Name="spinProgression" Style="{StaticResource ProgressBar_2}" Height="30"
+         HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Value="{Binding SpinProgress}"
+         FontFamily="{Binding ElementName=fontFan, Path=Text, Converter={StaticResource FontFamilyConverter}}"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+                
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

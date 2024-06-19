@@ -66,7 +66,7 @@ namespace Infinity.Roulette
                 });
 
 
-                mvm.StartSpins(await mvm.GetNewCancellationToken());                
+                await mvm.PlaySpinsAsync();
             }
             else
             {
@@ -91,27 +91,48 @@ namespace Infinity.Roulette
 
         private void mnuDefaultSettings_Click(object sender, RoutedEventArgs e)
         {
-            GameSettings gameSettings = new GameSettings();
+            GameSettings gameSettings = new();
             gameSettings.Owner = this;
             gameSettings.ShowDialog();
         }
 
         private void mnuGenerateSpinfile_Click(object sender, RoutedEventArgs e)
         {
-            SpinfileGenerator spinfileGenerator = new SpinfileGenerator();
+            SpinfileGenerator spinfileGenerator = new();
             spinfileGenerator.Owner = this;
             spinfileGenerator.ShowDialog();
         }
 
         public void ReloadSettings()
         {
-            FileInfo fileInfo = new FileInfo("settings.json");
+            mvm.ReloadSettings(SettingReload());
+            mvm.ProcessReset();
+        }
+
+        private Setting SettingReload()
+        {
+            FileInfo fileInfo = new("settings.json");
             if (!fileInfo.Exists)
-                return;
+                return mvm.CleanDashboardSetting();
             Setting newSetting = JsonConvert.DeserializeObject<Setting>(new StreamReader(fileInfo.Open(FileMode.Open)).ReadToEnd())!;
             if (newSetting == null)
-                return;
-            mvm.ReloadSettings(newSetting);
+                return mvm.CleanDashboardSetting();
+
+            return newSetting;
+        }
+
+        public async void ReloadGameSettingBindings()
+        {
+            await Dispatcher.InvokeAsync(() =>
+            {
+                BindingOperations.GetBindingExpression((DependencyObject)txtTables, TextBox.TextProperty)?.UpdateTarget();
+                BindingOperations.GetBindingExpression((DependencyObject)txtRandom, TextBox.TextProperty)?.UpdateTarget();
+                BindingOperations.GetBindingExpression((DependencyObject)txtRowLimit, TextBox.TextProperty)?.UpdateTarget();
+                BindingOperations.GetBindingExpression((DependencyObject)txtCountLimit, TextBox.TextProperty)?.UpdateTarget();
+                BindingOperations.GetBindingExpression((DependencyObject)txtGSLimit, TextBox.TextProperty)?.UpdateTarget();
+                BindingOperations.GetBindingExpression((DependencyObject)txtR1W, TextBox.TextProperty)?.UpdateTarget();
+                BindingOperations.GetBindingExpression((DependencyObject)txtTW, TextBox.TextProperty)?.UpdateTarget();
+            });
         }
 
         private void rbRandom_Checked(object sender, RoutedEventArgs e) => mvm.LoadGameTypeSettings();
@@ -120,10 +141,17 @@ namespace Infinity.Roulette
 
         private void mnuReworkTester_Click(object sender, RoutedEventArgs e)
         {
-            ReworkDash rework = new();
-            rework.Owner = this;
-            rework.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            rework.ShowDialog();
+            //ReworkDash rework = new();
+            //rework.Owner = this;
+            //rework.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            //rework.ShowDialog();
+
+            NewDashboard dash = new()
+            {
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+            dash.ShowDialog();
         }
     }
 }

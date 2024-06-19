@@ -289,7 +289,7 @@
                                         </DataGridColumn.Header>
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <CheckBox Style="{StaticResource WhiteCheckBox}" Cursor="Hand"
+                                                <CheckBox Style="{StaticResource WhiteCheckBox}" Cursor="Hand" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"
                                   IsChecked="{Binding RunSpinfile, Mode=TwoWay, NotifyOnTargetUpdated=True, IsAsync=True}" />
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>

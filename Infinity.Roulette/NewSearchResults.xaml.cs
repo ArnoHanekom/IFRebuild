@@ -6,12 +6,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Threading;
 using Unity;
 
 namespace Infinity.Roulette;
 
-public partial class SearchResults : Window
+public partial class NewSearchResults : Window
 {
     private readonly SearchResultsViewModel searchVM = Container.container.Resolve<SearchResultsViewModel>();
 
@@ -22,8 +21,7 @@ public partial class SearchResults : Window
     private double[]? saveColSizes { get; set; }
 
     private double resultsWindowWidth { get; set; }
-
-    public SearchResults()
+    public NewSearchResults()
     {
         DataContext = searchVM;
         InitializeComponent();
@@ -33,7 +31,6 @@ public partial class SearchResults : Window
         ResultsGrid.FontFamily = new FontFamily("Century Gothic");
         OpenResultsGrid.FontFamily = new FontFamily("Century Gothic");
     }
-
     private void ResultsGrid_LoadingRow(object sender, DataGridRowEventArgs e)
     {
         if (e.Row.Item is not Table table)
@@ -43,7 +40,6 @@ public partial class SearchResults : Window
         if (table.R1WMatch || table.TWMatch)
             e.Row.Style = Application.Current.FindResource("HighlightWinsMatch") as Style;
     }
-
     private void ResultsGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
         DataGrid dataGrid = (DataGrid)sender;
@@ -61,9 +57,7 @@ public partial class SearchResults : Window
         }
         ResultsGrid.ItemsSource = tableList;
     }
-
     private void ResultsGrid_Loaded(object sender, RoutedEventArgs e) => SetupInitialWidths();
-
     private void SetupInitialWidths()
     {
         double[] numArray;
@@ -78,39 +72,30 @@ public partial class SearchResults : Window
         }
         ResultsGrid.Width = ResultsWindow.Width - 25.0;
     }
-
     private void UpdateOwnerWidth()
     {
-        if (!(Window.GetWindow(this) is SearchResults window) || window.Width >= InitialGridColumnWidths.Sum() + 125.0)
+        if (Window.GetWindow(this) is not NewSearchResults window || window.Width >= InitialGridColumnWidths.Sum() + 125.0)
             return;
         window.Width = InitialGridColumnWidths.Sum() + 125.0;
     }
-
     private async void cbRunSpinfileAll_Checked(object sender, RoutedEventArgs e)
     {
         await base.Dispatcher.InvokeAsync(delegate
         {
             cbRunSpinfileLimit.IsChecked = false;
-            cbRunSpinfileR1W.IsChecked = false;
-            cbRunSpinfileTW.IsChecked = false;
         });
         await SelectAll(select: true);
     }
-
     private async void cbRunSpinfileAll_Unchecked(object sender, RoutedEventArgs e) => await SelectAll(false);
-
     private async void cbRunSpinfileLimit_Checked(object sender, RoutedEventArgs e)
     {
         await base.Dispatcher.InvokeAsync(delegate
         {
             cbRunSpinfileAll.IsChecked = false;
-            cbRunSpinfileR1W.IsChecked = false;
-            cbRunSpinfileTW.IsChecked = false;
         });
         await SelectAll(select: false);
         await SelectAllLimits(select: true);
     }
-
     private async void Window_SizeChanged(object sender, SizeChangedEventArgs e)
     {
         await base.Dispatcher.InvokeAsync(delegate
@@ -118,10 +103,9 @@ public partial class SearchResults : Window
             ResultsGrid.Width = ResultsWindow.Width - 25.0;
         });
     }
-
     private void ResizeGrid() => Dispatcher.Invoke(() =>
     {
-        double num1 = Height - ButtonsRow.ActualHeight - 65.0;
+        double num1 = Height - 65.0;
         double num2 = ResultsWindow.Width - 20.0;
         if (num1 > 100.0)
             ResultsGrid.MaxHeight = num1;
@@ -134,37 +118,29 @@ public partial class SearchResults : Window
         }
         ResultsGrid.UpdateLayout();
     });
-
     private async void cbRunSpinfileLimit_Unchecked(object sender, RoutedEventArgs e) => await SelectAllLimits(false);
-
     private async void cbRunSpinfileR1W_Checked(object sender, RoutedEventArgs e)
     {
         await base.Dispatcher.InvokeAsync(delegate
         {
             cbRunSpinfileAll.IsChecked = false;
             cbRunSpinfileLimit.IsChecked = false;
-            cbRunSpinfileTW.IsChecked = false;
         });
         await SelectAll(select: false);
         await SelectAllR1W(select: true);
     }
-
     private async void cbRunSpinfileTW_Checked(object sender, RoutedEventArgs e)
     {
         await base.Dispatcher.InvokeAsync(delegate
         {
             cbRunSpinfileAll.IsChecked = false;
             cbRunSpinfileLimit.IsChecked = false;
-            cbRunSpinfileR1W.IsChecked = false;
         });
         await SelectAll(select: false);
         await SelectAllTW(select: true);
     }
-
     private async void cbRunSpinfileTW_Unchecked(object sender, RoutedEventArgs e) => await SelectAllTW(false);
-
     private async void cbRunSpinfileR1W_Unchecked(object sender, RoutedEventArgs e) => await SelectAllR1W(false);
-
     private void CheckBox_Checked(object sender, RoutedEventArgs e)
     {
         var cb = (CheckBox)sender;
@@ -177,7 +153,6 @@ public partial class SearchResults : Window
             }
         }
     }
-
     private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
     {
         var cb = (CheckBox)sender;
@@ -190,10 +165,9 @@ public partial class SearchResults : Window
             }
         }
     }
-
     private async Task SelectAll(bool select)
     {
-        SearchResults searchResults = this;
+        NewSearchResults searchResults = this;
         IEnumerable<Table> itemsList = searchResults.ResultsGrid.Items.Cast<Table>().Select(t =>
         {
             t.RunSpinfile = select;
@@ -201,10 +175,9 @@ public partial class SearchResults : Window
         });
         await searchResults.Dispatcher.InvokeAsync((Action)(() => ResultsGrid.ItemsSource = itemsList));
     }
-
     private async Task SelectAllR1W(bool select)
     {
-        SearchResults searchResults = this;
+        NewSearchResults searchResults = this;
         IEnumerable<Table> itemsList = searchResults.ResultsGrid.Items.Cast<Table>().Select(t =>
         {
             if (t.R1WMatch)
@@ -213,10 +186,9 @@ public partial class SearchResults : Window
         });
         await searchResults.Dispatcher.InvokeAsync((Action)(() => ResultsGrid.ItemsSource = itemsList));
     }
-
     private async Task SelectAllTW(bool select)
     {
-        SearchResults searchResults = this;
+        NewSearchResults searchResults = this;
         IEnumerable<Table> itemsList = searchResults.ResultsGrid.Items.Cast<Table>().Select(t =>
         {
             if (t.TWMatch)
@@ -225,10 +197,9 @@ public partial class SearchResults : Window
         });
         await searchResults.Dispatcher.InvokeAsync((Action)(() => ResultsGrid.ItemsSource = itemsList));
     }
-
     private async Task SelectAllLimits(bool select)
     {
-        SearchResults searchResults = this;
+        NewSearchResults searchResults = this;
         IEnumerable<Table> itemsList = searchResults.ResultsGrid.Items.Cast<Table>().Select(t =>
         {
             if (t.ExactMatch)
@@ -237,7 +208,6 @@ public partial class SearchResults : Window
         });
         await searchResults.Dispatcher.InvokeAsync((Action)(() => ResultsGrid.ItemsSource = itemsList));
     }
-
     private async void btnSpinFile_Click(object sender, RoutedEventArgs e)
     {
         OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -248,53 +218,41 @@ public partial class SearchResults : Window
             return;
         await Task.Run(() => searchVM.LoadSpinfile(openFileDialog.FileName));
     }
-
     private async void btnPlay_Click(object sender, RoutedEventArgs e)
     {
         IEnumerable<Table> spinfileTables = ResultsGrid.Items.Cast<Table>().Where(t => t.RunSpinfile);
         if (spinfileTables == null || spinfileTables.Count() <= 0)
             return;
-        await Task.Run(() => searchVM.StartSpinfileSpins(spinfileTables, this));
+        await Task.Run(() => searchVM.StartNewSpinfileSpins(spinfileTables, this));
     }
-
     public async void ReloadGrid()
     {
         await base.Dispatcher.InvokeAsync(delegate
         {
             cbRunSpinfileAll.IsChecked = false;
             cbRunSpinfileLimit.IsChecked = false;
-            cbRunSpinfileR1W.IsChecked = false;
-            cbRunSpinfileTW.IsChecked = false;
             ResultsGrid.ItemsSource = searchVM.LoadedResults;
         });
     }
-
     private async void btnStop_Click(object sender, RoutedEventArgs e) => await Task.Run(() => searchVM.StopSpins());
-
     private async void cbR1Wonly_Checked(object sender, RoutedEventArgs e)
     {
         await base.Dispatcher.InvokeAsync(delegate
         {
             cbRunSpinfileAll.IsChecked = false;
             cbRunSpinfileLimit.IsChecked = false;
-            cbRunSpinfileR1W.IsChecked = false;
-            cbRunSpinfileTW.IsChecked = false;
             ResultsGrid.ItemsSource = searchVM.LoadedResults.Where((Table lr) => lr.R1WMatch);
         });
     }
-
     private async void cbR1Wonly_Unchecked(object sender, RoutedEventArgs e)
     {
         await base.Dispatcher.InvokeAsync(delegate
         {
             cbRunSpinfileAll.IsChecked = false;
             cbRunSpinfileLimit.IsChecked = false;
-            cbRunSpinfileR1W.IsChecked = false;
-            cbRunSpinfileTW.IsChecked = false;
             ResultsGrid.ItemsSource = searchVM.LoadedResults;
         });
     }
-
     private async void SearchResultsTabs_SelectionChanged(
       object sender,
       SelectionChangedEventArgs e)
@@ -343,18 +301,5 @@ public partial class SearchResults : Window
                 ResultsGrid.Width = num;
             }
         });
-    }
-
-    private void OpenResultsGrid_Loaded(object sender, RoutedEventArgs e)
-    {
-    }
-
-    private void OpenResultsGrid_LoadingRow(object sender, DataGridRowEventArgs e)
-    {
-    }
-
-    private void ResultsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-
     }
 }

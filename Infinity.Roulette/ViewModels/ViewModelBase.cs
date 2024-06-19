@@ -10,16 +10,16 @@ using System.ComponentModel;
 #nullable enable
 namespace Infinity.Roulette.ViewModels
 {
-  public class ViewModelBase : INotifyPropertyChanged
-  {
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    protected void OnPropertyChanged(string propertyName)
+    public class ViewModelBase : INotifyPropertyChanged
     {
-      PropertyChangedEventHandler propertyChanged = PropertyChanged!;
-      if (propertyChanged == null)
-        return;
-      propertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler propertyChanged = PropertyChanged!;
+            if (propertyChanged == null)
+                return;
+            propertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
-  }
 }

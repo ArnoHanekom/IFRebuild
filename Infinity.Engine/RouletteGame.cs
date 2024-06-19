@@ -92,34 +92,6 @@ namespace Infinity.Engine
                 PhaseType = phaseType,
                 SpinId = spinEntity.Id
             });
-
-            lock (this.BoardLayouts[0])
-            {
-                lock (this.BoardLayouts[0].Columns)
-                {
-                    var boardNumbers = this.BoardLayouts[0].Columns.SelectMany(c => c.Numbers).ToList();
-                    lock (boardNumbers)
-                    {
-                        if (boardNumbers.Any(bn => bn.Codes.Count() <= 1))
-                        {
-                            spinEntity.CountNumbers = boardNumbers.Where(bn => bn.Codes.Count() <= 1).Select(bn => bn.ToCountNumber()).ToList();
-                            Task.Run(async () => await _engineService.AddSpinEntityAsync(spinEntity));
-                        }                        
-                    }
-                }
-            }
-
-            lock (_engineService)
-            {
-                Task.Run(async () =>
-                {
-                    var lastOpenPhase = await _engineService.GetLastOpenPhase(TableUniqueId, GameId);
-                    if (lastOpenPhase is not null)
-                    {
-                        await _engineService.AddUpdatePhaseSpin(lastOpenPhase.Id, spinEntity.Id);
-                    }
-                });
-            }
         }
 
         public string BettingSummary()

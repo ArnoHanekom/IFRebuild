@@ -11,16 +11,21 @@ using System.Windows;
 #nullable enable
 namespace Infinity.Roulette.Statics
 {
-  public static class AlertNotifications
-  {
-    public static void PlayAlert(string soundFileLocation) => new SoundPlayer()
+    public static class AlertNotifications
     {
-      SoundLocation = soundFileLocation
-    }.Play();
+        public static void PlayAlert(string soundFileLocation) => new SoundPlayer()
+        {
+            SoundLocation = soundFileLocation
+        }.Play();
 
-    public static void DisplayAlertMessage(string msg)
-    {
-      int num = (int) MessageBox.Show(msg, "Alert", MessageBoxButton.OK);
+        public static void DisplayAlertMessage(string msg)
+        {
+            int num = (int)MessageBox.Show(msg, "Alert", MessageBoxButton.OK);
+        }
+
+        public static MessageBoxResult ResetOptionsMessage(string msg)
+        {
+            return MessageBox.Show(msg, "Reset Options", MessageBoxButton.YesNo);
+        }
     }
-  }
 }

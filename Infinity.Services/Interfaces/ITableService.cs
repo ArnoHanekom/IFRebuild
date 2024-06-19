@@ -11,30 +11,32 @@ using System.Collections.Generic;
 #nullable enable
 namespace Infinity.Services.Interfaces
 {
-  public interface ITableService
-  {
-    void NewPlaySearch();
+    public interface ITableService
+    {
+        void NewPlaySearch();
 
-    void AddTable(Table table);
+        void AddTable(Table table);
 
-    Table? Get(int tableId, int autoplay);
+        Table? Get(int tableId, int autoplay);
 
-    List<Table> Get();
+        List<Table> Get();
 
-    void SetTotalCalculatedSpins(int calcSpins);
+        void SetTotalCalculatedSpins(int calcSpins);
 
-    int GetTotalCalculatedSpins();
+        int GetTotalCalculatedSpins();
 
-    void AddOverallSpin();
+        void AddOverallSpin();
 
-    int GetCurrentOverallSpins();
+        int GetCurrentOverallSpins();
 
-    double GetCurrentPercentage();
+        double GetCurrentPercentage();
 
-    void ClearPlaySearch();
+        void ClearPlaySearch();
 
-    void ResetCounters();
+        void ResetCounters();
 
-    void AddDoneSpins(int remainingCount);
-  }
+        void AddDoneSpins(int remainingCount);
+
+        Task<List<Table>> StillRunning();
+    }
 }
