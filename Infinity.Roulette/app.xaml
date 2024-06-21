@@ -3,15 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Infinity.Roulette"
              xmlns:ui="http://schemas.modernwpf.com/2019">
-  <Application.Resources>
-    <ResourceDictionary>
-      <ResourceDictionary.MergedDictionaries>
-        <ui:ThemeResources RequestedTheme="Dark" />
-        <ui:XamlControlsResources/>
-        <ResourceDictionary Source="Styles/AppStyles.xaml"/>
-        <ResourceDictionary Source="Styles/ControlStyles.xaml"/>
-        <ResourceDictionary Source="Styles/Redesign.xaml"/>
-      </ResourceDictionary.MergedDictionaries>
-    </ResourceDictionary>
-  </Application.Resources>
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ui:ThemeResources RequestedTheme="Dark" />
+                <ui:XamlControlsResources/>
+                <ResourceDictionary Source="Styles/AppStyles.xaml"/>
+                <ResourceDictionary Source="Styles/ControlStyles.xaml"/>
+                <ResourceDictionary Source="Styles/Redesign.xaml"/>
+                <ResourceDictionary Source="Styles/iconStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
 </Application>

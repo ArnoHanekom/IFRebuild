@@ -10,7 +10,7 @@ namespace Infinity.Roulette
         {
             Container.RegisterServices();
             Container.container?.Resolve<AppSettings>().LoadSettings();
-            new Main().Show();
+            new NewDashboard().Show();
         }
     }
 }

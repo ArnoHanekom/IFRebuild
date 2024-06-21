@@ -10,6 +10,7 @@ using Infinity.Services.Interfaces;
 using Infinity.Engine;
 using System.IO;
 using Infinity.Engine.Services;
+using System.Collections.Concurrent;
 
 #nullable enable
 namespace Infinity.Roulette.ViewModels
@@ -17,13 +18,13 @@ namespace Infinity.Roulette.ViewModels
     public class SearchResultsViewModel : ViewModelBase
     {
         private readonly ITableService _tables;
-        private readonly ISearchService _searches;
+        private readonly IConcurrentSearchService _searches;
         private readonly IEngineService _engineService;
         
         private CancellationTokenSource cancellationToken;
         private Func<int, int, bool> WinsLimitReached = (val, valLimit) => val >= valLimit;
 
-        public SearchResultsViewModel(ITableService tables, ISearchService searches, IEngineService engineService)
+        public SearchResultsViewModel(ITableService tables, IConcurrentSearchService searches, IEngineService engineService)
         {            
             _tables = tables;
             _searches = searches;
@@ -36,8 +37,8 @@ namespace Infinity.Roulette.ViewModels
 
         private void LoadResults()
         {
-            LoadedResults = [.. _searches.GetSpinResults().OrderByDescending(t => t.Rows).OrderBy(t => t.Order).Where(t => t.Matched == 1)];
-            OpenedResults = new List<Table>();
+            LoadedResults = [.. _searches.GetSpinResults().Where(t => t.Matched == 1 && t.DoneSpinning).OrderByDescending(t => t.Rows).OrderBy(t => t.Order)];
+            OpenedResults = [];
         }
 
         private double _GridSize { get; set; }
@@ -53,16 +54,16 @@ namespace Infinity.Roulette.ViewModels
             }
         }
 
-        private List<Table> _loadedResults { get; set; } = default!;
+        private ConcurrentBag<Table> _loadedResults { get; set; } = default!;
 
-        public List<Table> LoadedResults
+        public ConcurrentBag<Table> LoadedResults
         {
             get => _loadedResults;
             set
             {
                 if (_loadedResults != value)
                     _loadedResults = value;
-                SearchResultsCount = LoadedResults != null ? LoadedResults.Count() : 0;
+                SearchResultsCount = LoadedResults is not null ? LoadedResults.Count : 0;
                 OnPropertyChanged(nameof(LoadedResults));
             }
         }
@@ -240,7 +241,7 @@ namespace Infinity.Roulette.ViewModels
             _searches.NewSpinSearch();
             Spinning = true;
             _tables.SetTotalCalculatedSpins(tables.Count() * Spinfile.Count());
-            RunSpinfileSpins(tables, cancellationToken.Token, resultsWindow);
+            RunSpinfileSpins(tables, resultsWindow, cancellationToken.Token);
         }
         public void StartNewSpinfileSpins(IEnumerable<Table> tables, NewSearchResults resultsWindow)
         {
@@ -253,9 +254,9 @@ namespace Infinity.Roulette.ViewModels
             _searches.NewSpinSearch();
             Spinning = true;
             _tables.SetTotalCalculatedSpins(tables.Count() * Spinfile.Count());
-            RunNewSpinfileSpins(tables, cancellationToken.Token, resultsWindow);
+            RunNewSpinfileSpins(tables, resultsWindow, cancellationToken.Token);
         }
-        public async void RunSpinfileSpins(IEnumerable<Table> tables, CancellationToken token, SearchResults resultsWindow)
+        public async void RunSpinfileSpins(IEnumerable<Table> tables, SearchResults resultsWindow, CancellationToken token)
         {
             List<Table> list = tables.ToList();
             List<Task> tasks = new();
@@ -283,7 +284,7 @@ namespace Infinity.Roulette.ViewModels
                 }
             }
         }
-        public async void RunNewSpinfileSpins(IEnumerable<Table> tables, CancellationToken token, NewSearchResults resultsWindow)
+        public async void RunNewSpinfileSpins(IEnumerable<Table> tables, NewSearchResults resultsWindow, CancellationToken token)
         {
             List<Table> list = tables.ToList();
             List<Task> tasks = new();

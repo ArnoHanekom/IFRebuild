@@ -42,10 +42,7 @@ namespace Infinity.Roulette
         public void UpdateDefaultGameType()
         {
             gameSettingsVM.GetLatestSetting();
-            ReloadDefaultGameTypeBindings();
         }
-
-        private void ReloadDefaultGameTypeBindings() => BindingOperations.GetBindingExpression((DependencyObject)hlDefaultGameTypeText, TextBlock.TextProperty)?.UpdateTarget();
 
         private void ReloadGameSettingBindings() => BindingOperations.GetBindingExpression((DependencyObject)txtTables, TextBox.TextProperty)?.UpdateTarget();
 
@@ -55,7 +52,10 @@ namespace Infinity.Roulette
             ReloadGameSettingBindings();
             AlertNotifications.PlayAlert("C:\\Windows\\Media\\Windows Message Nudge.wav");
             AlertNotifications.DisplayAlertMessage("New default settings saved.\r\nNew defaults will reload automatically.");
-            ((Main)Owner).ReloadSettings();
+            if (Owner.GetType() == typeof(Main))
+                ((Main)Owner).ReloadSettings();
+            else
+                ((NewDashboard)Owner).ReloadSettings();
             Close();
         }
 

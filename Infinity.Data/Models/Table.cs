@@ -3,6 +3,7 @@ using Infinity.Engine.Services;
 
 namespace Infinity.Data.Models
 {
+    
     public class Table
     {
         private Func<KeyValuePair<int, int>?, bool> _r1wAndHighest = R1Rows => R1Rows.HasValue && R1Rows.Value.Key == 0;

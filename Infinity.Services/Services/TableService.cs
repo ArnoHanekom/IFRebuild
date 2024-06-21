@@ -90,6 +90,11 @@ namespace Infinity.Services.Services
             });
         }
 
+        public async Task<List<Table>> AllLoadedTables()
+        {
+            return await Task.Run(() => spinTables);
+        }
+
         public double GetCurrentPercentage() => Math.Round(100.0 * CurrentOverallSpins / TotalCalculatedSpins, 2);
     }
 }

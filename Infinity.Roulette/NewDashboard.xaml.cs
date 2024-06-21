@@ -21,10 +21,10 @@ public partial class NewDashboard : Window
     }
     private async void btnPlay_Click(object sender, RoutedEventArgs e)
     {
-        if (await mainVM.GetSelectedGameType() != GameType.None)
+        if (mainVM.SelectedGameType is not GameType.None)
         {
-            mainVM.IsPlaying = true;
-            await mainVM.PlaySpinsAsync();
+            await mainVM.PreparePlayStartAsync().ConfigureAwait(false);
+            await mainVM.PlaySpinsAsync(mainVM.cancelToken).ConfigureAwait(false);
         }
         else
         {
@@ -34,7 +34,8 @@ public partial class NewDashboard : Window
     }
     private void btnStop_Click(object sender, RoutedEventArgs e)
     {
-        mainVM.Cts.Cancel();
+        mainVM.Stopping = true;
+        mainVM.cancelSource.Cancel();
     }
     private void mnuDefaultSettings_Click(object sender, RoutedEventArgs e)
     {
@@ -86,7 +87,12 @@ public partial class NewDashboard : Window
             AlertNotifications.DisplayAlertMessage("Dashboard was reset.");
         }
         ReloadSettings();
-        ((Main)Owner).ReloadSettings();
-        ((Main)Owner).ReloadGameSettingBindings();
+        //    ((Main)Owner).ReloadSettings();
+        //    ((Main)Owner).ReloadGameSettingBindings();
+    }
+
+    private void mnuGenerateSpinfile_Click(object sender, RoutedEventArgs e)
+    {
+
     }
 }

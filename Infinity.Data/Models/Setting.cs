@@ -11,12 +11,12 @@ using System.Collections.Generic;
 #nullable enable
 namespace Infinity.Data.Models
 {
-  public class Setting
-  {
-    public GameType DefaultGameType { get; set; }
+    public class Setting
+    {
+        public static GameType DefaultGameType => GameType.Autoplay;
 
-    public List<GameSetting> GameSettings { get; set; } = new List<GameSetting>();
+        public List<GameSetting> GameSettings { get; set; } = [];
 
-    public string DefaultGameTypeStr => DefaultGameType.ToString();
-  }
+        public static string DefaultGameTypeStr => DefaultGameType.ToString();
+    }
 }

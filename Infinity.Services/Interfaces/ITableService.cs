@@ -38,5 +38,7 @@ namespace Infinity.Services.Interfaces
         void AddDoneSpins(int remainingCount);
 
         Task<List<Table>> StillRunning();
+
+        Task<List<Table>> AllLoadedTables();
     }
 }

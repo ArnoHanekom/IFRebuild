@@ -19,7 +19,7 @@ namespace Infinity.Roulette.ViewModels
         private readonly INumberGenerator _numberGenerator;
         private readonly ITableSettingService _settingService;
         private readonly IGameTypeService _gameTypeService;
-        private readonly ISearchService _searches;
+        private readonly IConcurrentSearchService _searches;
         private readonly ICountColorService _countColorService;
         private readonly IEngineService _engineService;
         //private readonly IOddWinService _oddWinService;
@@ -29,7 +29,7 @@ namespace Infinity.Roulette.ViewModels
         public List<IObserver<Table>> observers = new();
 
         public NewTableViewModel(ITableService tables, INumberGenerator numberGenerator, ITableSettingService settingService, IGameTypeService gameTypeService,
-          ISearchService searches, ICountColorService countColorService, IEngineService engineService)
+          IConcurrentSearchService searches, ICountColorService countColorService, IEngineService engineService)
         {
             _tables = tables;
             _numberGenerator = numberGenerator;

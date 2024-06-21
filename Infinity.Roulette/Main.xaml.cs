@@ -37,7 +37,7 @@ namespace Infinity.Roulette
         private async void btnPlay_Click(object sender, RoutedEventArgs e)
         {
             mvm.SetOtherCountStyle();
-            if (await mvm.GetSelectedGameType() != GameType.None)
+            if (mvm.SelectedGameType != GameType.None)
             {
                 await Dispatcher.InvokeAsync(() =>
                 {
@@ -64,9 +64,8 @@ namespace Infinity.Roulette
                     if (binding != null)
                         binding.UpdateTarget();
                 });
-
-
-                await mvm.PlaySpinsAsync();
+                await mvm.PreparePlayStartAsync().ConfigureAwait(false);
+                await mvm.PlaySpinsAsync(mvm.cancelToken).ConfigureAwait(false);
             }
             else
             {
@@ -76,7 +75,11 @@ namespace Infinity.Roulette
             }
         }
 
-        private async void btnStop_Click(object sender, RoutedEventArgs e) => await Task.Run(() => mvm.StopSpins());
+        private void btnStop_Click(object sender, RoutedEventArgs e)
+        {
+            mvm.Stopping = true;
+            mvm.cancelSource.Cancel();
+        }
 
         private void btnReset_Click(object sender, RoutedEventArgs e) => mvm.ProcessReset();
 

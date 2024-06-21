@@ -12,38 +12,38 @@ using System.Threading.Tasks;
 #nullable enable
 namespace Infinity.Services.Interfaces
 {
-  public interface ISearchService
-  {
-    void NewSearch();
+    public interface ISearchService
+    {
+        void NewSearch();
 
-    Task NewSearchAsync();
+        Task NewSearchAsync();
 
-    Task<IEnumerable<Table>> GetAsync();
+        Task<IEnumerable<Table>> GetAsync();
 
-    Task AddResult(Table result);
+        Task AddResult(Table result);
 
-    Task<Table?> Get(int tableId, int autoplayNumber);
+        Task<Table?> Get(int tableId, int autoplayNumber);
 
-    Task<IEnumerable<Table>> GetResults();
+        Task<IEnumerable<Table>> GetResults();
 
-    Task<int> ExactMatchCount();
+        Task<int> ExactMatchCount();
 
-    int GetExactMatchCount();
+        int GetExactMatchCount();
 
-    int GetSpinResultsExactMatchCount();
+        int GetSpinResultsExactMatchCount();
 
-    int GetSpinResultsR1WMatchCount();
+        int GetSpinResultsR1WMatchCount();
 
-    int GetSpinResultsTWMatchCount();
+        int GetSpinResultsTWMatchCount();
 
-    void NewSpinSearch();
+        void NewSpinSearch();
 
-    List<Table> GetSpinResults();
+        List<Table> GetSpinResults();
 
-    void AddSpinResult(Table table);
+        void AddSpinResult(Table table);
 
-    Table? GetSpinResultTable(int tableId, int autoplay);
+        Table? GetSpinResultTable(int tableId, int autoplay);
 
-    IEnumerable<Table> GetAllSpinResults();
-  }
+        IEnumerable<Table> GetAllSpinResults();
+    }
 }

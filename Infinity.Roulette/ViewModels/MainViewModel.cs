@@ -2,8 +2,9 @@
 using Infinity.Data.Models;
 using Infinity.Engine;
 using Infinity.Engine.Services;
+using Infinity.Roulette.Statics;
 using Infinity.Services.Interfaces;
-using System.Buffers;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
@@ -18,13 +19,22 @@ public class MainViewModel : ViewModelBase
     private readonly INumberGenerator _numberGenerator;
     private readonly ISettingService _settingService;
     private readonly IGameTypeService _gameTypeService;
-    private readonly ISearchService _searches;
+
+    //private readonly ISearchService _searches;
+    private readonly IConcurrentSearchService _searches;
+
     private readonly ICountColorService _countColorService;
     private readonly IEngineService _engineService;
     //private readonly IOddWinService _oddWinService;
     public CancellationTokenSource Cts;
     private Func<int, int, bool> LimitReached = (val, valLimit) => val == valLimit;
     private Func<int, int, bool> WinsLimitReached = (val, valLimit) => val >= valLimit;
+
+    public CancellationTokenSource cancelSource = new();
+    public CancellationToken cancelToken
+    {
+        get => cancelSource.Token;
+    }
 
     private int _ExactMatchFontSize { get; set; }
     private Setting _setting { get; set; } = default!;
@@ -281,14 +291,11 @@ public class MainViewModel : ViewModelBase
         {
             if (_Spinning != value)
                 _Spinning = value;
-            ShowRunBtn = !_Spinning;
-            ShowStopBtn = _Spinning;
             OnPropertyChanged(nameof(Spinning));
+            OnPropertyChanged(nameof(IsNotPlaying));
         }
     }
-
     private double _SpinProgress { get; set; }
-
     public double SpinProgress
     {
         get => _SpinProgress;
@@ -296,17 +303,11 @@ public class MainViewModel : ViewModelBase
         {
             if (_SpinProgress != value)
                 _SpinProgress = value;
-            if (_SpinProgress >= 100.0)
-            {
-                Spinning = false;
-                IsPlaying = false;
-            }
+            if (SpinProgress >= 100.0) Spinning = false;
             OnPropertyChanged(nameof(SpinProgress));
         }
     }
-
     private int _SelectedAutoplayValue { get; set; }
-
     public int SelectedAutoplayValue
     {
         get => _SelectedAutoplayValue;
@@ -320,7 +321,6 @@ public class MainViewModel : ViewModelBase
     }
 
     private int? _CalculatedTotalResults { get; set; }
-
     public int? CalculatedTotalResults
     {
         get => _CalculatedTotalResults;
@@ -369,7 +369,6 @@ public class MainViewModel : ViewModelBase
     }
 
     private GameType _RouletteGameType { get; set; } = default!;
-
     public GameType RouletteGameType
     {
         get => _RouletteGameType;
@@ -421,21 +420,8 @@ public class MainViewModel : ViewModelBase
         }
     }
 
-    private List<int> _autoplayPreList { get; set; } = default!;
-
-    public List<int> AutoplayPrepList
-    {
-        get => _autoplayPreList;
-        set
-        {
-            if (_autoplayPreList != value)
-                _autoplayPreList = value;
-            OnPropertyChanged(nameof(AutoplayPrepList));
-        }
-    }
-
     public MainViewModel(ITableService tables, INumberGenerator numberGenerator, ISettingService settingService,
-      IGameTypeService gameTypeService, ISearchService searches, ICountColorService countColorService, IEngineService engineService)
+      IGameTypeService gameTypeService, IConcurrentSearchService searches, ICountColorService countColorService, IEngineService engineService)
     {
         _tables = tables;
         _searches = searches;
@@ -466,25 +452,25 @@ public class MainViewModel : ViewModelBase
     {
         Setting = newSetting;
         LoadGameSetting(Setting.DefaultGameType);
-        ResetCounters();
         LoadGameTypeSettings();
     }
 
     private void LoadDefaults()
     {
         _tables.ResetCounters();
-        PrepareAutoplayOptions();
         SetFontSizes();
-        ResetCounters();
         CheckAndLoadAutoplaySettings();
         GetLatestSetting();
         LoadGameSetting(Setting.DefaultGameType);
         RouletteGameType = Setting.DefaultGameType;
         if (RouletteGameType != GameType.None)
             LoadGameTypeSettings();
+        Spinning = false;
+        SpinProgress = 0.0;
+        ExactMatchCount = 0;
+        TotalCalculatedSpins = 0;
     }
-
-    public async Task<GameType> GetSelectedGameType() => await Task.Run(() => RouletteGameType);
+    public GameType SelectedGameType => RouletteGameType;
 
     private void SetFontSizes()
     {
@@ -493,13 +479,6 @@ public class MainViewModel : ViewModelBase
         TWMatchFontSize = 14;
     }
 
-    private void ResetCounters()
-    {
-        ExactMatchCount = 0;
-        R1WMatchCount = 0;
-        TWMatchCount = 0;
-        SpinProgress = 0.0;
-    }
 
     private void GetLatestSetting() => Setting = _settingService.Get();
 
@@ -517,16 +496,17 @@ public class MainViewModel : ViewModelBase
 
     private void CheckAndLoadAutoplaySettings()
     {
+        var autoplaySelection = Autoplays.Selection;
         AutoplayOptions = [];
         int autoplaySetting = (GameSetting?.AutoplayNumber) ?? 10;
         List<ComboBoxItem> items = [];
-        for (int i = 0; i < AutoplayPrepList.Count; i++)
+        for (int i = 0; i < autoplaySelection.Count; i++)
         {
-            if (AutoplayPrepList[i] == autoplaySetting)
+            if (autoplaySelection[i] == autoplaySetting)
             {
                 SelectedAutoplay = new ComboBoxItem()
                 {
-                    Content = AutoplayPrepList[i].ToString(),
+                    Content = autoplaySelection[i].ToString(),
                     FontFamily = new FontFamily("Century Gothic"),
                     IsSelected = true
                 };
@@ -536,7 +516,7 @@ public class MainViewModel : ViewModelBase
             {
                 items.Add(new()
                 {
-                    Content = AutoplayPrepList[i].ToString(),
+                    Content = autoplaySelection[i].ToString(),
                     FontFamily = new FontFamily("Century Gothic")
                 });
             }
@@ -546,9 +526,7 @@ public class MainViewModel : ViewModelBase
 
     public void LoadGameTypeSettings()
     {
-        PrepareAutoplayOptions();
         SetFontSizes();
-        ResetCounters();
         GetLatestSetting();
         LoadGameSetting(RouletteGameType);
         if (GameSetting == null)
@@ -557,17 +535,6 @@ public class MainViewModel : ViewModelBase
     }
 
     public void LoadGameSetting(GameType typeToLoad) => GameSetting = Setting.GameSettings.FirstOrDefault(gs => gs.Type == _gameTypeService.Get(typeToLoad.ToString()))!;
-
-    private void PrepareAutoplayOptions()
-    {
-        AutoplayPrepList = [];
-        for (int index = 10; index <= 100; index += 10)
-            AutoplayPrepList.Add(index);
-        for (int index = 120; index <= 200; index += 20)
-            AutoplayPrepList.Add(index);
-        for (int index = 250; index <= 300; index += 50)
-            AutoplayPrepList.Add(index);
-    }
 
     public void ProcessReset() => LoadDefaults();
 
@@ -599,102 +566,126 @@ public class MainViewModel : ViewModelBase
             num = tables * randoms;
         EstimatedSpinsTotal = num;
     }
+    public bool IsNotPlaying => !Spinning;
 
-    public async Task<CancellationToken> GetNewCancellationToken()
+    private bool _stopping { get; set; }
+    public bool Stopping
     {
-        Cts = new CancellationTokenSource();
-        return await Task.Run(() => Cts.Token);
-    }
-
-    private bool _isPlaying { get; set; }
-    public bool IsPlaying
-    {
-        get => _isPlaying;
+        get => _stopping;
         set
         {
-            _isPlaying = value;
-            OnPropertyChanged(nameof(IsPlaying));
-            OnPropertyChanged(nameof(IsNotPlaying));
+            _stopping = value;
+            OnPropertyChanged(nameof(Stopping));
         }
-    }
-    public bool IsNotPlaying => !IsPlaying;
-    
-    public async void StopSpins() => await Task.Run(StopTableRuns);
-
-    public async Task StopSearching()
-    {
-        await Task.Run(StopTableRuns);
-    }
-    private void StopTableRuns()
-    {
-        Cts?.Cancel();
-        Task.Delay(200);
-        SpinProgress = 100.0;
     }
     public void SetOtherCountStyle()
     {
         Style otherStyle = (Style)Application.Current.FindResource("BetWindowLabelTextBlockOtherSpinCount");
         _countColorService.SetOtherStyle(otherStyle);
     }
-
-    public async Task PlaySpinsAsync()
-    {
-        Cts = new();
-        await StartUpSpinsAsync(Cts.Token).ConfigureAwait(false);
+    public async Task PlaySpinsAsync(CancellationToken ct)
+    {        
+        await StartUpSpinsAsync(ct).ConfigureAwait(false);
     }
-
-    private async Task StartUpSpinsAsync(CancellationToken ct = default)
+    public async Task PreparePlayStartAsync()
     {
-        SpinProgress = 0.0;
-        ExactMatchCount = 0;
-        R1WMatchCount = 0;
-        TWMatchCount = 0;
-        if (RouletteGameType == GameType.Random)
-            SelectedAutoplayValue = 1;
-        Spinning = true;
-        _searches.NewSpinSearch();
-        _tables.NewPlaySearch();
-
-        var tableSpinTasks = BuildTableSpins(ct);
-        await Task.WhenAll(tableSpinTasks);
-    }
-
-
-    private async Task<Task[]?> BuildTableSpins(CancellationToken ct = default)
-    {
-        return await Task.Run(() =>
+        await Task.Run(() =>
         {
-            if (!Tables.HasValue && !Random.HasValue) return null;
+            cancelSource = new();
+            SpinProgress = 0.0;
+            ExactMatchCount = 0;
+            R1WMatchCount = 0;
+            TWMatchCount = 0;
+            if (RouletteGameType == GameType.Random)
+                SelectedAutoplayValue = 1;
+            Spinning = true;
             var autoplayVal = RouletteGameType == GameType.Random ? 1 : (SelectedAutoplay == null ? 1 : SelectedAutoplayValue);
             _tables.SetTotalCalculatedSpins(Tables!.Value * Random!.Value * autoplayVal);
-            List<Task> tablesToPlay = [];
-            for (int t = 0; t < Tables!.Value; t++)
-            {
-                if (ct.IsCancellationRequested) break;
-                tablesToPlay.Add(PlayTableAutoplaysAsync(t + 1, ct));
-            }
-            return tablesToPlay.ToArray();
-        }, ct).ConfigureAwait(false);
+            TotalCalculatedSpins = _tables.GetTotalCalculatedSpins();
+        }).ConfigureAwait(false);
     }
 
-    private async Task PlayTableAutoplaysAsync(int tableId, CancellationToken ct = default)
+    private async Task StartUpSpinsAsync(CancellationToken ct)
     {
-        for (int ap = 0; ap < SelectedAutoplayValue; ap++)
+        if (!Tables.HasValue && !Random.HasValue) return;
+        _searches.NewSpinSearch();
+        _tables.NewPlaySearch();
+        try
+        {
+            await Task.WhenAll(BuildTableSpins(ct))
+                .ContinueWith(t => {
+                    //var stillRunning = _searches.GetSpinResults().Where(r => !r.DoneSpinning);
+                    //if (stillRunning.Any(r => !r.DoneSpinning)) DebugPrinting.Add($"{stillRunning.Count()} tables still running");
+                    if (t.IsCompleted) t.Dispose();
+                    Spinning = false;
+                    SpinProgress = 100.0;
+                }, CancellationToken.None)
+                //.ContinueWith(t => {                    
+                //    Task.Run(async ()=>
+                //    {
+                //        await Task.Run(() =>
+                //        {
+                //            foreach (var logLine in DebugPrinting)
+                //            {
+                //                Debug.WriteLine($"\t'{logLine}'");
+                //            }
+                //        });
+                //    });
+                //}, ct)
+                .ConfigureAwait(false);
+        }
+        catch (TaskCanceledException tce)
+        {
+            var tsk = tce.Task;
+            if (tsk!.IsCompleted) tsk.Dispose();
+            //maybe keep track of cancelled tasks?
+            //tce.Task
+        }
+        finally
         {
             if (ct.IsCancellationRequested)
-                break;
-            //var tableAutoplaySpinned = await PlayTableGameAutoplayAsync(tableId, ap, ct);
-            await PlayTableGameAutoplayAsync(tableId, ap, ct);
+            {
+                await FinalizeCancellationSpinAsync().ConfigureAwait(false);
+                await Task.Run(() =>
+                {
+                    _searches.MarkAllAsDone();
+                    MatchCountExact = _searches
+                        .GetSpinResults()
+                        .Count(t => t.Matched == 1 && t.DoneSpinning);
+                }, CancellationToken.None).ConfigureAwait(false);
+
+                Stopping = false;
+            }            
+            cancelSource.Dispose();
+        }
+    }
+    private Task[] BuildTableSpins(CancellationToken ct)
+    {    
+        List<Task> tablesToPlay = [];
+        for (int t = 0; t < Tables!.Value; t++)
+        {
+            if (ct.IsCancellationRequested) break;
+            tablesToPlay.Add(PlayTableAutoplaysAsync(t + 1, ct));
+        }
+        return [.. tablesToPlay];
+    }
+
+    private async Task PlayTableAutoplaysAsync(int tableId, CancellationToken ct)
+    {
+        for (int ap = 0; ap < SelectedAutoplayValue; ap++)
+        {            
+            await PlayTableGameAutoplayAsync(tableId, ap, ct).ConfigureAwait(false);
+            if (ct.IsCancellationRequested) break;
         }
     }
 
-    private async Task<Table> PlayTableGameAutoplayAsync(int tableId, int currentAp, CancellationToken ct = default)
+    private async Task<Table> PlayTableGameAutoplayAsync(int tableId, int currentAp, CancellationToken ct)
     {        
         Table tableForPlay = TableForPlay(tableId, currentAp);
         if (ct.IsCancellationRequested) return tableForPlay;        
         return await PlayTableGameSpinAsync(tableForPlay, ct).ConfigureAwait(false);
     }
-    private async Task<Table> PlayTableGameSpinAsync(Table table, CancellationToken ct = default)
+    private async Task<Table> PlayTableGameSpinAsync(Table table, CancellationToken ct)
     {
         if (!Random.HasValue) return table; 
         await Task.Run(() =>
@@ -704,35 +695,63 @@ public class MainViewModel : ViewModelBase
                 var tablePlayed = CaptureTableGameSpin(table, i + 1, Random.Value, ct);
                 if ((i + 1) == Random.Value || tablePlayed.ExactMatch || tablePlayed.WinsMatch)
                     _searches.AddSpinResult(tablePlayed);
-                if (ct.IsCancellationRequested) break;
+                lock (_searches)
+                {
+                    MatchCountExact = _searches.GetSpinResults().Where(t => t.Matched == 1 && t.DoneSpinning).Count();
+                }
+                if (ct.IsCancellationRequested) break;                
             }
-        }, ct);
+        }, ct).ConfigureAwait(false);
         return table;
     }
 
-    private Table CaptureTableGameSpin(Table gameTable, int currentSpin, int totalSpins, CancellationToken ct = default)
+    private ConcurrentBag<string> DebugPrinting { get; set; } = [];
+
+    private Table CaptureTableGameSpin(Table gameTable, int currentSpin, int totalSpins, CancellationToken ct)
     {
-        if (gameTable.DoneSpinning)
+        if (!ct.IsCancellationRequested)
         {
-            _tables.AddDoneSpins(totalSpins - gameTable.Spins);
-            gameTable.DoneSpinning = true;
+            if (gameTable.DoneSpinning)
+            {
+                _tables.AddDoneSpins(totalSpins - gameTable.Spins);
+                gameTable.DoneSpinning = true;
+                SpinProgress = _tables.GetCurrentPercentage();
+                return gameTable;
+            }
+            gameTable.Game.CaptureSpin(_numberGenerator.NextRandomNumber(), 0);
+            gameTable.ExactMatch = CheckLimit(gameTable);
+            gameTable.WinsMatch = CheckWinsLimit(gameTable); 
+            _tables.AddOverallSpin();
             SpinProgress = _tables.GetCurrentPercentage();
+
+            if (currentSpin == totalSpins || gameTable.ExactMatch)
+                gameTable.DoneSpinning = true;
+            
             return gameTable;
         }
-        gameTable.Game.CaptureSpin(_numberGenerator.NextRandomNumber(), 0);
-        _tables.AddOverallSpin();
-        SpinProgress = _tables.GetCurrentPercentage();
-        gameTable.ExactMatch = CheckLimit(gameTable);
-        gameTable.WinsMatch = CheckWinsLimit(gameTable);
-
-        if (currentSpin == totalSpins || gameTable.ExactMatch)
-            gameTable.DoneSpinning = true;
-
-        //ExactMatchCount = _searches.GetSpinResultsExactMatchCount();
-        //R1WMatchCount = _searches.GetSpinResultsR1WMatchCount();
-        //TWMatchCount = _searches.GetSpinResultsTWMatchCount();
-
         return gameTable;
+    }
+
+    private int _matchCountExact { get; set; }
+    public int MatchCountExact
+    {
+        get => _matchCountExact;
+        set
+        {
+            _matchCountExact = value;
+            OnPropertyChanged(nameof(MatchCountExact));
+        }
+    }
+
+    private int _totalCalculatedSpins { get; set; }
+    public int TotalCalculatedSpins
+    {
+        get => _totalCalculatedSpins;
+        set
+        {
+            _totalCalculatedSpins = value;
+            OnPropertyChanged(nameof(TotalCalculatedSpins));
+        }
     }
 
     private Table TableForPlay(int id, int autoplay)
@@ -752,139 +771,18 @@ public class MainViewModel : ViewModelBase
         return t;
     }
 
-    public async void StartSpins(CancellationToken token)
-    {
-        SpinProgress = 0.0;
-        ExactMatchCount = 0;
-        R1WMatchCount = 0;
-        TWMatchCount = 0;
-        if (RouletteGameType == GameType.Random)
-            SelectedAutoplayValue = 1;
-        Spinning = true;
-        _searches.NewSpinSearch();
-        await RunTables(token).ConfigureAwait(false);
-        //await WaitTillDoneSpinning();
-    }
-
-    private readonly object _LOCKING = new();
-    public async Task RunTables(CancellationToken token)
-    {
-        _tables.NewPlaySearch();
-        if (Tables.HasValue && Random.HasValue)
-        {
-            var autoplayVal = RouletteGameType == GameType.Random ? 1 : (SelectedAutoplay == null ? 1 : SelectedAutoplayValue);
-            _tables.SetTotalCalculatedSpins(Tables.Value * Random.Value * autoplayVal);
-            List<Task> tableTasks = [];
-            for (int j = 0; j < Tables.Value; j++)
-            {
-                tableTasks.Add(Task.Run(() => TableSpinTaskCallerAsync(j + 1, token).ConfigureAwait(false), token));
-                if (token.IsCancellationRequested)
-                    break;
-            }
-
-            await Task.WhenAll(tableTasks).ConfigureAwait(false);
-
-            lock (_LOCKING)
-            {
-                var cancelledCount = tableTasks.Count(t => t.IsCanceled);
-                var completedCount = tableTasks.Count(t => t.IsCompleted);
-                if (cancelledCount <= 0 && completedCount != tableTasks.Count)
-                {
-                    tableTasks = null!;
-                }
-                else
-                {
-                    FinalizeCancellationSpin();
-                    tableTasks = null!;
-                }
-            }
-        }
-    }
-
-    private async Task TableSpinTaskCallerAsync(int tableId, CancellationToken token)
-    {
-        for (int autoplay = 1; autoplay <= SelectedAutoplayValue; ++autoplay)
-        {
-            await ProcessTableAutoplayTask(tableId, autoplay, token);
-            if (token.IsCancellationRequested)
-            {
-                break;
-            }
-        }
-        var notDone = await _tables.StillRunning().ConfigureAwait(false);
-        if (notDone.Count > 0)
-        {
-            foreach (var table in notDone)
-            {
-                table.DoneSpinning = true;
-            }
-        }
-        //return cancelled ? Task.FromCanceled(token) : Task.CompletedTask;
-    }
-    public async Task ProcessTableAutoplayTask(int tableId, int autoplay, CancellationToken token)
-    {
-        Table? table = _getPlayTable(_tables, tableId, autoplay);
-        if (table == null)
-        {
-            table = new(_engineService)
-            {
-                TableId = tableId,
-                Autoplay = autoplay,
-                R1Wlimit = R1WLimit,
-                TWlimit = TWLimit
-            };
-            _tables.AddTable(table);
-        }
-
-        if (Random.HasValue && !table.ExactMatch && !table.DoneSpinning)
-        {
-            await ProcessTableAutoplaySpinAsync(table, Random.Value, token).ConfigureAwait(false);
-        }
-    }
-
     public Setting CleanDashboardSetting()
     {
         _settingService.New();
         return _settingService.Get();
     }
 
-    public async Task ProcessTableAutoplaySpinAsync(Table spinTable, int totalSpins, CancellationToken token)
+    private async Task FinalizeCancellationSpinAsync()
     {
-        for (int index = 1; index <= totalSpins; ++index)
-        {
-            await Task.Run(() => {
-                lock(spinTable.Game)
-                {
-                    if (spinTable.DoneSpinning)
-                    {
-                        _tables.AddDoneSpins(totalSpins - spinTable.Spins);
-                        SpinProgress = _tables.GetCurrentPercentage();
-                        return;
-                    }
-
-                    var currSpinNo = spinTable.Game.CurrentSpinNo + 1;
-                    spinTable.Game.CaptureSpin(_numberGenerator.NextRandomNumber(), 0);
-
-                    _tables.AddOverallSpin();
-                    SpinProgress = _tables.GetCurrentPercentage();
-                    spinTable.ExactMatch = CheckLimit(spinTable);
-                    spinTable.WinsMatch = CheckWinsLimit(spinTable);
-
-                    if (index == totalSpins || spinTable.ExactMatch)
-                        spinTable.DoneSpinning = true;
-
-                    if (index == totalSpins || spinTable.ExactMatch || spinTable.WinsMatch)
-                        _searches.AddSpinResult(spinTable);
-
-                    ExactMatchCount = _searches.GetSpinResultsExactMatchCount();
-                    R1WMatchCount = _searches.GetSpinResultsR1WMatchCount();
-                    TWMatchCount = _searches.GetSpinResultsTWMatchCount();
-                }                
-            });
-
-            if (token.IsCancellationRequested)
-                break;
-        }
+        await Task.Delay(200);
+        if (SpinProgress == 100.0)
+            return;
+        SpinProgress = 100.0;
     }
 
     private void FinalizeCancellationSpin()
@@ -894,9 +792,6 @@ public class MainViewModel : ViewModelBase
             return;
         SpinProgress = 100.0;
     }
-    
-    public async void ProcessTableAutoplayWrapper(int tableId, int autoplay, CancellationToken token)
-        => await ProcessTableAutoplayTask(tableId, autoplay, token);
 
     private Func<ITableService, int, int, Table?> _getPlayTable = (tableService, id, ap) =>
     {
@@ -906,23 +801,6 @@ public class MainViewModel : ViewModelBase
         }
     };
 
-    
-
-    
-
-    public void ProcessTableAutoplaySpin(Table spinTable, int totalSpins, CancellationToken token)
-    {
-        lock (_tables)
-        {
-            lock (spinTable)
-            {
-                lock (spinTable.Game)
-                {
-
-                }
-            }
-        }
-    }
     private bool CheckLimit(Table table)
     {
         lock (table)
@@ -1008,7 +886,7 @@ public class MainViewModel : ViewModelBase
             int firstRowWin = table.FirstRowWin;
             r1Wlimit = R1WLimit;
             int num = r1Wlimit.Value;
-            return winsLimitReached(firstRowWin, num);
+            return winsLimitReached(firstRowWin, num); 
         }
     }
     private bool CheckTWLimit(Table table)
@@ -1022,7 +900,7 @@ public class MainViewModel : ViewModelBase
             int highestColumnWin = table.HighestColumnWin;
             twLimit = TWLimit;
             int num = twLimit.Value;
-            return winsLimitReached(highestColumnWin, num);
+            return winsLimitReached(highestColumnWin, num); 
         }
     }
     public void LoadAndShowNewTable(Window ownerWindow)

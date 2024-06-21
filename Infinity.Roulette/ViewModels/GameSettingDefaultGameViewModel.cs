@@ -54,8 +54,8 @@ namespace Infinity.Roulette.ViewModels
       {
         if (_selectedType != value)
           _selectedType = value;
-        if (_selectedType.Content.ToString() != Setting.DefaultGameType.ToString())
-          Setting.DefaultGameType = _gameTypeService.Get(SelectedType.Content.ToString());
+        //if (_selectedType.Content.ToString() != Setting.DefaultGameType.ToString())
+        //  Setting.DefaultGameType = _gameTypeService.Get(SelectedType.Content.ToString());
         OnPropertyChanged(nameof (SelectedType));
       }
     }
@@ -85,7 +85,7 @@ namespace Infinity.Roulette.ViewModels
           });
       });
       GameTypeOptions = new ObservableCollection<ComboBoxItem>(options);
-      SelectedType = GameTypeOptions.FirstOrDefault(o => o.Content.ToString() == _setting.DefaultGameType.ToString());
+      SelectedType = GameTypeOptions.FirstOrDefault(o => o.Content.ToString() == Setting.DefaultGameType.ToString());
     }
 
     public void SaveDefaultGameSetting() => _settingService.Save(Setting);
