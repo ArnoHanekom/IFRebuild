@@ -52,6 +52,7 @@ namespace Infinity.Roulette
             unsub = ntvm.Subscribe(this);
             DataContext = ntvm;
             InitializeComponent();
+            txtManual.Focus();
         }
 
         private void ResolveViewModelContainer()
@@ -81,29 +82,29 @@ namespace Infinity.Roulette
 
         private async void btnStop_Click(object sender, RoutedEventArgs e) => await Task.Run(() => ntvm.StopSpins());
 
-        private void txtRandom_KeyDown(object sender, KeyEventArgs e)
-        {
-            var manText = txtManual.Text.Trim();
-            if (manText != "")
-            {
-                ntvm.Manual = null;
-                ntvm.IsManual = false;
-            }   
+        //private void txtRandom_KeyDown(object sender, KeyEventArgs e)
+        //{
+        //    var manText = txtManual.Text.Trim();
+        //    if (manText != "")
+        //    {
+        //        ntvm.Manual = null;
+        //        ntvm.IsManual = false;
+        //    }   
 
-            if (e.Key == Key.Return)
-            {
-                if (int.TryParse(txtRandom.Text, out int randomNumber))
-                {
-                    ntvm.Random = randomNumber;
-                    btnPlay_Click(sender, e);
-                }
-            }
-        }
+        //    if (e.Key == Key.Return)
+        //    {
+        //        if (int.TryParse(txtRandom.Text, out int randomNumber))
+        //        {
+        //            ntvm.Random = randomNumber;
+        //            btnPlay_Click(sender, e);
+        //        }
+        //    }
+        //}
 
         private void txtManual_KeyDown(object sender, KeyEventArgs e)
         {
-            var rndText = txtRandom.Text.Trim();
-            if (rndText != "")
+            //var rndText = txtRandom.Text.Trim();
+            //if (rndText != "")
                 ntvm.Random = null;
 
             ntvm.IsManual = true;
@@ -160,14 +161,14 @@ namespace Infinity.Roulette
                     ntvm.GSLimit = (setting?.GSLimit);
                     ntvm.R1WLimit = (setting?.R1WLimit);
                     ntvm.TWLimit = (setting?.TWLimit);
-                    UnSelectAutoplay();
-                    SelectAutoplay((setting?.AutoplayNumber) ?? 10);
+                    //UnSelectAutoplay();
+                    //SelectAutoplay((setting?.AutoplayNumber) ?? 10);
                 }
                 BetWindow.Game = ntvm.GameTable.Game;
                 if (ntvm.IsManual)
                     txtManual.Focus();
-                else
-                    txtRandom.Focus();
+                //else
+                //    txtRandom.Focus();
                 List<int> spinHistory = new List<int>(ntvm.GameTable.Game.SpinHistory.TakeLast(100));
                 spinHistory.Reverse();
                 ntvm.GameHistory = new List<Label>(new GameSpinHistory(spinHistory));
@@ -178,7 +179,7 @@ namespace Infinity.Roulette
                 ntvm.GameMaxGS = ntvm.GameTable.Game.GetMaxGS();
                 BindingOperations.GetBindingExpression(GameSpinHistoryList, ItemsControl.ItemsSourceProperty)?.UpdateTarget();
                 DependencyProperty textProperty = TextBlock.TextProperty;
-                BindingOperations.GetBindingExpression(tbTotalGameSpins, textProperty)?.UpdateTarget();
+                //BindingOperations.GetBindingExpression(tbTotalGameSpins, textProperty)?.UpdateTarget();
                 BindingOperations.GetBindingExpression(tbGameRows, textProperty)?.UpdateTarget();
                 BindingOperations.GetBindingExpression(tbGameCounts, textProperty)?.UpdateTarget();
                 BindingOperations.GetBindingExpression(tbGameGS, textProperty)?.UpdateTarget();
@@ -188,20 +189,20 @@ namespace Infinity.Roulette
             });
         }
 
-        private void UnSelectAutoplay()
-        {
-            foreach (ListBoxItem listBoxItem in cbAutoplays.Items)
-                listBoxItem.IsSelected = false;
-        }
+        //private void UnSelectAutoplay()
+        //{
+        //    foreach (ListBoxItem listBoxItem in cbAutoplays.Items)
+        //        listBoxItem.IsSelected = false;
+        //}
 
-        private void SelectAutoplay(int ap)
-        {
-            foreach (ComboBoxItem comboBoxItem in cbAutoplays.Items)
-            {
-                if (comboBoxItem.Content.ToString() == ap.ToString())
-                    comboBoxItem.IsSelected = true;
-            }
-        }
+        //private void SelectAutoplay(int ap)
+        //{
+        //    foreach (ComboBoxItem comboBoxItem in cbAutoplays.Items)
+        //    {
+        //        if (comboBoxItem.Content.ToString() == ap.ToString())
+        //            comboBoxItem.IsSelected = true;
+        //    }
+        //}
 
         public void OnError(Exception error) => throw new NotImplementedException();
 

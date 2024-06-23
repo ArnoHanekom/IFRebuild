@@ -223,7 +223,9 @@ public partial class NewSearchResults : Window
         IEnumerable<Table> spinfileTables = ResultsGrid.Items.Cast<Table>().Where(t => t.RunSpinfile);
         if (spinfileTables == null || spinfileTables.Count() <= 0)
             return;
-        await Task.Run(() => searchVM.StartNewSpinfileSpins(spinfileTables, this));
+
+        await searchVM.PrepareSpinStartAsync(spinfileTables.ToList()).ConfigureAwait(false);
+        await searchVM.PlaySpinfileTablesAsync(this, searchVM.cancelToken).ConfigureAwait(false);
     }
     public async void ReloadGrid()
     {
@@ -231,10 +233,14 @@ public partial class NewSearchResults : Window
         {
             cbRunSpinfileAll.IsChecked = false;
             cbRunSpinfileLimit.IsChecked = false;
-            ResultsGrid.ItemsSource = searchVM.LoadedResults;
+            //ResultsGrid.ItemsSource = searchVM.LoadedResults;
         });
     }
-    private async void btnStop_Click(object sender, RoutedEventArgs e) => await Task.Run(() => searchVM.StopSpins());
+    private void btnStop_Click(object sender, RoutedEventArgs e)
+    {
+        searchVM.Stopping = true;
+        searchVM.cancelSource.Cancel();
+    }
     private async void cbR1Wonly_Checked(object sender, RoutedEventArgs e)
     {
         await base.Dispatcher.InvokeAsync(delegate

@@ -21,7 +21,11 @@ namespace Infinity.Roulette.ViewModels
         private readonly IConcurrentSearchService _searches;
         private readonly IEngineService _engineService;
         
-        private CancellationTokenSource cancellationToken;
+        public CancellationTokenSource cancelSource;
+        public CancellationToken cancelToken
+        {
+            get => cancelSource.Token;
+        }
         private Func<int, int, bool> WinsLimitReached = (val, valLimit) => val >= valLimit;
 
         public SearchResultsViewModel(ITableService tables, IConcurrentSearchService searches, IEngineService engineService)
@@ -31,7 +35,7 @@ namespace Infinity.Roulette.ViewModels
             _engineService = engineService;
             
             Spinning = false;
-            cancellationToken = new CancellationTokenSource();
+            cancelSource = new();
             LoadResults();
         }
 
@@ -54,9 +58,9 @@ namespace Infinity.Roulette.ViewModels
             }
         }
 
-        private ConcurrentBag<Table> _loadedResults { get; set; } = default!;
+        private List<Table> _loadedResults { get; set; } = default!;
 
-        public ConcurrentBag<Table> LoadedResults
+        public List<Table> LoadedResults
         {
             get => _loadedResults;
             set
@@ -94,9 +98,9 @@ namespace Infinity.Roulette.ViewModels
             }
         }
 
-        private List<int> _Spinfile { get; set; } = default!;
+        private ConcurrentBag<int> _Spinfile { get; set; } = default!;
 
-        public List<int> Spinfile
+        public ConcurrentBag<int> Spinfile
         {
             get => _Spinfile;
             set
@@ -104,32 +108,6 @@ namespace Infinity.Roulette.ViewModels
                 if (_Spinfile != value)
                     _Spinfile = value;
                 OnPropertyChanged(nameof(Spinfile));
-            }
-        }
-
-        private bool _ShowRunBtn { get; set; }
-
-        public bool ShowRunBtn
-        {
-            get => _ShowRunBtn;
-            set
-            {
-                if (_ShowRunBtn != value)
-                    _ShowRunBtn = value;
-                OnPropertyChanged(nameof(ShowRunBtn));
-            }
-        }
-
-        private bool _ShowStopBtn { get; set; }
-
-        public bool ShowStopBtn
-        {
-            get => _ShowStopBtn;
-            set
-            {
-                if (_ShowStopBtn != value)
-                    _ShowStopBtn = value;
-                OnPropertyChanged(nameof(ShowStopBtn));
             }
         }
 
@@ -142,9 +120,6 @@ namespace Infinity.Roulette.ViewModels
             {
                 if (_Spinning != value)
                     _Spinning = value;
-                ShowRunBtn = !_Spinning;
-                ShowStopBtn = _Spinning;
-                IsPlaying = Spinning;
                 OnPropertyChanged(nameof(Spinning));
             }
         }
@@ -161,19 +136,6 @@ namespace Infinity.Roulette.ViewModels
                 if (_SpinProgress >= 100.0)
                     Spinning = false;
                 OnPropertyChanged(nameof(SpinProgress));
-            }
-        }
-
-        private int _SelectedAutoplayValue { get; set; }
-
-        public int SelectedAutoplayValue
-        {
-            get => _SelectedAutoplayValue;
-            set
-            {
-                if (_SelectedAutoplayValue != value)
-                    _SelectedAutoplayValue = value;
-                OnPropertyChanged(nameof(SelectedAutoplayValue));
             }
         }
 
@@ -212,6 +174,17 @@ namespace Infinity.Roulette.ViewModels
         }
         public bool FileNotLoaded => !FileLoaded;
 
+        private bool _stopping { get; set; }
+        public bool Stopping
+        {
+            get => _stopping;
+            set
+            {
+                _stopping = value;
+                OnPropertyChanged(nameof(Stopping));
+            }
+        }
+
         private List<Table> _SpinFileTables { get; set; } = default!;
 
         public List<Table> SpinFileTables
@@ -227,34 +200,159 @@ namespace Infinity.Roulette.ViewModels
 
         public async Task<CancellationToken> GetNewCancellationToken()
         {
-            cancellationToken = new CancellationTokenSource();
-            return await Task.Run(() => cancellationToken.Token);
+            cancelSource = new CancellationTokenSource();
+            return await Task.Run(() => cancelSource.Token);
+        }
+
+        public async Task PrepareSpinStartAsync(List<Table> spinfileTables)
+        {
+            SpinFileTables = await PrepareSpinfileTablesAsync(spinfileTables).ConfigureAwait(false);
+            Spinning = true;
+            await Task.Run(() =>
+            {
+                cancelSource = new();
+                SpinProgress = 0.0;                              
+                _tables.NewPlaySearch();
+                _tables.ResetCounters();
+                _tables.SetTotalCalculatedSpins(SpinFileTables.Count * Spinfile.Count);
+                _searches.NewSpinSearch();
+            }).ConfigureAwait(false);
+        }
+
+        private async Task<List<Table>> PrepareSpinfileTablesAsync(List<Table> spinfileTables)
+        {
+            return await Task.Run(() =>
+            {
+                foreach (var table in spinfileTables)
+                {
+                    table.RunSpinfile = false;
+                    table.DoneSpinning = false;
+                }
+                return spinfileTables;
+            });
+        }
+
+        public async Task PlaySpinfileTablesAsync(NewSearchResults resultsWindow, CancellationToken ct)
+        {
+            if (SpinFileTables.Count  == 0) return;
+
+            try
+            {
+                await Task.WhenAll(BuildSpinfileTableSpins(ct))
+                .ContinueWith(t => 
+                    {
+                        if (t.IsCompleted) t.Dispose();
+                        
+                        SpinProgress = 100.0;
+                    }, CancellationToken.None)
+                .ConfigureAwait(false);
+            }
+            catch (TaskCanceledException tce)
+            {
+                var tsk = tce.Task;
+                if (tsk!.IsCompleted) tsk.Dispose();
+            }
+            finally
+            {
+                if (ct.IsCancellationRequested)
+                {
+                    await FinalizeCancellationSpinAsync(resultsWindow).ConfigureAwait(false);
+                    await Task.Run(_searches.MarkAllAsDone, CancellationToken.None).ConfigureAwait(false);
+                    Stopping = false;
+                }
+                cancelSource.Dispose();
+            }
+
+            await Task.Run(() =>
+            {
+                LoadResults();
+                resultsWindow.ReloadGrid();
+                Spinning = false;
+            }, CancellationToken.None);
+        }
+
+        private Task[] BuildSpinfileTableSpins(CancellationToken ct)
+        {
+            List<Task> tablesToPlay = [];
+            foreach (var spintable in SpinFileTables)
+            {
+                if (ct.IsCancellationRequested) break;
+                tablesToPlay.Add(PlayTableGameSpinAsync(spintable, ct));
+            }
+            return [.. tablesToPlay];
+        }
+
+        private async Task<Table> PlayTableGameSpinAsync(Table table, CancellationToken ct)
+        {
+            if (Spinfile.IsEmpty) return table;
+            await Task.Run(() =>
+            {
+                for (int i = 0; i < Spinfile.Count; i++)
+                {
+                    var tablePlayed = CaptureTableGameSpin(table, Spinfile.ToArray()[i], table.Spins > 0 ? table.Spins + i + 1 : i + 1, table.Spins > 0 ? table.Spins + Spinfile.Count : Spinfile.Count, ct);
+                    if (ct.IsCancellationRequested) break;
+                }
+            }, ct).ConfigureAwait(false);
+            return table;
+        }
+
+        private Table CaptureTableGameSpin(Table table, int spinfileNumber, int currentSpin, int totalSpins, CancellationToken ct)
+        {
+            if (!ct.IsCancellationRequested)
+            {
+                if (table.RunSpinfile) table.RunSpinfile = false;
+                if (table.DoneSpinning)
+                {
+                    _tables.AddDoneSpins(totalSpins - table.Spins, table.TableId, table.Autoplay);
+                    table.DoneSpinning = true;
+                    SpinProgress = _tables.GetCurrentPercentage();
+                    return table;
+                }
+                table.Game.CaptureSpin(spinfileNumber, 1);
+
+                table.WinsMatch = CheckWinsLimit(table);
+                _tables.AddOverallSpin();
+                SpinProgress = _tables.GetCurrentPercentage();
+
+                if (currentSpin == totalSpins)
+                    table.DoneSpinning = true;
+
+                _searches.AddSpinResult(table);
+
+                return table;
+            }
+            return table;
+        }
+        private async Task FinalizeCancellationSpinAsync(NewSearchResults resultsWindow)
+        {
+            await Task.Delay(200);
+            if (SpinProgress == 100.0)
+                return;
+            SpinProgress = 100.0;
         }
 
         public void StartSpinfileSpins(IEnumerable<Table> tables, SearchResults resultsWindow)
         {
             SpinProgress = 0.0;
-            SelectedAutoplayValue = 1;
             SpinFileTables = tables.ToList();
             _tables.NewPlaySearch();
             _tables.ResetCounters();
             _searches.NewSpinSearch();
             Spinning = true;
             _tables.SetTotalCalculatedSpins(tables.Count() * Spinfile.Count());
-            RunSpinfileSpins(tables, resultsWindow, cancellationToken.Token);
+            RunSpinfileSpins(tables, resultsWindow, cancelSource.Token);
         }
         public void StartNewSpinfileSpins(IEnumerable<Table> tables, NewSearchResults resultsWindow)
         {
             FileLoaded = false;
             SpinProgress = 0.0;
-            SelectedAutoplayValue = 1;
             SpinFileTables = tables.ToList();
             _tables.NewPlaySearch();
             _tables.ResetCounters();
             _searches.NewSpinSearch();
             Spinning = true;
             _tables.SetTotalCalculatedSpins(tables.Count() * Spinfile.Count());
-            RunNewSpinfileSpins(tables, resultsWindow, cancellationToken.Token);
+            RunNewSpinfileSpins(tables, resultsWindow, cancelSource.Token);
         }
         public async void RunSpinfileSpins(IEnumerable<Table> tables, SearchResults resultsWindow, CancellationToken token)
         {
@@ -317,7 +415,7 @@ namespace Infinity.Roulette.ViewModels
         private async Task<Task> RunSpinfileTableAutoplays(int idx, CancellationToken token)
         {
             bool cancelled = false;
-            for (int autoplay = 1; autoplay <= SelectedAutoplayValue; ++autoplay)
+            for (int autoplay = 1; autoplay <= 1; ++autoplay)
             {
                 ProcessSpinfileTableAutoplayWrapper(idx, autoplay, token);
                 if (token.IsCancellationRequested)
@@ -401,14 +499,14 @@ namespace Infinity.Roulette.ViewModels
                                 {
                                     if (spinTable.DoneSpinning)
                                     {
-                                        _tables.AddDoneSpins(totalSpins - index);
+                                        _tables.AddDoneSpins(totalSpins - index, spinTable.TableId, spinTable.Autoplay);
                                         SpinProgress = _tables.GetCurrentPercentage();
                                         break;
                                     }
                                     spinTable.Game.AddSpinTypeHistory((int)GameType.Spinfile);
                                     var currSpinNo = spinTable.Game.CurrentSpinNo + 1;
                                     spinTable.Game.UpdateCurrentSpin(currSpinNo);
-                                    spinTable.Game.CaptureSpin(Spinfile[index - 1], 1);
+                                    spinTable.Game.CaptureSpin(Spinfile.ToArray()[index - 1], 1);
                                     _tables.AddOverallSpin();
                                     SpinProgress = _tables.GetCurrentPercentage();
                                     spinTable.WinsMatch = CheckWinsLimit(spinTable);
@@ -429,8 +527,8 @@ namespace Infinity.Roulette.ViewModels
 
         private void StopTableRuns()
         {
-            if (cancellationToken != null)
-                cancellationToken.Cancel();
+            if (cancelSource != null)
+                cancelSource.Cancel();
             SpinProgress = 100.0;
         }
 
@@ -488,18 +586,6 @@ namespace Infinity.Roulette.ViewModels
                 return winsLimitReached(highestColumnWin, num);
             }
         }
-
-        private bool _isPlaying { get; set; }
-        public bool IsPlaying
-        {
-            get => _isPlaying;
-            set
-            {
-                _isPlaying = value;
-                OnPropertyChanged(nameof(IsPlaying));
-                OnPropertyChanged(nameof(IsNotPlaying));
-            }
-        }
-        public bool IsNotPlaying => !IsPlaying;
+        public bool IsNotPlaying => !Spinning;
     }
 }

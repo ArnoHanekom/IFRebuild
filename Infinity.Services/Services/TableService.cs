@@ -7,6 +7,7 @@
 using Infinity.Data.Models;
 using Infinity.Services.Interfaces;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -79,7 +80,19 @@ namespace Infinity.Services.Services
 
         public void AddOverallSpin() => ++CurrentOverallSpins;
 
-        public void AddDoneSpins(int remainingCount) => CurrentOverallSpins += remainingCount;
+        private ConcurrentBag<Remainder> AddedToDone { get; set; } = [];
+        public void AddDoneSpins(int remainingCount, int tableId, int autoplay)
+        {
+            if (!AddedToDone.Any(t => t.TableId == tableId && t.Autoplay == autoplay))
+            {
+                CurrentOverallSpins += remainingCount;
+                AddedToDone.Add(new()
+                {
+                    TableId = tableId,
+                    Autoplay = autoplay
+                });
+            }
+        }
 
         public int GetCurrentOverallSpins() => CurrentOverallSpins;
         public async Task<List<Table>> StillRunning()
@@ -96,5 +109,11 @@ namespace Infinity.Services.Services
         }
 
         public double GetCurrentPercentage() => Math.Round(100.0 * CurrentOverallSpins / TotalCalculatedSpins, 2);
+
+        public class Remainder
+        {
+            public int TableId { get; set; }
+            public int Autoplay { get; set; }
+        }
     }
 }

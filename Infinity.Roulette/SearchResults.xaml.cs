@@ -251,10 +251,12 @@ public partial class SearchResults : Window
 
     private async void btnPlay_Click(object sender, RoutedEventArgs e)
     {
-        IEnumerable<Table> spinfileTables = ResultsGrid.Items.Cast<Table>().Where(t => t.RunSpinfile);
-        if (spinfileTables == null || spinfileTables.Count() <= 0)
+        var spinfileTables = ResultsGrid.Items.Cast<Table>().Where(t => t.RunSpinfile);
+        if (spinfileTables == null || !spinfileTables.Any())
             return;
-        await Task.Run(() => searchVM.StartSpinfileSpins(spinfileTables, this));
+
+        await searchVM.PrepareSpinStartAsync(spinfileTables.ToList());
+       // await searchVM.PlaySpinfileTablesAsync(this, searchVM.cancelToken);
     }
 
     public async void ReloadGrid()
@@ -269,7 +271,11 @@ public partial class SearchResults : Window
         });
     }
 
-    private async void btnStop_Click(object sender, RoutedEventArgs e) => await Task.Run(() => searchVM.StopSpins());
+    private void btnStop_Click(object sender, RoutedEventArgs e)
+    {
+        searchVM.Stopping = true;
+        searchVM.cancelSource.Cancel();
+    }
 
     private async void cbR1Wonly_Checked(object sender, RoutedEventArgs e)
     {

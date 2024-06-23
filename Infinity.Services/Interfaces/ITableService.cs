@@ -35,7 +35,7 @@ namespace Infinity.Services.Interfaces
 
         void ResetCounters();
 
-        void AddDoneSpins(int remainingCount);
+        void AddDoneSpins(int remainingCount, int tableId, int autoplay);
 
         Task<List<Table>> StillRunning();
 

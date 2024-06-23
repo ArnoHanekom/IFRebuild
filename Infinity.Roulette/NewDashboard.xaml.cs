@@ -21,7 +21,7 @@ public partial class NewDashboard : Window
     }
     private async void btnPlay_Click(object sender, RoutedEventArgs e)
     {
-        if (mainVM.SelectedGameType is not GameType.None)
+        if (mainVM.GameSetting is not null)
         {
             await mainVM.PreparePlayStartAsync().ConfigureAwait(false);
             await mainVM.PlaySpinsAsync(mainVM.cancelToken).ConfigureAwait(false);

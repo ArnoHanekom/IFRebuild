@@ -467,7 +467,7 @@ public class MainViewModel : ViewModelBase
             LoadGameTypeSettings();
         Spinning = false;
         SpinProgress = 0.0;
-        ExactMatchCount = 0;
+        MatchCountExact = 0;
         TotalCalculatedSpins = 0;
     }
     public GameType SelectedGameType => RouletteGameType;
@@ -593,9 +593,7 @@ public class MainViewModel : ViewModelBase
         {
             cancelSource = new();
             SpinProgress = 0.0;
-            ExactMatchCount = 0;
-            R1WMatchCount = 0;
-            TWMatchCount = 0;
+            MatchCountExact = 0;
             if (RouletteGameType == GameType.Random)
                 SelectedAutoplayValue = 1;
             Spinning = true;
@@ -651,7 +649,7 @@ public class MainViewModel : ViewModelBase
                     _searches.MarkAllAsDone();
                     MatchCountExact = _searches
                         .GetSpinResults()
-                        .Count(t => t.Matched == 1 && t.DoneSpinning);
+                        .Count(t => t.ExactMatch && t.DoneSpinning);
                 }, CancellationToken.None).ConfigureAwait(false);
 
                 Stopping = false;
@@ -697,7 +695,8 @@ public class MainViewModel : ViewModelBase
                     _searches.AddSpinResult(tablePlayed);
                 lock (_searches)
                 {
-                    MatchCountExact = _searches.GetSpinResults().Where(t => t.Matched == 1 && t.DoneSpinning).Count();
+                    MatchCountExact = _searches.GetSpinResults()
+                        .Where(t => t.ExactMatch && t.DoneSpinning).Count();
                 }
                 if (ct.IsCancellationRequested) break;                
             }
@@ -713,7 +712,9 @@ public class MainViewModel : ViewModelBase
         {
             if (gameTable.DoneSpinning)
             {
-                _tables.AddDoneSpins(totalSpins - gameTable.Spins);
+                var overallBeforeDoneSpins = _tables.GetCurrentOverallSpins();
+                _tables.AddDoneSpins(totalSpins - gameTable.Spins, gameTable.TableId, gameTable.Autoplay);
+                //Debug.WriteLine($"Done Spins - Table {gameTable.TableId}|{gameTable.Autoplay}\tTotal: {totalSpins}\tGame: {gameTable.Spins}\tBefore: {overallBeforeDoneSpins}\tAfter: {_tables.GetCurrentOverallSpins()}");
                 gameTable.DoneSpinning = true;
                 SpinProgress = _tables.GetCurrentPercentage();
                 return gameTable;
