@@ -93,8 +93,8 @@ public partial class NewSearchResults : Window
         {
             cbRunSpinfileAll.IsChecked = false;
         });
-        await SelectAll(select: false);
-        await SelectAllLimits(select: true);
+        await SelectAll(false);
+        await SelectAllLimits(true);
     }
     private async void Window_SizeChanged(object sender, SizeChangedEventArgs e)
     {
@@ -167,14 +167,9 @@ public partial class NewSearchResults : Window
     }
     private async Task SelectAll(bool select)
     {
-        NewSearchResults searchResults = this;
-        IEnumerable<Table> itemsList = searchResults.ResultsGrid.Items.Cast<Table>().Select(t =>
-        {
-            t.RunSpinfile = select;
-            return t;
-        });
-        await searchResults.Dispatcher.InvokeAsync((Action)(() => ResultsGrid.ItemsSource = itemsList));
+        await Dispatcher.InvokeAsync(() => ResultsGrid.ItemsSource = SelectAllCheck(select));
     }
+
     private async Task SelectAllR1W(bool select)
     {
         NewSearchResults searchResults = this;
@@ -198,16 +193,37 @@ public partial class NewSearchResults : Window
         await searchResults.Dispatcher.InvokeAsync((Action)(() => ResultsGrid.ItemsSource = itemsList));
     }
     private async Task SelectAllLimits(bool select)
-    {
-        NewSearchResults searchResults = this;
-        IEnumerable<Table> itemsList = searchResults.ResultsGrid.Items.Cast<Table>().Select(t =>
-        {
-            if (t.ExactMatch)
-                t.RunSpinfile = select;
-            return t;
-        });
-        await searchResults.Dispatcher.InvokeAsync((Action)(() => ResultsGrid.ItemsSource = itemsList));
+    {        
+        await Dispatcher.InvokeAsync(() => ResultsGrid.ItemsSource = SelectAllLimitsCheck(select));
     }
+    private List<Table> SelectAllLimitsCheck(bool select)
+    {
+        List<Table> allResults = [.. ResultsGrid.Items.Cast<Table>()];
+        foreach (var table in allResults.Where(t => t.ExactMatch))
+        {
+            table.RunSpinfile = select;
+        }
+        return allResults;
+    }
+    private List<Table> SelectAllCheck(bool select)
+    {
+        List<Table> allResults = [.. ResultsGrid.Items.Cast<Table>()];
+        foreach (var table in allResults)
+        {
+            table.RunSpinfile = select;
+        }
+        return allResults;
+    }
+    private List<Table> SelectR1WCheck(bool select)
+    {
+        List<Table> allResults = [.. ResultsGrid.Items.Cast<Table>()];
+        foreach (var table in allResults)
+        {
+            table.RunSpinfile = select;
+        }
+        return allResults;
+    }
+
     private async void btnSpinFile_Click(object sender, RoutedEventArgs e)
     {
         OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -220,20 +236,31 @@ public partial class NewSearchResults : Window
     }
     private async void btnPlay_Click(object sender, RoutedEventArgs e)
     {
-        IEnumerable<Table> spinfileTables = ResultsGrid.Items.Cast<Table>().Where(t => t.RunSpinfile);
-        if (spinfileTables == null || spinfileTables.Count() <= 0)
+        List<Table> spinfileTables = GetSpinfileTables();
+        if (spinfileTables == null || spinfileTables.Count <= 0)
             return;
+
+        await Dispatcher.InvokeAsync(() =>
+        {
+            ResultsGrid.ItemsSource = null;
+        });
 
         await searchVM.PrepareSpinStartAsync(spinfileTables.ToList()).ConfigureAwait(false);
         await searchVM.PlaySpinfileTablesAsync(this, searchVM.cancelToken).ConfigureAwait(false);
     }
+
+    private List<Table> GetSpinfileTables()
+    {
+        return [.. ResultsGrid.Items.Cast<Table>().Where(t => t.RunSpinfile)];
+    }
+
     public async void ReloadGrid()
     {
         await base.Dispatcher.InvokeAsync(delegate
         {
             cbRunSpinfileAll.IsChecked = false;
             cbRunSpinfileLimit.IsChecked = false;
-            //ResultsGrid.ItemsSource = searchVM.LoadedResults;
+            ResultsGrid.ItemsSource = searchVM.LoadedResults;
         });
     }
     private void btnStop_Click(object sender, RoutedEventArgs e)

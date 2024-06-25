@@ -12,7 +12,7 @@
         WindowStartupLocation="CenterScreen" UseLayoutRounding="True" AllowsTransparency="True"
         WindowStyle="None" BorderThickness="0" ui:TitleBar.ExtendViewIntoTitleBar="True"
         Background="Transparent" Title="Results" MinHeight="400" SizeToContent="WidthAndHeight"
-        MinWidth="590" SnapsToDevicePixels="True">
+        MinWidth="600" SnapsToDevicePixels="True">
     <FrameworkElement.Resources>
         <convert:GameTypeConverter x:Key="GameTypeConverter"/>
         <convert:VisibilityConverter x:Key="VisibilityConverter"/>
@@ -160,7 +160,7 @@
                                 <DataGrid MouseDoubleClick="ResultsGrid_MouseDoubleClick" Loaded="ResultsGrid_Loaded"
         LoadingRow="ResultsGrid_LoadingRow" x:Name="ResultsGrid" AutoGenerateColumns="False"
         Margin="7,0,0,0" CanUserReorderColumns="False" IsReadOnly="True" SelectionMode="Single"
-        SelectionUnit="FullRow" Background="Transparent" Foreground="White" MaxHeight="450" MinWidth="590"
+        SelectionUnit="FullRow" Background="Transparent" Foreground="White" MaxHeight="450" MinWidth="600"
         CanUserResizeColumns="False" CanUserResizeRows="False" HorizontalContentAlignment="Stretch"
         VerticalContentAlignment="Stretch" UseLayoutRounding="True" EnableColumnVirtualization="True"
         FontFamily="{Binding ElementName=fontFan, Path=Text, Converter={StaticResource FontFamilyConverter}}"
@@ -312,7 +312,7 @@
                                 <DataGrid MouseDoubleClick="ResultsGrid_MouseDoubleClick" 
                       x:Name="OpenResultsGrid" AutoGenerateColumns="False"
         Margin="7,0,0,0" CanUserReorderColumns="False" IsReadOnly="True" SelectionMode="Single"
-        SelectionUnit="FullRow" Background="Transparent" Foreground="White" MaxHeight="450" MinWidth="590"
+        SelectionUnit="FullRow" Background="Transparent" Foreground="White" MaxHeight="450" MinWidth="600"
         CanUserResizeColumns="False" CanUserResizeRows="False" HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch"
         FontFamily="{Binding ElementName=fontFan, Path=Text, Converter={StaticResource FontFamilyConverter}}"

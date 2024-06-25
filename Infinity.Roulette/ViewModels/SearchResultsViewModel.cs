@@ -98,9 +98,9 @@ namespace Infinity.Roulette.ViewModels
             }
         }
 
-        private ConcurrentBag<int> _Spinfile { get; set; } = default!;
+        private List<int> _Spinfile { get; set; } = default!;
 
-        public ConcurrentBag<int> Spinfile
+        public List<int> Spinfile
         {
             get => _Spinfile;
             set
@@ -284,7 +284,7 @@ namespace Infinity.Roulette.ViewModels
 
         private async Task<Table> PlayTableGameSpinAsync(Table table, CancellationToken ct)
         {
-            if (Spinfile.IsEmpty) return table;
+            if (Spinfile.Count == 0) return table;
             await Task.Run(() =>
             {
                 for (int i = 0; i < Spinfile.Count; i++)

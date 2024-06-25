@@ -10,7 +10,7 @@
         xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock" x:Class="Infinity.Roulette.NewDashboard"
         ui:WindowHelper.UseModernWindowStyle="True"
         WindowStartupLocation="CenterScreen" UseLayoutRounding="True" AllowsTransparency="True"
-        WindowStyle="None" BorderThickness="0" ui:TitleBar.ExtendViewIntoTitleBar="True"
+        WindowStyle="None" BorderThickness="0" ui:TitleBar.ExtendViewIntoTitleBar="True" MinWidth="235"
         Background="Transparent" ResizeMode="CanMinimize" Title="Dashboard" SizeToContent="WidthAndHeight"
         SnapsToDevicePixels="True" Icon="/roulette.ico">
     <Window.Resources>
@@ -28,6 +28,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="10"/>
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Row="1" Margin="0, -15, 0, 0">
@@ -41,14 +42,14 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="5" />
                         <ColumnDefinition />
-                        <ColumnDefinition Width="15" />
+                        <ColumnDefinition Width="75" />
                         <ColumnDefinition />
                         <ColumnDefinition Width="5" />
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Row="0" Grid.RowSpan="5" Grid.Column="0" Grid.ColumnSpan="5" Margin="0">
                         <Image x:Name="imgRouletteTable" Source="{StaticResource roulette-wheel-background}" 
                                VerticalAlignment="Top"
-                               RenderTransformOrigin="0.5,0.5" Width="200" Height="255" Opacity="0.2"/>
+                               RenderTransformOrigin="0.5,0.5" Width="220" Height="255" Opacity="0.2"/>
                     </Grid>
                     <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" 
                           Margin="0, -10, 0, 0" Height="90" MinHeight="90" 
@@ -123,12 +124,8 @@
                             </Button>
                             <Button x:Name="btnResults" Click="btnResults_Click" ToolTip="Open Results"
                                 Style="{StaticResource resultsButton}" Width="35" Height="35" Margin="0,3,0,0">
-                                <Viewbox Width="25" Height="25" Margin="0.5,0,0,0">
-                                    <Image>
-                                        <Image.Source>
-                                            <DrawingImage Drawing="{StaticResource exclamation-icon-drawingGroup}" />
-                                        </Image.Source>
-                                    </Image>
+                                <Viewbox Width="25" Height="25" Margin="2,0,0,0">
+                                    <Image Source="{StaticResource magnify-Image}" />
                                 </Viewbox>
                             </Button>
                             <Button x:Name="btnReset" Click="btnReset_Click" ToolTip="Reset"
@@ -143,11 +140,9 @@
                             </Button>
                         </StackPanel>
                     </Grid>
-
-                    <Grid Grid.Row="1" Grid.RowSpan="3" Grid.Column="1" Margin="0,0,0,-30"
-                          Visibility="{Binding Spinning, Converter={StaticResource VisibilityConverter}}">
+                    <Grid Grid.Row="1" Grid.RowSpan="3" Grid.Column="1" Margin="0,0,0,-30">
                         <Viewbox Width="100" Height="100" HorizontalAlignment="Left" VerticalAlignment="Bottom">
-                            <Grid>
+                            <Grid Visibility="{Binding Spinning, Converter={StaticResource VisibilityConverter}}">
                                 <Grid.Resources>
                                     <Storyboard x:Key="Anim.Rotate" RepeatBehavior="Forever">
                                         <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" Storyboard.TargetName="Inner">
@@ -203,81 +198,74 @@
                             </Grid>
                         </Viewbox>
                     </Grid>
-
-                    <TextBlock Grid.Row="4" Grid.Column="1" Foreground="Black" Text="Game On..." 
-                           Margin="0,0,0,0" VerticalAlignment="Bottom"
-                           FontSize="20" FontWeight="Light" FontFamily="Segoe Script" MinHeight="10">
-                        <TextBlock.Effect>
-                            <DropShadowEffect Color="Black" ShadowDepth="2" BlurRadius="0" RenderingBias="Quality" Opacity="100" />
-                        </TextBlock.Effect>
-                    </TextBlock>
-                    <TextBlock Grid.Row="4" Grid.Column="1" Foreground="#FF0000" Text="Game On..." 
-                               Margin="0,0,0,0" VerticalAlignment="Bottom"
-                               FontSize="20" FontWeight="Light" FontFamily="Segoe Script" MinHeight="10">
-                        <TextBlock.Effect>
-                            <DropShadowEffect Color="#FF0000" ShadowDepth="0" BlurRadius="25" RenderingBias="Quality" Opacity="100" />
-                        </TextBlock.Effect>
-                    </TextBlock>
                 </Grid>
-                <Grid Grid.Row="1" Margin="0, 0, 75, 20" Width="45"
-                            Height="45" MinWidth="45"  MinHeight="45" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                    <Border BorderBrush="#FF9800" BorderThickness="4" Background="Transparent" 
-                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                            Margin="1"
-                            CornerRadius="360"/>
-                    <Border CornerRadius="360" BorderBrush="#BBC2CC" BorderThickness="0.2" Background="Transparent"
-                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                        <Border.Effect>
-                            <BlurEffect Radius="1" />
-                        </Border.Effect>
-                    </Border>
-                    <Grid Margin="4">
-                        <Border CornerRadius="360" BorderBrush="#BBC2CC" BorderThickness="1">
-                            <Border.Background>
-                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                    <GradientStop Color="#FF282828" Offset="0" />
-                                    <GradientStop Color="#33FFFFFF" Offset="1" />
-                                </LinearGradientBrush>
-                            </Border.Background>
+                <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="5,0,0,-5"  VerticalAlignment="Bottom">
+                    <Grid Margin="0,0,0,-5">
+                        <TextBlock Foreground="Black" Text="Game On..." Margin="0,0,0,0" VerticalAlignment="Bottom" FontSize="20" FontWeight="Light" FontFamily="Segoe Script" MinHeight="10">
+                            <TextBlock.Effect>
+                                <DropShadowEffect Color="Black" ShadowDepth="2" BlurRadius="0" RenderingBias="Quality" Opacity="100" />
+                            </TextBlock.Effect>
+                        </TextBlock>
+                        <TextBlock Foreground="#FF0000" Text="Game On..."  Margin="0,0,0,0" VerticalAlignment="Bottom" FontSize="20" FontWeight="Light" FontFamily="Segoe Script" MinHeight="10">
+                            <TextBlock.Effect>
+                                <DropShadowEffect Color="#FF0000" ShadowDepth="0" BlurRadius="25" RenderingBias="Quality" Opacity="100" />
+                            </TextBlock.Effect>
+                        </TextBlock>
+                    </Grid>
+                    <Grid Margin="10,0,0,0" Width="45" Height="45" MinWidth="45"  MinHeight="45" HorizontalAlignment="Left">
+                        <Border BorderBrush="#FF9800" BorderThickness="4" Background="Transparent" 
+            HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+            Margin="1"
+            CornerRadius="360"/>
+                        <Border CornerRadius="360" BorderBrush="#BBC2CC" BorderThickness="0.2" Background="Transparent"
+        HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                             <Border.Effect>
                                 <BlurEffect Radius="1" />
                             </Border.Effect>
                         </Border>
-                        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"                                                                                                                            
-                                FontSize="14" FontWeight="ExtraBold" Foreground="#F0FF4D" Margin="0,0,0,0"
-                                Text="{Binding MatchCountExact}" >
-                                <TextBlock.Effect>
-                                    <DropShadowEffect ShadowDepth="3" BlurRadius="4" />
-                                </TextBlock.Effect>
-                            </TextBlock>
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"                                                                                                                            
-                                FontSize="15" FontWeight="ExtraBold" Opacity="0.5" Margin="0,0,0,0"
-                                Text="{Binding MatchCountExact}" >
-                                <TextBlock.Foreground>
+                        <Grid Margin="4">
+                            <Border CornerRadius="360" BorderBrush="#BBC2CC" BorderThickness="1">
+                                <Border.Background>
                                     <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                        <GradientStop Color="#DDFFFFFF" Offset="0" />
+                                        <GradientStop Color="#FF282828" Offset="0" />
                                         <GradientStop Color="#33FFFFFF" Offset="1" />
                                     </LinearGradientBrush>
-                                </TextBlock.Foreground>
-                            </TextBlock>
+                                </Border.Background>
+                                <Border.Effect>
+                                    <BlurEffect Radius="1" />
+                                </Border.Effect>
+                            </Border>
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"                                                                                                                            
+                FontSize="14" FontWeight="ExtraBold" Foreground="#F0FF4D" Margin="0,0,0,0"
+                Text="{Binding MatchCountExact}" >
+                                    <TextBlock.Effect>
+                                        <DropShadowEffect ShadowDepth="3" BlurRadius="4" />
+                                    </TextBlock.Effect>
+                                </TextBlock>
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"                                                                                                                            
+                FontSize="15" FontWeight="ExtraBold" Opacity="0.5" Margin="0,0,0,0"
+                Text="{Binding MatchCountExact}" >
+                                    <TextBlock.Foreground>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="#DDFFFFFF" Offset="0" />
+                                            <GradientStop Color="#33FFFFFF" Offset="1" />
+                                        </LinearGradientBrush>
+                                    </TextBlock.Foreground>
+                                </TextBlock>
+                            </Grid>
                         </Grid>
                     </Grid>
-                </Grid>
+                </StackPanel>
+                
             </Grid>
         </Border>
         <Border x:Name="StoppingBorder" BorderBrush="Black" Background="Transparent" 
-                Visibility="{Binding Stopping, Converter={StaticResource VisibilityConverter}}"
+                Visibility="Collapsed"
                 BorderThickness="4" CornerRadius="10">
             <Grid>
                 <Border Background="Black" Opacity="0.9" />
-                <StackPanel>
-                    <TextBlock Text="Completing running spins..." FontSize="25" FontWeight="DemiBold"  TextWrapping="Wrap" Width="150"
-    Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <TextBlock.Effect>
-                            <DropShadowEffect Color="#FF9D9D9D" BlurRadius="0" ShadowDepth="3" />
-                        </TextBlock.Effect>
-                    </TextBlock>
+                <StackPanel Margin="0,10,0,0">                    
                     <Grid>
                         <Viewbox Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center">
                             <Grid>
@@ -315,6 +303,11 @@
                             </Grid>
                         </Viewbox>
                     </Grid>
+                    <TextBlock Text="Please wait a moment whilst we finalize the results..." FontSize="25" FontWeight="DemiBold" FontStyle="Italic" TextWrapping="Wrap" Width="150" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock.Effect>
+                            <DropShadowEffect Color="#FF9D9D9D" BlurRadius="0" ShadowDepth="3" />
+                        </TextBlock.Effect>
+                    </TextBlock>
                 </StackPanel>                
             </Grid>
         </Border>

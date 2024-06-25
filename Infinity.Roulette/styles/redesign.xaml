@@ -1321,10 +1321,10 @@
     <DropShadowEffect x:Key="resultsFocusEffect" ShadowDepth="0" Color="Orange" BlurRadius="4"  />
     <DropShadowEffect x:Key="resultsPressedEffect" ShadowDepth="0" Color="#FFAA00" BlurRadius="6"  />
     <RadialGradientBrush x:Key="mouseOverResultsButtonBackground">
-        <GradientStop Color="#420000" Offset="0" />
-        <GradientStop Color="#850000" Offset="0.3" />
-        <GradientStop Color="#990000" Offset="0.7" />
-        <GradientStop Color="#C70000" Offset="1" />
+        <GradientStop Color="#662200" Offset="0" />
+        <GradientStop Color="#5A1000" Offset="0.3" />
+        <GradientStop Color="#5C0200" Offset="0.7" />
+        <GradientStop Color="#380100" Offset="1" />
     </RadialGradientBrush>
     
     <RadialGradientBrush x:Key="mouseOverResetButtonBackground">

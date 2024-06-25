@@ -557,12 +557,13 @@ namespace Infinity.Roulette.ViewModels
             set
             {
                 if (_spinning != value)
-                    _spinning = value;
-                ShowRunBtn = !_spinning;
-                ShowStopBtn = _spinning;
+                    _spinning = value;                
                 OnPropertyChanged(nameof(Spinning));
+                OnPropertyChanged(nameof(NotSpinning));
             }
         }
+
+        public bool NotSpinning => !Spinning;
 
         private double _SpinProgress { get; set; }
 
