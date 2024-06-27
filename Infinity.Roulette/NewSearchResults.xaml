@@ -12,7 +12,7 @@
         WindowStartupLocation="CenterScreen" UseLayoutRounding="True" AllowsTransparency="True"
         WindowStyle="None" BorderThickness="0" ui:TitleBar.ExtendViewIntoTitleBar="True"
         Background="Transparent" Title="Results" MinHeight="400" SizeToContent="WidthAndHeight"
-        MinWidth="600" SnapsToDevicePixels="True">
+        MinWidth="570" SnapsToDevicePixels="True">
     <FrameworkElement.Resources>
         <convert:GameTypeConverter x:Key="GameTypeConverter"/>
         <convert:VisibilityConverter x:Key="VisibilityConverter"/>
@@ -34,12 +34,12 @@
                 <Grid Background="Black" Row="0">
                     <Image Source="{StaticResource redesign-background-image}" 
                            MaxHeight="35" Margin="5,0,0,0" HorizontalAlignment="Left"/>
-                </Grid>                
+                </Grid>
                 <Grid Grid.Row="1">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="80" />
                         <RowDefinition Height="30" />
-                        <RowDefinition />                        
+                        <RowDefinition />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
@@ -112,7 +112,7 @@
                                 Margin="0,0,10,0">
                         <Button x:Name="btnLoadFile" Click="btnSpinFile_Click" Grid.Row="3" Grid.Column="3" 
                                 ToolTip="Load Spinfile"
-                            Style="{StaticResource fileUploadButton}" Width="65" Height="65" Margin="5">            
+                            Style="{StaticResource fileUploadButton}" Width="65" Height="65" Margin="5">
                             <Button.Content>
                                 <Viewbox Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <Image Source="/file-upload-icon.png" Margin="0,0,-50,0" />
@@ -123,7 +123,7 @@
                         <Button x:Name="btnPlay" Click="btnPlay_Click"
                             VerticalAlignment="Top" HorizontalAlignment="Center"
                             Style="{StaticResource playButton}" Width="65" Height="65" Margin="5" 
-                            IsEnabled="{Binding IsNotPlaying}"> 
+                            IsEnabled="{Binding IsNotPlaying}">
                             <Button.Content>
                                 <TextBlock Text="Play" Foreground="White" FontSize="22" FontWeight="Bold"  FontFamily="Verdana">
                                     <TextBlock.Effect>
@@ -133,9 +133,9 @@
                             </Button.Content>
                         </Button>
 
-                        
-                    </StackPanel> 
-                    
+
+                    </StackPanel>
+
                     <CheckBox Grid.Row="1" Grid.Column="0" Checked="cbR1Wonly_Checked" Unchecked="cbR1Wonly_Unchecked" 
                               x:Name="cbR1Wonly" Margin="15,5,10,0" VerticalAlignment="Top"
                         Style="{StaticResource WhiteCheckBox}" Content="R1W Only?"
@@ -150,7 +150,7 @@
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>                                                
+                        </Grid.ColumnDefinitions>
                         <TextBlock x:Name="fontFan" Visibility="Collapsed" Text="Century Gothic"/>
                         <TabControl x:Name="SearchResultsTabs" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Margin="0,0,8,0" UseLayoutRounding="True"
       FontFamily="{Binding ElementName=fontFan, Path=Text, Converter={StaticResource FontFamilyConverter}}">
@@ -160,7 +160,7 @@
                                 <DataGrid MouseDoubleClick="ResultsGrid_MouseDoubleClick" Loaded="ResultsGrid_Loaded"
         LoadingRow="ResultsGrid_LoadingRow" x:Name="ResultsGrid" AutoGenerateColumns="False"
         Margin="7,0,0,0" CanUserReorderColumns="False" IsReadOnly="True" SelectionMode="Single"
-        SelectionUnit="FullRow" Background="Transparent" Foreground="White" MaxHeight="450" MinWidth="600"
+        SelectionUnit="FullRow" Background="Transparent" Foreground="White" MaxHeight="450" MinWidth="570"
         CanUserResizeColumns="False" CanUserResizeRows="False" HorizontalContentAlignment="Stretch"
         VerticalContentAlignment="Stretch" UseLayoutRounding="True" EnableColumnVirtualization="True"
         FontFamily="{Binding ElementName=fontFan, Path=Text, Converter={StaticResource FontFamilyConverter}}"
@@ -265,7 +265,7 @@
                                                 </Style>
                                             </DataGridColumn.CellStyle>
                                         </DataGridTextColumn>
-                                        <DataGridTemplateColumn MinWidth="140" Width="4*">
+                                        <DataGridTemplateColumn MinWidth="120" Width="4*">
                                             <DataGridColumn.CellStyle>
                                                 <Style TargetType="{x:Type DataGridCell}">
                                                     <Setter Property="FrameworkElement.HorizontalAlignment" Value="Center"/>
@@ -290,10 +290,10 @@
                   Margin="10,5,10,0" Style="{StaticResource WhiteCheckBox}" Grid.Row="1" Grid.Column="0"
                   Content="All?" HorizontalAlignment="Left" MinWidth="0" Width="Auto" FontWeight="SemiBold"
                   Cursor="Hand"/>
-                                                    <CheckBox Checked="cbRunSpinfileLimit_Checked" Unchecked="cbRunSpinfileLimit_Unchecked"
+                                                    <!--<CheckBox Checked="cbRunSpinfileLimit_Checked" Unchecked="cbRunSpinfileLimit_Unchecked"
                   x:Name="cbRunSpinfileLimit" Margin="10,5,10,0" Style="{StaticResource WhiteCheckBox}" Grid.Row="1"
                   Grid.Column="1" HorizontalAlignment="Right" Width="Auto" Content="Limits?" FontWeight="SemiBold"
-                  Cursor="Hand"/>
+                  Cursor="Hand"/>-->
                                                 </Grid>
                                             </DataGridColumn.Header>
                                             <DataGridTemplateColumn.CellTemplate>
@@ -379,7 +379,7 @@
                                                     <Setter Property="Control.FontWeight" Value="Bold"/>
                                                 </Style>
                                             </DataGridColumn.CellStyle>
-                                        </DataGridTextColumn>                                        
+                                        </DataGridTextColumn>
                                         <DataGridTextColumn MinWidth="80" Width="*" Header="Counts" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
                                             Binding="{Binding Counts}">
                                             <DataGridColumn.CellStyle>
@@ -442,7 +442,7 @@
                             </Grid>
                         </Grid>
                     </Grid>
-                </Grid>                
+                </Grid>
             </Grid>
         </Border>
     </Grid>

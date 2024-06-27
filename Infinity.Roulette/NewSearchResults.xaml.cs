@@ -2,6 +2,7 @@
 using Infinity.Roulette.Containers;
 using Infinity.Roulette.ViewModels;
 using Microsoft.Win32;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -33,6 +34,7 @@ public partial class NewSearchResults : Window
     }
     private void ResultsGrid_LoadingRow(object sender, DataGridRowEventArgs e)
     {
+        searchVM.IsLoadingEvent = true;
         if (e.Row.Item is not Table table)
             return;
         e.Row.Style = Application.Current.FindResource("NormalResultRow") as Style;
@@ -57,7 +59,11 @@ public partial class NewSearchResults : Window
         }
         ResultsGrid.ItemsSource = tableList;
     }
-    private void ResultsGrid_Loaded(object sender, RoutedEventArgs e) => SetupInitialWidths();
+    private void ResultsGrid_Loaded(object sender, RoutedEventArgs e)
+    {
+        SetupInitialWidths();
+        searchVM.IsLoadingEvent = false;
+    }
     private void SetupInitialWidths()
     {
         double[] numArray;
@@ -80,21 +86,37 @@ public partial class NewSearchResults : Window
     }
     private async void cbRunSpinfileAll_Checked(object sender, RoutedEventArgs e)
     {
-        await base.Dispatcher.InvokeAsync(delegate
+        await Task.Run(() =>
         {
-            cbRunSpinfileLimit.IsChecked = false;
+            searchVM.IsLoadingEvent = true;
         });
-        await SelectAll(select: true);
+        await Dispatcher.InvokeAsync(() =>
+        {
+            //cbRunSpinfileLimit.IsChecked = false;
+        });
+        await SelectAll(true);
+        await Task.Run(() =>
+        {
+            searchVM.IsLoadingEvent = false;
+        });
     }
     private async void cbRunSpinfileAll_Unchecked(object sender, RoutedEventArgs e) => await SelectAll(false);
     private async void cbRunSpinfileLimit_Checked(object sender, RoutedEventArgs e)
     {
-        await base.Dispatcher.InvokeAsync(delegate
+        await Task.Run(() =>
+        {
+            searchVM.IsLoadingEvent = true;
+        });
+        await Dispatcher.InvokeAsync(() =>
         {
             cbRunSpinfileAll.IsChecked = false;
         });
         await SelectAll(false);
         await SelectAllLimits(true);
+        await Task.Run(() =>
+        {
+            searchVM.IsLoadingEvent = false;
+        });
     }
     private async void Window_SizeChanged(object sender, SizeChangedEventArgs e)
     {
@@ -121,49 +143,79 @@ public partial class NewSearchResults : Window
     private async void cbRunSpinfileLimit_Unchecked(object sender, RoutedEventArgs e) => await SelectAllLimits(false);
     private async void cbRunSpinfileR1W_Checked(object sender, RoutedEventArgs e)
     {
+        await Task.Run(() =>
+        {
+            searchVM.IsLoadingEvent = true;
+        });
         await base.Dispatcher.InvokeAsync(delegate
         {
             cbRunSpinfileAll.IsChecked = false;
-            cbRunSpinfileLimit.IsChecked = false;
+            //cbRunSpinfileLimit.IsChecked = false;
         });
-        await SelectAll(select: false);
-        await SelectAllR1W(select: true);
+        await SelectAll(false);
+        await SelectAllR1W(true);
+        await Task.Run(() =>
+        {
+            searchVM.IsLoadingEvent = false;
+        });
     }
     private async void cbRunSpinfileTW_Checked(object sender, RoutedEventArgs e)
     {
-        await base.Dispatcher.InvokeAsync(delegate
+        await Task.Run(() =>
+        {
+            searchVM.IsLoadingEvent = true;
+        });
+        await Dispatcher.InvokeAsync(() =>
         {
             cbRunSpinfileAll.IsChecked = false;
-            cbRunSpinfileLimit.IsChecked = false;
+            //cbRunSpinfileLimit.IsChecked = false;
         });
         await SelectAll(select: false);
         await SelectAllTW(select: true);
+        await Task.Run(() =>
+        {
+            searchVM.IsLoadingEvent = false;
+        });
     }
     private async void cbRunSpinfileTW_Unchecked(object sender, RoutedEventArgs e) => await SelectAllTW(false);
     private async void cbRunSpinfileR1W_Unchecked(object sender, RoutedEventArgs e) => await SelectAllR1W(false);
     private void CheckBox_Checked(object sender, RoutedEventArgs e)
     {
-        var cb = (CheckBox)sender;
-        var table = (Table)cb.DataContext;
-        foreach (Table selected in ResultsGrid.Items.Cast<Table>())
+        if (!searchVM.IsLoadingEvent)
         {
-            if (selected.TableId == table.TableId && selected.Autoplay == table.Autoplay)
+            try
             {
-                selected.RunSpinfile = true;
+                var cb = (CheckBox)sender;
+                var table = (Table)cb.DataContext;
+                foreach (Table selected in ResultsGrid.Items.Cast<Table>())
+                {
+                    if (selected.TableId == table.TableId && selected.Autoplay == table.Autoplay)
+                    {
+                        selected.RunSpinfile = true;
+                    }
+                }
             }
+            catch { }
         }
     }
     private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
     {
-        var cb = (CheckBox)sender;
-        var table = (Table)cb.DataContext;
-        foreach (Table selected in ResultsGrid.Items.Cast<Table>())
+        if (!searchVM.IsLoadingEvent)
         {
-            if (selected.TableId == table.TableId && selected.Autoplay == table.Autoplay)
+            try
             {
-                selected.RunSpinfile = false;
+                var cb = (CheckBox)sender;
+                var table = (Table)cb.DataContext;
+                foreach (Table selected in ResultsGrid.Items.Cast<Table>())
+                {
+                    if (selected.TableId == table.TableId && selected.Autoplay == table.Autoplay)
+                    {
+                        selected.RunSpinfile = false;
+                    }
+                }
             }
-        }
+            catch { }        
+        }        
     }
     private async Task SelectAll(bool select)
     {
@@ -259,7 +311,7 @@ public partial class NewSearchResults : Window
         await base.Dispatcher.InvokeAsync(delegate
         {
             cbRunSpinfileAll.IsChecked = false;
-            cbRunSpinfileLimit.IsChecked = false;
+            //cbRunSpinfileLimit.IsChecked = false;
             ResultsGrid.ItemsSource = searchVM.LoadedResults;
         });
     }
@@ -273,7 +325,7 @@ public partial class NewSearchResults : Window
         await base.Dispatcher.InvokeAsync(delegate
         {
             cbRunSpinfileAll.IsChecked = false;
-            cbRunSpinfileLimit.IsChecked = false;
+            //cbRunSpinfileLimit.IsChecked = false;
             ResultsGrid.ItemsSource = searchVM.LoadedResults.Where((Table lr) => lr.R1WMatch);
         });
     }
@@ -282,7 +334,7 @@ public partial class NewSearchResults : Window
         await base.Dispatcher.InvokeAsync(delegate
         {
             cbRunSpinfileAll.IsChecked = false;
-            cbRunSpinfileLimit.IsChecked = false;
+            //cbRunSpinfileLimit.IsChecked = false;
             ResultsGrid.ItemsSource = searchVM.LoadedResults;
         });
     }

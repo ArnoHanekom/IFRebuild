@@ -34,10 +34,10 @@ namespace Infinity.Roulette
             generatorVM.Generate();
             if (!generatorVM.Generated)
                 return;
-            Window.GetWindow(this).Close();
+            GetWindow(this).Close();
         }
 
-        private void btnCancel_Click(object sender, RoutedEventArgs e) => Window.GetWindow(this).Close();
+        private void btnCancel_Click(object sender, RoutedEventArgs e) => GetWindow(this).Close();
 
     }
 }

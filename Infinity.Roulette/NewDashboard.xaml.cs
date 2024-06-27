@@ -93,6 +93,10 @@ public partial class NewDashboard : Window
 
     private void mnuGenerateSpinfile_Click(object sender, RoutedEventArgs e)
     {
-
+        SpinfileGenerator spinfileGenerator = new()
+        {
+            Owner = this
+        };
+        spinfileGenerator.ShowDialog();
     }
 }

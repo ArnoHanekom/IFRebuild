@@ -30,7 +30,6 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="10"/>
                 </Grid.RowDefinitions>
-
                 <Grid Grid.Row="1" Margin="0, -15, 0, 0">
                     <Grid.RowDefinitions>
                         <RowDefinition />
@@ -51,10 +50,7 @@
                                VerticalAlignment="Top"
                                RenderTransformOrigin="0.5,0.5" Width="220" Height="255" Opacity="0.2"/>
                     </Grid>
-                    <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" 
-                          Margin="0, -10, 0, 0" Height="90" MinHeight="90" 
-                          Width="150" MinWidth="150">
-
+                    <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Margin="0, -10, 0, 0" Height="90" MinHeight="90" Width="150" MinWidth="150">
                         <Grid Margin="5">
                             <Grid.RowDefinitions>
                                 <RowDefinition />
@@ -66,8 +62,7 @@
                                     <DropShadowEffect />
                                 </TextBlock.Effect>
                             </TextBlock>
-                            <TextBlock Grid.Row="1" Text="Infinity" Foreground="#000000" HorizontalAlignment="Center"                                       
-                                       Margin="0, -15, 0, 0"
+                            <TextBlock Grid.Row="1" Text="Infinity" Foreground="#000000" HorizontalAlignment="Center" Margin="0, -15, 0, 0"
                                        VerticalAlignment="Top" FontSize="25" FontWeight="Light" FontFamily="Segoe Script" RenderTransformOrigin="0.5,0.5" >
                                 <TextBlock.RenderTransform>
                                     <TransformGroup>
@@ -97,7 +92,6 @@
                             </TextBlock>
                         </Grid>
                     </Grid>
-
                     <Grid Grid.Row="1" Grid.Column="3" Grid.RowSpan="5">
                         <StackPanel>
                             <Button x:Name="btnPlay" Click="btnPlay_Click"
@@ -131,11 +125,7 @@
                             <Button x:Name="btnReset" Click="btnReset_Click" ToolTip="Reset"
                                 Style="{StaticResource resetButton}" Width="35" Height="35" Margin="0,3,0,0">
                                 <Viewbox Width="30" Height="30" HorizontalAlignment="Center" Margin="0,0,1,0">
-                                    <Image>
-                                        <Image.Source>
-                                            <DrawingImage Drawing="{StaticResource cogwheel-icon-drawingGroup}" />
-                                        </Image.Source>
-                                    </Image>
+                                    <Image Source="{StaticResource cogwheel-icon-drawingImage}" />
                                 </Viewbox>
                             </Button>
                         </StackPanel>
@@ -213,12 +203,11 @@
                         </TextBlock>
                     </Grid>
                     <Grid Margin="10,0,0,0" Width="45" Height="45" MinWidth="45"  MinHeight="45" HorizontalAlignment="Left">
-                        <Border BorderBrush="#FF9800" BorderThickness="4" Background="Transparent" 
-            HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-            Margin="1"
-            CornerRadius="360"/>
-                        <Border CornerRadius="360" BorderBrush="#BBC2CC" BorderThickness="0.2" Background="Transparent"
-        HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <Border BorderBrush="#FF9800" BorderThickness="4" Background="Transparent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="1"
+                            CornerRadius="360"/>
+                        <Border CornerRadius="360" BorderBrush="#BBC2CC" BorderThickness="0.2" Background="Transparent" 
+                                
+                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                             <Border.Effect>
                                 <BlurEffect Radius="1" />
                             </Border.Effect>
@@ -325,6 +314,17 @@
                     </Grid>
                 </MenuItem.Header>
             </MenuItem>
+            <!--<MenuItem x:Name="mnuGenerateSpinfile" Click="mnuGenerateSpinfile_Click" Cursor="Hand" ForceCursor="True">
+                <MenuItem.Icon>
+                    <Image Source="/cogwheel-icon-menu_2.png" Width="50" Height="50" />
+                </MenuItem.Icon>
+                <MenuItem.Header>
+                    <Grid>
+                        <TextBlock Text="Generate Spinfile" HorizontalAlignment="Left" VerticalAlignment="Center"
+                      FontSize="12" FontWeight="Light" FontFamily="Century Gothic" Foreground="#BBC2CC" UseLayoutRounding="True" />
+                    </Grid>
+                </MenuItem.Header>
+            </MenuItem>-->
         </ContextMenu>
     </Window.ContextMenu>
 </Window>

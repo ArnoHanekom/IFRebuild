@@ -12,7 +12,7 @@
         WindowStartupLocation="CenterScreen" UseLayoutRounding="True" AllowsTransparency="True"
         WindowStyle="None" ResizeMode="CanMinimize" BorderThickness="0"
         ui:TitleBar.ExtendViewIntoTitleBar="True" Background="Transparent" Title="New Table"
-        SizeToContent="WidthAndHeight" MinWidth="390" SnapsToDevicePixels="True">
+        SizeToContent="WidthAndHeight" MinWidth="320" Width="320" SnapsToDevicePixels="True">
     <FrameworkElement.Resources>
         <convert:GameTypeConverter x:Key="GameTypeConverter"/>
         <convert:VisibilityConverter x:Key="VisibilityConverter"/>
@@ -33,110 +33,38 @@
                 </Grid.RowDefinitions>
                 <Grid Background="Black" Row="0">
                     <Image Source="{StaticResource redesign-background-image}" MaxHeight="35" Margin="5,0,0,0" HorizontalAlignment="Left"/>
-                </Grid>
+                </Grid>                
                 <Grid Grid.Row="2" Margin="0, 10 ,0, 0">
-                    <Image x:Name="imgRouletteTable" Source="{StaticResource roulette-wheel-background}" VerticalAlignment="Top"
-                           RenderTransformOrigin="0.5,0.5" Width="300" Height="350" Opacity="0.2"/>
+                    <Image x:Name="imgRouletteTable" Source="{StaticResource roulette-wheel-background}" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Width="300" Height="350" Opacity="0.2"/>
                 </Grid>
                 <Grid Grid.Row="2">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="55" />
-                        <RowDefinition Height="10" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="5" />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="5" />
                         <ColumnDefinition />
                         <ColumnDefinition />
                         <ColumnDefinition />
+                        <ColumnDefinition />
                         <ColumnDefinition Width="5" />
                     </Grid.ColumnDefinitions>
-
-                    
-                    <Border BorderBrush="Black" BorderThickness="2" CornerRadius="5" Margin="0,5,0,5" Padding="0,5,3,5" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Width="70">
-                        <ScrollViewer MaxHeight="290" Height="290">
+                    <Border BorderBrush="Black" BorderThickness="2" CornerRadius="5" Margin="0,5,0,5" Padding="0,5,3,5" 
+                            Grid.Row="0" Grid.Column="1" Grid.RowSpan="5" Width="70">
+                        <ScrollViewer MaxHeight="150" Height="150">
                             <ItemsControl x:Name="GameSpinHistoryList" HorizontalAlignment="Left" Margin="8,0,10,0" ItemsSource="{Binding GameHistory}"/>
                         </ScrollViewer>
                         <UIElement.Effect>
                             <DropShadowEffect Color="#300064" BlurRadius="10" ShadowDepth="4"/>
                         </UIElement.Effect>
                     </Border>
-                    <Grid Grid.Row="0" Grid.Column="3" Visibility="{Binding NotSpinning, Converter={StaticResource VisibilityConverter}}">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
-                            <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
-                                <TextBlock FontWeight="Bold" Foreground="White" FontSize="10" Text="Spins:"/>
-                            </Label>
-                            <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
-                                <TextBlock x:Name="tbGameSpins" FontWeight="Bold" FontSize="10" Foreground="White" Text="{Binding TotalGameSpins}"/>
-                            </Label>
-                        </StackPanel>
-                    </Grid>
-                    <Grid Grid.Row="0" Grid.Column="3" Grid.RowSpan="2">
-                        <Grid Visibility="{Binding Spinning, Converter={StaticResource VisibilityConverter}}" Margin="0,0,20,0">
-                        <!--<Grid Visibility="Visible" Margin="0,0,20,0">-->
-                            <Viewbox Width="80" Height="80" HorizontalAlignment="Right" VerticalAlignment="Top">
-                                <Grid>
-                                    <Grid.Resources>
-                                        <Storyboard x:Key="Anim.Rotate" RepeatBehavior="Forever">
-                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" Storyboard.TargetName="Inner">
-                                                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="360">
-                                                    <EasingDoubleKeyFrame.EasingFunction>
-                                                        <PowerEase EasingMode="EaseInOut"/>
-                                                    </EasingDoubleKeyFrame.EasingFunction>
-                                                </EasingDoubleKeyFrame>
-                                            </DoubleAnimationUsingKeyFrames>
-                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" Storyboard.TargetName="Outer">
-                                                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="360">
-                                                    <EasingDoubleKeyFrame.EasingFunction>
-                                                        <PowerEase EasingMode="EaseInOut"/>
-                                                    </EasingDoubleKeyFrame.EasingFunction>
-                                                </EasingDoubleKeyFrame>
-                                            </DoubleAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </Grid.Resources>
-                                    <Grid.Triggers>
-                                        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                                            <BeginStoryboard Storyboard="{StaticResource Anim.Rotate}"/>
-                                        </EventTrigger>
-                                    </Grid.Triggers>
-                                    <Viewbox>
-                                        <Grid Margin="20">
-                                            <Path x:Name="Inner" Fill="#FF00FFD2" Width="187" Height="187" RenderTransformOrigin="0.5,0.5"
-                          Data="M46.299878,146.50609 L47.766228,147.79096 C58.474648,156.78397 71.877045,162.67316 86.588265,164.07338 L89.149674,164.25597 89.149674,186.79178 88.73761,186.78169 C66.294571,185.67963 45.931611,176.66448 30.380114,162.46759 L30.358767,162.44721 z M140.49947,146.50609 L156.44058,162.44721 156.41924,162.46759 C140.86774,176.66448 120.50478,185.67963 98.061737,186.78169 L97.649674,186.79178 97.649674,164.25597 100.21108,164.07338 C114.9223,162.67316 128.32471,156.78397 139.03311,147.79096 z M164.26193,97.64589 L186.79935,97.64589 186.77802,98.207383 C185.71666,119.14559 177.76738,138.26654 165.15089,153.3495 L162.44974,156.43555 146.50887,140.49468 147.51971,139.35484 C156.57564,128.70131 162.54182,115.33972 164.03311,100.65523 z M0,97.64589 L22.537411,97.64589 22.766238,100.65523 C24.257529,115.33972 30.223717,128.70131 39.279644,139.35484 L40.290478,140.49468 24.349608,156.43555 21.648446,153.3495 C9.0319733,138.26654 1.0826934,119.14559 0.021331854,98.207383 z M162.44974,30.356231 L165.15089,33.442285 C177.76738,48.525247 185.71666,67.646196 186.77802,88.584398 L186.79935,89.14589 164.26193,89.14589 164.03311,86.136552 C162.54182,71.452066 156.57564,58.090474 147.51971,47.436933 L146.50887,46.297101 z M24.349606,30.356231 L40.290486,46.297105 39.279644,47.436933 C30.223717,58.090474 24.257529,71.452066 22.766238,86.136552 L22.537411,89.14589 0,89.14589 0.021331854,88.584398 C1.0826932,67.646196 9.0319733,48.525247 21.648446,33.442285 z M97.649674,0 L98.061737,0.010093458 C120.50478,1.1121466 140.86774,10.127313 156.41924,24.324199 L156.44058,24.344579 140.49947,40.285688 139.03311,39.000829 C128.32471,30.007821 114.9223,24.118625 100.21108,22.718396 L97.649674,22.535823 z M89.149674,0 L89.149674,22.535823 86.588265,22.718396 C71.877045,24.118625 58.474648,30.007821 47.766228,39.000829 L46.299881,40.285688 30.358771,24.344579 30.380114,24.324199 C45.931611,10.127313 66.294571,1.1121462 88.73761,0.010093458 z">
-                                                <Path.RenderTransform>
-                                                    <TransformGroup>
-                                                        <ScaleTransform/>
-                                                        <SkewTransform/>
-                                                        <RotateTransform/>
-                                                        <TranslateTransform/>
-                                                    </TransformGroup>
-                                                </Path.RenderTransform>
-                                            </Path>
-                                            <Path x:Name="Outer" Fill="#9E42FF" Width="300" Height="300" RenderTransformOrigin="0.5,0.5"
-                          Data="M224.41695,237.14477 L249.23029,261.95809 248.44242,262.66256 C224.64556,283.48019 194.21095,296.89807 160.7288,299.32595 L158.72364,299.44708 158.72364,264.37036 160.75619,264.20117 C184.58424,261.93319 206.29234,252.39436 223.63696,237.82823 z M75.030328,237.14477 L75.810319,237.82823 C93.154939,252.39436 114.86305,261.93319 138.69109,264.20117 L140.72364,264.37036 140.72364,299.44708 138.71848,299.32595 C105.23634,296.89807 74.801721,283.48019 51.004861,262.66256 L50.216985,261.95809 z M264.37483,158.72354 L299.44727,158.72354 299.28626,161.2646 C296.74113,194.71411 283.2252,225.09693 262.32868,248.82282 L261.96018,249.23217 237.1522,224.42419 237.38284,224.1641 C252.0509,206.90837 261.71442,185.26635 264.12989,161.48162 z M0,158.72354 L35.072457,158.72354 35.317372,161.48162 C37.732842,185.26635 47.396386,206.90837 62.064435,224.1641 L62.295079,224.42419 37.487096,249.23217 37.118607,248.82282 C16.222096,225.09693 2.7061571,194.71411 0.16102871,161.2646 z M261.96018,50.214907 L262.32868,50.624255 C283.2252,74.350146 296.74113,104.73297 299.28626,138.18247 L299.44727,140.72354 264.37483,140.72354 264.12989,137.96545 C261.71442,114.18071 252.0509,92.538699 237.38284,75.282969 L237.1522,75.02289 z M37.487088,50.214903 L62.295079,75.02289 62.064435,75.282969 C47.396386,92.538699 37.732842,114.18071 35.317372,137.96545 L35.072457,140.72354 0,140.72354 0.16102871,138.18247 C2.7061566,104.73297 16.222096,74.350146 37.118607,50.624251 z M158.72364,0 L160.7288,0.12110621 C194.21095,2.5490118 224.64556,15.966891 248.44242,36.784506 L249.23029,37.488963 224.41695,62.302306 223.63696,61.618853 C206.29234,47.052714 184.58424,37.513873 160.75619,35.245894 L158.72364,35.07672 z M140.72364,0 L140.72364,35.07672 138.69109,35.245894 C114.86305,37.513873 93.154939,47.052714 75.810319,61.618861 L75.030328,62.302302 50.216988,37.488959 51.004861,36.784506 C74.801721,15.966891 105.23634,2.5490106 138.71848,0.12110621 z">
-                                                <Path.RenderTransform>
-                                                    <TransformGroup>
-                                                        <ScaleTransform/>
-                                                        <SkewTransform/>
-                                                        <RotateTransform/>
-                                                        <TranslateTransform/>
-                                                    </TransformGroup>
-                                                </Path.RenderTransform>
-                                            </Path>
 
-                                            <TextBlock Text="{Binding SpinProgress, StringFormat=\{0:#0.00\'%\'\}}" Foreground="White" FontSize="30" FontFamily="Verdana" 
-                                                       HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                            <!--<TextBlock Text="200%" Foreground="White" FontSize="30" FontFamily="Verdana" 
-                                                       HorizontalAlignment="Center" VerticalAlignment="Center" />-->
-                                        </Grid>
-                                    </Viewbox>
-                                </Grid>
-                            </Viewbox>
-                        </Grid>
-                    </Grid>
-                    <Grid Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Grid.RowSpan="2">
+                    <Grid Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="3" Grid.RowSpan="5">
                         <Grid.RowDefinitions>
                             <RowDefinition />
                             <RowDefinition />
@@ -148,85 +76,142 @@
                             <ColumnDefinition />
                             <ColumnDefinition />
                             <ColumnDefinition />
-                            <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-
-                        <Label Grid.Row="0" Grid.Column="1" Margin="0,0,0,0" VerticalContentAlignment="top" HorizontalContentAlignment="Right">
-                            <TextBlock Text="Manual:"/>
-                        </Label>
-                        <TextBox KeyDown="txtManual_KeyDown" x:Name="txtManual" Grid.Row="0" Margin="0,0,0,0" Grid.Column="2" Padding="2,0,0,0" UseLayoutRounding="True" 
+                        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
+                            <Label Margin="0,0,0,0" VerticalContentAlignment="top" HorizontalContentAlignment="Right">
+                                <TextBlock Text="Manual:"/>
+                            </Label>
+                            <TextBox KeyDown="txtManual_KeyDown" x:Name="txtManual" Grid.Row="0" Margin="0,0,0,0" Grid.Column="3" Padding="2,0,0,0" UseLayoutRounding="True" 
                                  Style="{StaticResource NewTableTextBox}" HorizontalAlignment="Left" MinWidth="50" Width="50" TabIndex="5" VerticalAlignment="Top"
                                  Text="{Binding Manual, Converter={StaticResource NullableValueConverter}}" />
-                        <Grid Row="1" Column="0" ColumnSpan="4" VerticalAlignment="Top">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="28"/>
-                                <RowDefinition Height="28"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
-                                    <TextBlock FontWeight="Bold" Foreground="{StaticResource solid-color-brush-yellow}" Text="Row:"/>
-                                </Label>
-                                <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
-                                    <TextBlock x:Name="tbGameRows" FontWeight="Bold" Foreground="{StaticResource solid-color-brush-yellow}" Text="{Binding GameRows}"/>
-                                </Label>
-                            </StackPanel>
-                            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
-                                    <TextBlock FontWeight="Bold" Foreground="{StaticResource solid-color-brush-orange-base}" Text="Count:"/>
-                                </Label>
-                                <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
-                                    <TextBlock x:Name="tbGameCounts" FontWeight="Bold" Foreground="{StaticResource solid-color-brush-orange-base}" Text="{Binding GameCounts}"/>
-                                </Label>
-                            </StackPanel>
-                            <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
-                                    <TextBlock FontWeight="Bold" Foreground="{StaticResource solid-color-brush-blue-base}" Text="GS:"/>
-                                </Label>
-                                <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
-                                    <TextBlock x:Name="tbGameGS" FontWeight="Bold" Foreground="{StaticResource solid-color-brush-blue-base}" Text="{Binding GameGS}"/>
-                                </Label>
-                            </StackPanel>
-                            <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
-                                    <TextBlock FontWeight="Bold" Foreground="{StaticResource solid-color-brush-blue-base}" Text="MGS:"/>
-                                </Label>
-                                <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
-                                    <TextBlock x:Name="tbGameMaxGS" FontWeight="Bold" Foreground="{StaticResource solid-color-brush-blue-base}" Text="{Binding GameMaxGS}"/>
-                                </Label>
-                            </StackPanel>
-                        </Grid>
-                        <Grid Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4" Grid.RowSpan="3" VerticalAlignment="Bottom">
-                            <Grid.RowDefinitions>
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="15" />
-                                <ColumnDefinition />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <controls:BettingWindow x:Name="BetWindow" Grid.Column="1" Height="210" Width="360" Game="{Binding Path=Game, ElementName=NewTableGame}" />
-                        </Grid>
-                    </Grid>
-                    <Grid Grid.Row="2" Grid.Column="1">
-                        <Button Click="btnLoadFile_Click" x:Name="btnLoadFile" VerticalAlignment="Center"
-                            Style="{StaticResource ButtonDashed}" Background="{StaticResource solid-color-brush-night-rider}"
-                            Width="100" HorizontalAlignment="Center" Margin="0" TabIndex="4">
-                            <UIElement.Effect>
-                                <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.8" Color="{StaticResource night-rider}"/>
-                            </UIElement.Effect>
-                            <TextBlock Text="LOAD FILE" FontSize="14" Foreground="LimeGreen">
+                        </StackPanel>
+                        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+                            <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
+                                <TextBlock FontWeight="Bold" Foreground="{StaticResource solid-color-brush-yellow}" Text="Row:"/>
+                            </Label>
+                            <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
+                                <TextBlock x:Name="tbGameRows" FontWeight="Bold" Foreground="{StaticResource solid-color-brush-yellow}" Text="{Binding GameRows}"/>
+                            </Label>
+                        </StackPanel>
+                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                            <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
+                                <TextBlock FontWeight="Bold" Foreground="{StaticResource solid-color-brush-orange-base}" Text="Count:"/>
+                            </Label>
+                            <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
+                                <TextBlock x:Name="tbGameCounts" FontWeight="Bold" Foreground="{StaticResource solid-color-brush-orange-base}" Text="{Binding GameCounts}"/>
+                            </Label>
+                        </StackPanel>
+                        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
+                            <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
+                                <TextBlock FontWeight="Bold" Foreground="{StaticResource solid-color-brush-blue-base}" Text="GS:"/>
+                            </Label>
+                            <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
+                                <TextBlock x:Name="tbGameGS" FontWeight="Bold" Foreground="{StaticResource solid-color-brush-blue-base}" Text="{Binding GameGS}"/>
+                            </Label>
+                        </StackPanel>
+                        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+                            <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
+                                <TextBlock FontWeight="Bold" Foreground="{StaticResource solid-color-brush-blue-base}" Text="MGS:"/>
+                            </Label>
+                            <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
+                                <TextBlock x:Name="tbGameMaxGS" FontWeight="Bold" Foreground="{StaticResource solid-color-brush-blue-base}" Text="{Binding GameMaxGS}"/>
+                            </Label>
+                        </StackPanel>
+                        <Grid Grid.Row="3" Grid.Column="0">
+                            <Button Click="btnLoadFile_Click" x:Name="btnLoadFile" VerticalAlignment="Center"
+                                Style="{StaticResource ButtonDashed}" Background="{StaticResource solid-color-brush-night-rider}"
+                                Width="100" HorizontalAlignment="Center" Margin="0" TabIndex="4">
                                 <UIElement.Effect>
-                                    <DropShadowEffect BlurRadius="4" ShadowDepth="3" Color="Black" Opacity="0.8"/>
+                                    <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.8" Color="{StaticResource night-rider}"/>
                                 </UIElement.Effect>
-                            </TextBlock>
-                        </Button>
+                                <TextBlock Text="LOAD FILE" FontSize="14" Foreground="LimeGreen">
+                                    <UIElement.Effect>
+                                        <DropShadowEffect BlurRadius="4" ShadowDepth="3" Color="Black" Opacity="0.8"/>
+                                    </UIElement.Effect>
+                                </TextBlock>
+                            </Button>
+                        </Grid>
+
+                        <Grid Grid.Row="0" Grid.Column="1" Visibility="{Binding NotSpinning, Converter={StaticResource VisibilityConverter}}">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+                                <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
+                                    <TextBlock FontWeight="Bold" Foreground="White" FontSize="10" Text="Spins:"/>
+                                </Label>
+                                <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
+                                    <TextBlock x:Name="tbGameSpins" FontWeight="Bold" FontSize="10" Foreground="White" Text="{Binding TotalGameSpins}"/>
+                                </Label>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Grid.Row="3" Grid.Column="1" Grid.RowSpan="1">
+                            <Grid Visibility="{Binding Spinning, Converter={StaticResource VisibilityConverter}}" Margin="0,0,0,0">
+                                <!--<Grid Visibility="Visible" Margin="0,0,20,0">-->
+                                <Viewbox Width="80" Height="80" HorizontalAlignment="Right" VerticalAlignment="Top">
+                                    <Grid>
+                                        <Grid.Resources>
+                                            <Storyboard x:Key="Anim.Rotate" RepeatBehavior="Forever">
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" Storyboard.TargetName="Inner">
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:1" Value="360">
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <PowerEase EasingMode="EaseInOut"/>
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" Storyboard.TargetName="Outer">
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:1" Value="360">
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <PowerEase EasingMode="EaseInOut"/>
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </Grid.Resources>
+                                        <Grid.Triggers>
+                                            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                                <BeginStoryboard Storyboard="{StaticResource Anim.Rotate}"/>
+                                            </EventTrigger>
+                                        </Grid.Triggers>
+                                        <Viewbox>
+                                            <Grid Margin="20">
+                                                <Path x:Name="Inner" Fill="#FF00FFD2" Width="187" Height="187" RenderTransformOrigin="0.5,0.5"
+      Data="M46.299878,146.50609 L47.766228,147.79096 C58.474648,156.78397 71.877045,162.67316 86.588265,164.07338 L89.149674,164.25597 89.149674,186.79178 88.73761,186.78169 C66.294571,185.67963 45.931611,176.66448 30.380114,162.46759 L30.358767,162.44721 z M140.49947,146.50609 L156.44058,162.44721 156.41924,162.46759 C140.86774,176.66448 120.50478,185.67963 98.061737,186.78169 L97.649674,186.79178 97.649674,164.25597 100.21108,164.07338 C114.9223,162.67316 128.32471,156.78397 139.03311,147.79096 z M164.26193,97.64589 L186.79935,97.64589 186.77802,98.207383 C185.71666,119.14559 177.76738,138.26654 165.15089,153.3495 L162.44974,156.43555 146.50887,140.49468 147.51971,139.35484 C156.57564,128.70131 162.54182,115.33972 164.03311,100.65523 z M0,97.64589 L22.537411,97.64589 22.766238,100.65523 C24.257529,115.33972 30.223717,128.70131 39.279644,139.35484 L40.290478,140.49468 24.349608,156.43555 21.648446,153.3495 C9.0319733,138.26654 1.0826934,119.14559 0.021331854,98.207383 z M162.44974,30.356231 L165.15089,33.442285 C177.76738,48.525247 185.71666,67.646196 186.77802,88.584398 L186.79935,89.14589 164.26193,89.14589 164.03311,86.136552 C162.54182,71.452066 156.57564,58.090474 147.51971,47.436933 L146.50887,46.297101 z M24.349606,30.356231 L40.290486,46.297105 39.279644,47.436933 C30.223717,58.090474 24.257529,71.452066 22.766238,86.136552 L22.537411,89.14589 0,89.14589 0.021331854,88.584398 C1.0826932,67.646196 9.0319733,48.525247 21.648446,33.442285 z M97.649674,0 L98.061737,0.010093458 C120.50478,1.1121466 140.86774,10.127313 156.41924,24.324199 L156.44058,24.344579 140.49947,40.285688 139.03311,39.000829 C128.32471,30.007821 114.9223,24.118625 100.21108,22.718396 L97.649674,22.535823 z M89.149674,0 L89.149674,22.535823 86.588265,22.718396 C71.877045,24.118625 58.474648,30.007821 47.766228,39.000829 L46.299881,40.285688 30.358771,24.344579 30.380114,24.324199 C45.931611,10.127313 66.294571,1.1121462 88.73761,0.010093458 z">
+                                                    <Path.RenderTransform>
+                                                        <TransformGroup>
+                                                            <ScaleTransform/>
+                                                            <SkewTransform/>
+                                                            <RotateTransform/>
+                                                            <TranslateTransform/>
+                                                        </TransformGroup>
+                                                    </Path.RenderTransform>
+                                                </Path>
+                                                <Path x:Name="Outer" Fill="#9E42FF" Width="300" Height="300" RenderTransformOrigin="0.5,0.5"
+      Data="M224.41695,237.14477 L249.23029,261.95809 248.44242,262.66256 C224.64556,283.48019 194.21095,296.89807 160.7288,299.32595 L158.72364,299.44708 158.72364,264.37036 160.75619,264.20117 C184.58424,261.93319 206.29234,252.39436 223.63696,237.82823 z M75.030328,237.14477 L75.810319,237.82823 C93.154939,252.39436 114.86305,261.93319 138.69109,264.20117 L140.72364,264.37036 140.72364,299.44708 138.71848,299.32595 C105.23634,296.89807 74.801721,283.48019 51.004861,262.66256 L50.216985,261.95809 z M264.37483,158.72354 L299.44727,158.72354 299.28626,161.2646 C296.74113,194.71411 283.2252,225.09693 262.32868,248.82282 L261.96018,249.23217 237.1522,224.42419 237.38284,224.1641 C252.0509,206.90837 261.71442,185.26635 264.12989,161.48162 z M0,158.72354 L35.072457,158.72354 35.317372,161.48162 C37.732842,185.26635 47.396386,206.90837 62.064435,224.1641 L62.295079,224.42419 37.487096,249.23217 37.118607,248.82282 C16.222096,225.09693 2.7061571,194.71411 0.16102871,161.2646 z M261.96018,50.214907 L262.32868,50.624255 C283.2252,74.350146 296.74113,104.73297 299.28626,138.18247 L299.44727,140.72354 264.37483,140.72354 264.12989,137.96545 C261.71442,114.18071 252.0509,92.538699 237.38284,75.282969 L237.1522,75.02289 z M37.487088,50.214903 L62.295079,75.02289 62.064435,75.282969 C47.396386,92.538699 37.732842,114.18071 35.317372,137.96545 L35.072457,140.72354 0,140.72354 0.16102871,138.18247 C2.7061566,104.73297 16.222096,74.350146 37.118607,50.624251 z M158.72364,0 L160.7288,0.12110621 C194.21095,2.5490118 224.64556,15.966891 248.44242,36.784506 L249.23029,37.488963 224.41695,62.302306 223.63696,61.618853 C206.29234,47.052714 184.58424,37.513873 160.75619,35.245894 L158.72364,35.07672 z M140.72364,0 L140.72364,35.07672 138.69109,35.245894 C114.86305,37.513873 93.154939,47.052714 75.810319,61.618861 L75.030328,62.302302 50.216988,37.488959 51.004861,36.784506 C74.801721,15.966891 105.23634,2.5490106 138.71848,0.12110621 z">
+                                                    <Path.RenderTransform>
+                                                        <TransformGroup>
+                                                            <ScaleTransform/>
+                                                            <SkewTransform/>
+                                                            <RotateTransform/>
+                                                            <TranslateTransform/>
+                                                        </TransformGroup>
+                                                    </Path.RenderTransform>
+                                                </Path>
+
+                                                <TextBlock Text="{Binding SpinProgress, StringFormat=\{0:#0.00\'%\'\}}" Foreground="White" FontSize="30" FontFamily="Verdana" 
+                                   HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            </Grid>
+                                        </Viewbox>
+                                    </Grid>
+                                </Viewbox>
+                            </Grid>
+                        </Grid>
+
                     </Grid>
-                </Grid>                
+                    
+                    
+                    <controls:BettingWindow x:Name="BetWindow" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="4" Height="210" Width="320" 
+                                            HorizontalAlignment="Left"
+                                            Game="{Binding Path=Game, ElementName=NewTableGame}" />
+                </Grid>
             </Grid>
         </Border>
     </Grid>

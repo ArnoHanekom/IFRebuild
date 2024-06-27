@@ -22,7 +22,7 @@ public partial class ReworkResults : Window
     {
         await vm.LoadResultsAsync(ct);
         await vm.LoadOrderedResultsForDisplayAsync(ct);
-        await ReloadGridSourceAsync();
+        await ReloadGridSourceAsync(ct);
     }
 
     private async void cbRunSpinfileAll_Click(object sender, RoutedEventArgs e)
@@ -41,21 +41,6 @@ public partial class ReworkResults : Window
                 await ReloadGridSourceAsync();
             }
         }
-    }
-
-    private async void cbRunSpinfileLimit_Click(object sender, RoutedEventArgs e)
-    {
-
-    }
-
-    private async void cbRunSpinfileR1W_Click(object sender, RoutedEventArgs e)
-    {
-
-    }
-
-    private async void cbRunSpinfileTW_Click(object sender, RoutedEventArgs e)
-    {
-
     }
 
     private async Task ReloadGridSourceAsync(CancellationToken ct = default)
