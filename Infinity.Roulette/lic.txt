@@ -1,0 +1,3 @@
+{
+	"AppLicense": "03096BC9-22F1-4C1F-BD8E-54FCD646D99A"
+}

@@ -2,6 +2,7 @@
 using Infinity.Roulette.Containers;
 using Infinity.Roulette.ViewModels;
 using Microsoft.Win32;
+using ModernWpf.Controls;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
@@ -179,43 +180,39 @@ public partial class NewSearchResults : Window
     }
     private async void cbRunSpinfileTW_Unchecked(object sender, RoutedEventArgs e) => await SelectAllTW(false);
     private async void cbRunSpinfileR1W_Unchecked(object sender, RoutedEventArgs e) => await SelectAllR1W(false);
-    private void CheckBox_Checked(object sender, RoutedEventArgs e)
+    private async void CheckBox_Checked(object sender, RoutedEventArgs e)
     {
-        if (!searchVM.IsLoadingEvent)
+        try
         {
-            try
-            {
-                var cb = (CheckBox)sender;
-                var table = (Table)cb.DataContext;
-                foreach (Table selected in ResultsGrid.Items.Cast<Table>())
-                {
-                    if (selected.TableId == table.TableId && selected.Autoplay == table.Autoplay)
-                    {
-                        selected.RunSpinfile = true;
-                    }
-                }
-            }
-            catch { }
+            var cb = (CheckBox)sender;
+            var table = (Table)cb.DataContext;
+            await SelectCheckbox(true, table.TableId, table.Autoplay);
         }
+        catch { }
     }
-    private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+    private async Task SelectCheckbox(bool select, int tableId, int autoplay)
     {
-        if (!searchVM.IsLoadingEvent)
+        await Dispatcher.InvokeAsync(() => ResultsGrid.ItemsSource = SelectCheckboxCheck(select, tableId, autoplay));
+    }
+    private List<Table> SelectCheckboxCheck(bool select, int tableId, int autoplay)
+    {
+        List<Table> allResults = [.. ResultsGrid.Items.Cast<Table>()];
+        foreach (var table in allResults.Where(t => t.TableId == tableId && t.Autoplay == autoplay))
         {
-            try
-            {
-                var cb = (CheckBox)sender;
-                var table = (Table)cb.DataContext;
-                foreach (Table selected in ResultsGrid.Items.Cast<Table>())
-                {
-                    if (selected.TableId == table.TableId && selected.Autoplay == table.Autoplay)
-                    {
-                        selected.RunSpinfile = false;
-                    }
-                }
-            }
-            catch { }        
-        }        
+            table.RunSpinfile = select;
+        }
+        return allResults;
+    }
+
+    private async void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var cb = (CheckBox)sender;
+            var table = (Table)cb.DataContext;
+            await SelectCheckbox(false, table.TableId, table.Autoplay);
+        }
+        catch { }
     }
     private async Task SelectAll(bool select)
     {
@@ -292,11 +289,13 @@ public partial class NewSearchResults : Window
         if (spinfileTables == null || spinfileTables.Count <= 0)
             return;
 
+        if (spinfileTables.Count == 0) spinfileTables = _manualSelected;
+
         await Dispatcher.InvokeAsync(() =>
         {
             ResultsGrid.ItemsSource = null;
         });
-
+        _manualSelected = [];
         await searchVM.PrepareSpinStartAsync(spinfileTables.ToList()).ConfigureAwait(false);
         await searchVM.PlaySpinfileTablesAsync(this, searchVM.cancelToken).ConfigureAwait(false);
     }
@@ -387,4 +386,15 @@ public partial class NewSearchResults : Window
             }
         });
     }
+
+    private void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)
+    {
+        var toggler = sender as ToggleSwitch;
+        if (toggler is null) return;
+        var table = toggler.DataContext as Table;
+        if (table is null) return;
+        table.RunSpinfile = true;
+        _manualSelected.Add(table);
+    }
+    private List<Table> _manualSelected { get; set; } = [];
 }

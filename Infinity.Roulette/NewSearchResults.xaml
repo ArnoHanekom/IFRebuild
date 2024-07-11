@@ -12,7 +12,7 @@
         WindowStartupLocation="CenterScreen" UseLayoutRounding="True" AllowsTransparency="True"
         WindowStyle="None" BorderThickness="0" ui:TitleBar.ExtendViewIntoTitleBar="True"
         Background="Transparent" Title="Results" MinHeight="400" SizeToContent="WidthAndHeight"
-        MinWidth="570" SnapsToDevicePixels="True">
+        MinWidth="615" SnapsToDevicePixels="True">
     <FrameworkElement.Resources>
         <convert:GameTypeConverter x:Key="GameTypeConverter"/>
         <convert:VisibilityConverter x:Key="VisibilityConverter"/>
@@ -160,7 +160,7 @@
                                 <DataGrid MouseDoubleClick="ResultsGrid_MouseDoubleClick" Loaded="ResultsGrid_Loaded"
         LoadingRow="ResultsGrid_LoadingRow" x:Name="ResultsGrid" AutoGenerateColumns="False"
         Margin="7,0,0,0" CanUserReorderColumns="False" IsReadOnly="True" SelectionMode="Single"
-        SelectionUnit="FullRow" Background="Transparent" Foreground="White" MaxHeight="450" MinWidth="570"
+        SelectionUnit="FullRow" Background="Transparent" Foreground="White" MaxHeight="450" MinWidth="520"
         CanUserResizeColumns="False" CanUserResizeRows="False" HorizontalContentAlignment="Stretch"
         VerticalContentAlignment="Stretch" UseLayoutRounding="True" EnableColumnVirtualization="True"
         FontFamily="{Binding ElementName=fontFan, Path=Text, Converter={StaticResource FontFamilyConverter}}"
@@ -226,6 +226,15 @@
                                                 </Style>
                                             </DataGridColumn.CellStyle>
                                         </DataGridTextColumn>
+                                        <DataGridTextColumn MinWidth="75" Width="1*" Header="TW" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
+                  Binding="{Binding HighestColumnWin}">
+                                            <DataGridColumn.CellStyle>
+                                                <Style TargetType="{x:Type DataGridCell}">
+                                                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                                    <Setter Property="Control.FontWeight" Value="Bold"/>
+                                                </Style>
+                                            </DataGridColumn.CellStyle>
+                                        </DataGridTextColumn>
                                         <DataGridTextColumn MinWidth="80" Width="1*" Header="Counts" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
                       Binding="{Binding Counts}">
                                             <DataGridColumn.CellStyle>
@@ -246,8 +255,7 @@
                                                 </Style>
                                             </DataGridColumn.CellStyle>
                                         </DataGridTextColumn>
-                                        <DataGridTextColumn MinWidth="55" Width="1*" Header="GS" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
-                      Binding="{Binding GS}">
+                                        <DataGridTextColumn MinWidth="55" Width="1*" Header="GS" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}" Binding="{Binding GS}">
                                             <DataGridColumn.CellStyle>
                                                 <Style TargetType="{x:Type DataGridCell}">
                                                     <Setter Property="TextBlock.TextAlignment" Value="Center"/>
@@ -256,8 +264,7 @@
                                                 </Style>
                                             </DataGridColumn.CellStyle>
                                         </DataGridTextColumn>
-                                        <DataGridTextColumn MinWidth="90" Width="1*" Header="Max GS" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
-                      Binding="{Binding MaxGS}">
+                                        <DataGridTextColumn MinWidth="90" Width="1*" Header="Max GS" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}" Binding="{Binding MaxGS}">
                                             <DataGridColumn.CellStyle>
                                                 <Style TargetType="{x:Type DataGridCell}">
                                                     <Setter Property="TextBlock.TextAlignment" Value="Center"/>
@@ -265,7 +272,7 @@
                                                 </Style>
                                             </DataGridColumn.CellStyle>
                                         </DataGridTextColumn>
-                                        <DataGridTemplateColumn MinWidth="120" Width="4*">
+                                        <DataGridTemplateColumn MinWidth="60" Width="4*">
                                             <DataGridColumn.CellStyle>
                                                 <Style TargetType="{x:Type DataGridCell}">
                                                     <Setter Property="FrameworkElement.HorizontalAlignment" Value="Center"/>
@@ -279,27 +286,22 @@
                                                         <RowDefinition/>
                                                     </Grid.RowDefinitions>
                                                     <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
                                                     </Grid.ColumnDefinitions>
-                                                    <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Text="Run Spinfile?" FontSize="18"
-                   FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                                                    <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Text="Run" FontSize="18"
+                                                        FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,0,0,0" />
                                                     <CheckBox Checked="cbRunSpinfileAll_Checked" Unchecked="cbRunSpinfileAll_Unchecked" x:Name="cbRunSpinfileAll"
-                  Margin="10,5,10,0" Style="{StaticResource WhiteCheckBox}" Grid.Row="1" Grid.Column="0"
-                  Content="All?" HorizontalAlignment="Left" MinWidth="0" Width="Auto" FontWeight="SemiBold"
-                  Cursor="Hand"/>
-                                                    <!--<CheckBox Checked="cbRunSpinfileLimit_Checked" Unchecked="cbRunSpinfileLimit_Unchecked"
-                  x:Name="cbRunSpinfileLimit" Margin="10,5,10,0" Style="{StaticResource WhiteCheckBox}" Grid.Row="1"
-                  Grid.Column="1" HorizontalAlignment="Right" Width="Auto" Content="Limits?" FontWeight="SemiBold"
-                  Cursor="Hand"/>-->
+                                                          Margin="10,5,10,0" Style="{StaticResource WhiteCheckBox}" Grid.Row="1" Grid.Column="0"
+                                                          Content="All" HorizontalAlignment="Left" MinWidth="0" Width="Auto" FontWeight="SemiBold"
+                                                          Cursor="Hand" />
                                                 </Grid>
                                             </DataGridColumn.Header>
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <CheckBox Style="{StaticResource WhiteCheckBox}" Cursor="Hand" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"
-                  IsChecked="{Binding RunSpinfile, Mode=TwoWay, NotifyOnTargetUpdated=True, IsAsync=True}" />
+                                                    <ui:ToggleSwitch Margin="14, 5, 10, 0" Cursor="Hand" HorizontalAlignment="Left" IsOn="{Binding RunSpinfile}"  Toggled="ToggleSwitch_Toggled" Width="Auto" />
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>
@@ -309,14 +311,11 @@
                             <TabItem x:Name="OpenedResultsPage" Style="{StaticResource SearchResults}" Header="Opened Results"
      Background="Transparent" BorderBrush="Transparent" HorizontalAlignment="Left"
      FontFamily="{Binding ElementName=fontFan, Path=Text, Converter={StaticResource FontFamilyConverter}}">
-                                <DataGrid MouseDoubleClick="ResultsGrid_MouseDoubleClick" 
-                      x:Name="OpenResultsGrid" AutoGenerateColumns="False"
-        Margin="7,0,0,0" CanUserReorderColumns="False" IsReadOnly="True" SelectionMode="Single"
-        SelectionUnit="FullRow" Background="Transparent" Foreground="White" MaxHeight="450" MinWidth="600"
-        CanUserResizeColumns="False" CanUserResizeRows="False" HorizontalAlignment="Stretch"
-        VerticalAlignment="Stretch"
-        FontFamily="{Binding ElementName=fontFan, Path=Text, Converter={StaticResource FontFamilyConverter}}"
-        ItemsSource="{Binding OpenedResults}">
+                                <DataGrid MouseDoubleClick="ResultsGrid_MouseDoubleClick" x:Name="OpenResultsGrid" AutoGenerateColumns="False" Margin="7,0,0,0" CanUserReorderColumns="False" 
+                                          IsReadOnly="True" SelectionMode="Single" SelectionUnit="FullRow" Background="Transparent" Foreground="White" MaxHeight="450" MinWidth="570"
+                                          CanUserResizeColumns="False" CanUserResizeRows="False" HorizontalAlignment="Stretch"
+                                          VerticalAlignment="Stretch" FontFamily="{Binding ElementName=fontFan, Path=Text, Converter={StaticResource FontFamilyConverter}}"
+                                          ItemsSource="{Binding OpenedResults}">
                                     <DataGrid.ColumnHeaderStyle>
                                         <Style TargetType="{x:Type DataGridColumnHeader}">
                                             <Setter Property="Control.Background" Value="Black"/>
@@ -340,8 +339,6 @@
                                     </DataGrid.CellStyle>
                                     <DataGrid.RowStyle>
                                         <Style TargetType="{x:Type DataGridRow}">
-                                            <Setter Property="Control.FontFamily"
-            Value="{Binding ElementName=fontFan, Path=Text, Converter={StaticResource FontFamilyConverter}}"/>
                                             <Style.Resources>
                                                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{StaticResource logo-orange-color-01}"/>
                                             </Style.Resources>
@@ -362,8 +359,7 @@
                                         </Style>
                                     </DataGrid.RowStyle>
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn MinWidth="80" Width="1*" Header="RW Col" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
-    Binding="{Binding ColumnWithHighestRowWin}">
+                                        <DataGridTextColumn MinWidth="80" Width="1*" Header="RW Col" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}" Binding="{Binding ColumnWithHighestRowWin}">
                                             <DataGridColumn.CellStyle>
                                                 <Style TargetType="{x:Type DataGridCell}">
                                                     <Setter Property="TextBlock.TextAlignment" Value="Center"/>
@@ -371,8 +367,7 @@
                                                 </Style>
                                             </DataGridColumn.CellStyle>
                                         </DataGridTextColumn>
-                                        <DataGridTextColumn MinWidth="60" Width="*" Header="R1W" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
-                                            Binding="{Binding FirstRowWin}">
+                                        <DataGridTextColumn MinWidth="60" Width="1*" Header="R1W" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}" Binding="{Binding FirstRowWin}">
                                             <DataGridColumn.CellStyle>
                                                 <Style TargetType="{x:Type DataGridCell}">
                                                     <Setter Property="TextBlock.TextAlignment" Value="Center"/>
@@ -380,8 +375,7 @@
                                                 </Style>
                                             </DataGridColumn.CellStyle>
                                         </DataGridTextColumn>
-                                        <DataGridTextColumn MinWidth="80" Width="*" Header="Counts" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
-                                            Binding="{Binding Counts}">
+                                        <DataGridTextColumn MinWidth="80" Width="1*" Header="Counts" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}" Binding="{Binding Counts}">
                                             <DataGridColumn.CellStyle>
                                                 <Style TargetType="{x:Type DataGridCell}">
                                                     <Setter Property="TextBlock.TextAlignment" Value="Center"/>
@@ -390,8 +384,7 @@
                                                 </Style>
                                             </DataGridColumn.CellStyle>
                                         </DataGridTextColumn>
-                                        <DataGridTextColumn MinWidth="65" Width="*" Header="Rows" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
-                                            Binding="{Binding Rows}">
+                                        <DataGridTextColumn MinWidth="65" Width="1*" Header="Rows" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}" Binding="{Binding Rows}">
                                             <DataGridColumn.CellStyle>
                                                 <Style TargetType="{x:Type DataGridCell}">
                                                     <Setter Property="TextBlock.TextAlignment" Value="Center"/>
@@ -400,8 +393,7 @@
                                                 </Style>
                                             </DataGridColumn.CellStyle>
                                         </DataGridTextColumn>
-                                        <DataGridTextColumn MinWidth="55" Width="*" Header="GS" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
-                      Binding="{Binding GS}">
+                                        <DataGridTextColumn MinWidth="55" Width="1*" Header="GS" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}" Binding="{Binding GS}">
                                             <DataGridColumn.CellStyle>
                                                 <Style TargetType="{x:Type DataGridCell}">
                                                     <Setter Property="TextBlock.TextAlignment" Value="Center"/>
@@ -410,8 +402,7 @@
                                                 </Style>
                                             </DataGridColumn.CellStyle>
                                         </DataGridTextColumn>
-                                        <DataGridTextColumn MinWidth="90" Width="*" Header="Max GS" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
-                      Binding="{Binding MaxGS}">
+                                        <DataGridTextColumn MinWidth="90" Width="1*" Header="Max GS" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}" Binding="{Binding MaxGS}">
                                             <DataGridColumn.CellStyle>
                                                 <Style TargetType="{x:Type DataGridCell}">
                                                     <Setter Property="TextBlock.TextAlignment" Value="Center"/>

@@ -31,6 +31,7 @@ namespace Infinity.Roulette.Containers
             container.RegisterType<IPlayService, PlayService>(new ContainerControlledLifetimeManager());
             container.RegisterType<IReworkSettingService, ReworkSettingService>(new ContainerControlledLifetimeManager());
             container.RegisterType<IConcurrentSearchService, ConcurrentSearchService>(new ContainerControlledLifetimeManager());
+            container.RegisterType<ILicenseService, LicenseService>(new ContainerControlledLifetimeManager());
             //container.RegisterType<IOddWinService, OddWinService>(new ContainerControlledLifetimeManager());
         }
     }

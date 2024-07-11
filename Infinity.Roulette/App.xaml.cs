@@ -2,15 +2,14 @@
 using System.Windows;
 using Unity;
 
-namespace Infinity.Roulette
+namespace Infinity.Roulette;
+
+public partial class App : Application
 {
-    public partial class App : Application
+    protected override void OnStartup(StartupEventArgs e)
     {
-        protected override void OnStartup(StartupEventArgs e)
-        {
-            Container.RegisterServices();
-            Container.container?.Resolve<AppSettings>().LoadSettings();
-            new NewDashboard().Show();
-        }
+        Container.RegisterServices();
+        Container.container?.Resolve<AppSettings>().LoadSettings();
+        new Splash().Show();
     }
 }

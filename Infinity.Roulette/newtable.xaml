@@ -87,23 +87,23 @@
                         </StackPanel>
                         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
                             <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
-                                <TextBlock FontWeight="Bold" Foreground="{StaticResource solid-color-brush-yellow}" Text="Row:"/>
+                                <TextBlock FontWeight="Bold" Foreground="White" Text="Row:"/>
                             </Label>
                             <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
                                 <TextBlock x:Name="tbGameRows" FontWeight="Bold" Foreground="{StaticResource solid-color-brush-yellow}" Text="{Binding GameRows}"/>
                             </Label>
                         </StackPanel>
-                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
                             <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
-                                <TextBlock FontWeight="Bold" Foreground="{StaticResource solid-color-brush-orange-base}" Text="Count:"/>
+                                <TextBlock FontWeight="Bold" Foreground="White" Text="Count:"/>
                             </Label>
                             <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
                                 <TextBlock x:Name="tbGameCounts" FontWeight="Bold" Foreground="{StaticResource solid-color-brush-orange-base}" Text="{Binding GameCounts}"/>
                             </Label>
                         </StackPanel>
-                        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
+                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
                             <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
-                                <TextBlock FontWeight="Bold" Foreground="{StaticResource solid-color-brush-blue-base}" Text="GS:"/>
+                                <TextBlock FontWeight="Bold" Foreground="White" Text="GS:"/>
                             </Label>
                             <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
                                 <TextBlock x:Name="tbGameGS" FontWeight="Bold" Foreground="{StaticResource solid-color-brush-blue-base}" Text="{Binding GameGS}"/>
@@ -111,7 +111,7 @@
                         </StackPanel>
                         <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
                             <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
-                                <TextBlock FontWeight="Bold" Foreground="{StaticResource solid-color-brush-blue-base}" Text="MGS:"/>
+                                <TextBlock FontWeight="Bold" Foreground="White" Text="MGS:"/>
                             </Label>
                             <Label Margin="0,0,0,0" VerticalContentAlignment="Center">
                                 <TextBlock x:Name="tbGameMaxGS" FontWeight="Bold" Foreground="{StaticResource solid-color-brush-blue-base}" Text="{Binding GameMaxGS}"/>

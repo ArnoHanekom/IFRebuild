@@ -1,99 +1,105 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
-    <ApplicationIcon>images\roulette.ico</ApplicationIcon>
-    <AssemblyName>Infinity Roulette</AssemblyName>
-    <PackageIcon>matrix.ico</PackageIcon>
-  </PropertyGroup>
-  <ItemGroup>
-    <None Remove="5c165542b0164202f1cf04d9 %281%29.png" />
-    <None Remove="autoplay btn.png" />
-    <None Remove="cogwheel-icon-menu.png" />
-    <None Remove="cogwheel-icon-menu_2.png" />
-    <None Remove="exclamation-512.png" />
-    <None Remove="file-upload-icon.png" />
-    <None Remove="images\5c165542b0164202f1cf04d9 %281%29.png" />
-    <None Remove="images\cogwheel-icon-menu.png" />
-    <None Remove="images\cogwheel-icon-menu_2.png" />
-    <None Remove="images\exclamation-512.png" />
-    <None Remove="images\file-upload-icon.png" />
-    <None Remove="Images\grey_gradient_background_darkest.jpg" />
-    <None Remove="Images\RI_Logo.png" />
-    <None Remove="matrix.ico" />
-    <None Remove="randomize btn.png" />
-    <None Remove="roulette.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="images\roulette.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.0" />
-    <PackageReference Include="log4net" Version="2.0.17" />
-    <PackageReference Include="MediatR" Version="12.3.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.6" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Maui.Graphics" Version="8.0.60" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.122" />
-    <PackageReference Include="ModernWpfUI" Version="0.9.6" />
-    <PackageReference Include="System.Drawing.Common" Version="8.0.6" />
-    <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
-    <PackageReference Include="Unity" Version="5.11.10" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Infinity.Roulette.Rework.Data\Infinity.Roulette.Rework.Data.csproj" />
-    <ProjectReference Include="..\Infinity.Roulette.Rework.Services\Infinity.Roulette.Rework.Services.csproj" />
-    <ProjectReference Include="..\Infinity.Services\Infinity.Services.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="5c165542b0164202f1cf04d9 (1).png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="autoplay btn.png" />
-    <Resource Include="cogwheel-icon-menu.png" />
-    <Resource Include="cogwheel-icon-menu_2.png" />
-    <Resource Include="exclamation-512.png" />
-    <Resource Include="file-upload-icon.png" />
-    <Resource Include="images\5c165542b0164202f1cf04d9 (1).png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="images\cogwheel-icon-menu.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="images\cogwheel-icon-menu_2.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="images\exclamation-512.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="images\file-upload-icon.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\grey_gradient_background_darkest.jpg" />
-    <Resource Include="Images\Matrix.ico" />
-    <Resource Include="Images\RI_Logo.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="matrix.ico" />
-    <Resource Include="randomize btn.png" />
-    <Resource Include="roulette.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="images\matrix.ico">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+		<ApplicationIcon>images\roulette.ico</ApplicationIcon>
+		<AssemblyName>Infinity Roulette</AssemblyName>
+		<PackageIcon>matrix.ico</PackageIcon>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Remove="5c165542b0164202f1cf04d9 %281%29.png" />
+		<None Remove="autoplay btn.png" />
+		<None Remove="cogwheel-icon-menu.png" />
+		<None Remove="cogwheel-icon-menu_2.png" />
+		<None Remove="exclamation-512.png" />
+		<None Remove="file-upload-icon.png" />
+		<None Remove="images\5c165542b0164202f1cf04d9 %281%29.png" />
+		<None Remove="images\cogwheel-icon-menu.png" />
+		<None Remove="images\cogwheel-icon-menu_2.png" />
+		<None Remove="images\exclamation-512.png" />
+		<None Remove="images\file-upload-icon.png" />
+		<None Remove="Images\grey_gradient_background_darkest.jpg" />
+		<None Remove="Images\RI_Logo.png" />
+		<None Remove="matrix.ico" />
+		<None Remove="randomize btn.png" />
+		<None Remove="roulette.ico" />
+	</ItemGroup>
+	<ItemGroup>
+		<Content Include="images\roulette.ico" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+		<PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.1" />
+		<PackageReference Include="log4net" Version="2.0.17" />
+		<PackageReference Include="MediatR" Version="12.3.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.6" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Maui.Graphics" Version="8.0.61" />
+		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.122" />
+		<PackageReference Include="ModernWpfUI" Version="0.9.6" />
+		<PackageReference Include="System.Drawing.Common" Version="8.0.6" />
+		<PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
+		<PackageReference Include="Unity" Version="5.11.10" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Infinity.Roulette.Rework.Data\Infinity.Roulette.Rework.Data.csproj" />
+		<ProjectReference Include="..\Infinity.Roulette.Rework.Services\Infinity.Roulette.Rework.Services.csproj" />
+		<ProjectReference Include="..\Infinity.Services\Infinity.Services.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<Resource Include="5c165542b0164202f1cf04d9 (1).png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="autoplay btn.png" />
+		<Resource Include="cogwheel-icon-menu.png" />
+		<Resource Include="cogwheel-icon-menu_2.png" />
+		<Resource Include="exclamation-512.png" />
+		<Resource Include="file-upload-icon.png" />
+		<Resource Include="images\5c165542b0164202f1cf04d9 (1).png">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="images\cogwheel-icon-menu.png">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="images\cogwheel-icon-menu_2.png">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="images\exclamation-512.png">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="images\file-upload-icon.png">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Images\grey_gradient_background_darkest.jpg" />
+		<Resource Include="Images\Matrix.ico" />
+		<Resource Include="Images\RI_Logo.png">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="matrix.ico" />
+		<Resource Include="randomize btn.png" />
+		<Resource Include="roulette.ico" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Update="images\matrix.ico">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Update="lic-act.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="lic.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 </Project>

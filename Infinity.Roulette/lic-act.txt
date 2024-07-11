@@ -1,0 +1,4 @@
+{
+	"ActiveAppLicense": "03096BC9-22F1-4C1F-BD8E-54FCD646D99A",
+	"Activated": "2024-07-11 00:00:00.000"
+}
