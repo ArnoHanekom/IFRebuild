@@ -1,13 +1,14 @@
 ﻿using Infinity.Data.Models;
 using Infinity.Services.Interfaces;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace Infinity.Services.Services;
 
 public class LicenseService : ILicenseService
 {
-    public const string licenseFilename = "lic.txt";
-    public const string activateFilename = "lic-act.txt";
+    public const string licenseFilename = "InfinityRoulette.lic";
+    public const string activateFilename = "InfinityRoulette-Act.lic";
     private License? _license { get; set; } = null;
 
     public async Task<bool> HasLicenseAsync()
@@ -44,8 +45,57 @@ public class LicenseService : ILicenseService
         FileInfo activateFile = new(activateFilename);
         ActiveLicense? activeLicense = null;
         if (activateFile.Exists) activeLicense = JsonConvert.DeserializeObject<ActiveLicense>(new StreamReader(activateFile.Open(FileMode.Open)).ReadToEnd());
-        activeLicense ??= new() {  ActiveAppLicense = _license.AppLicense, Activated = DateTime.Now };
-        TimeSpan difference = current.Date - activeLicense.Activated.Date;
-        return difference.Days <= 0 && difference.Days >= 0 && activeLicense.ActiveAppLicense == _license.AppLicense;
+        if (activeLicense is null) return false;
+
+        TimeSpan difference = current.Date - activeLicense.Expire.Date;
+        var licenseToBytes = Convert.FromBase64String(_license.AppLicense);
+        var licenseDecoded = Encoding.UTF8.GetString(licenseToBytes);
+        var activeLicenseToBytes = Convert.FromBase64String(activeLicense.ActiveAppLicense);
+        var activeLicenseDecoded = Encoding.UTF8.GetString(activeLicenseToBytes);
+
+        return difference.Days <= 0 && activeLicenseDecoded == licenseDecoded;
+    }
+
+    public async Task<bool> GenerateLicenseAsync(int period)
+    {
+        return await Task.Run(() => GenerateLicense(period));
+    }
+
+    private bool GenerateLicense(int period)
+    {
+        try
+        {
+            var newAppLicense = Guid.NewGuid().ToString();
+            var toBytes = Encoding.UTF8.GetBytes(newAppLicense);
+            var base64Encoded = Convert.ToBase64String(toBytes);
+            DateTime activeTill = DateTime.Now.AddDays(period);
+
+            License newLicense = new()
+            {
+                AppLicense = base64Encoded
+            };
+            ActiveLicense newActiveLicense = new()
+            {
+                ActiveAppLicense = base64Encoded,
+                Expire = activeTill
+            };
+            FileInfo fileInfo = new(licenseFilename);
+            if (fileInfo.Exists)
+                fileInfo.Delete();
+            using StreamWriter licenseWriter = new(fileInfo.Open(FileMode.OpenOrCreate));
+            licenseWriter.Write(JsonConvert.SerializeObject(newLicense));
+
+            fileInfo = new(activateFilename);
+            if (fileInfo.Exists)
+                fileInfo.Delete();
+            using StreamWriter activeLicenseWriter = new(fileInfo.Open(FileMode.OpenOrCreate));
+            activeLicenseWriter.Write(JsonConvert.SerializeObject(newActiveLicense));
+
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 }

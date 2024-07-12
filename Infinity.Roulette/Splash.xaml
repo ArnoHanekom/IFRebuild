@@ -115,4 +115,19 @@
             </Grid>
         </Border>
     </Grid>
+    <Window.ContextMenu>
+        <ContextMenu>
+            <MenuItem x:Name="mnuAdmin" Click="mnuAdmin_Click"  Cursor="Hand" ForceCursor="True">
+                <MenuItem.Icon>
+                    <Image Source="/cogwheel-icon-menu_2.png" Width="50" Height="50" />
+                </MenuItem.Icon>
+                <MenuItem.Header>
+                    <Grid>
+                        <TextBlock Text="Admin" HorizontalAlignment="Left" VerticalAlignment="Center"
+                              FontSize="12" FontWeight="Light" FontFamily="Century Gothic" Foreground="#BBC2CC" UseLayoutRounding="True" />
+                    </Grid>
+                </MenuItem.Header>
+            </MenuItem>
+        </ContextMenu>
+    </Window.ContextMenu>
 </Window>

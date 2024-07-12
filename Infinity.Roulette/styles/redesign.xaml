@@ -271,6 +271,62 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style TargetType="{x:Type PasswordBox}">
+        <Setter Property="UIElement.SnapsToDevicePixels" Value="True"/>
+        <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="True"/>
+        <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+        <Setter Property="Control.FontSize" Value="12"/>
+        <Setter Property="FrameworkElement.FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FrameworkElement.MinHeight" Value="25"/>
+        <Setter Property="FrameworkElement.Height" Value="25"/>
+        <Setter Property="FrameworkElement.MinWidth" Value="64"/>
+        <Setter Property="FrameworkElement.Width" Value="64"/>
+        <Setter Property="TextBoxBase.SelectionBrush" Value="{StaticResource solid-color-brush-night-rider}"/>
+        <Setter Property="Control.Foreground" Value="White"/>
+        <Setter Property="Control.FontWeight" Value="Bold"/>
+        <Setter Property="Control.HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="Control.VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Control.FontFamily" Value="Century Gothic"/>
+        <Setter Property="UIElement.AllowDrop" Value="true"/>
+        <Setter Property="TextBoxBase.SelectionOpacity" Value="0.25"/>
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type PasswordBox}">
+                    <Border Name="Border" CornerRadius="3" BorderThickness="1">
+                        <Border.Background>
+                            <SolidColorBrush Color="#9A9A9A"/>
+                        </Border.Background>
+                        <Border.BorderBrush>
+                            <SolidColorBrush Color="#9A9A9A"/>
+                        </Border.BorderBrush>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                              Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="#666666"/>
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="ReadOnly">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                              Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="#666666"/>
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="MouseOver"/>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <ScrollViewer x:Name="PART_ContentHost" Margin="1,1,1,1" Background="#666666"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Style TargetType="{x:Type TextBox}">
         <Setter Property="UIElement.SnapsToDevicePixels" Value="True"/>
         <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="True"/>

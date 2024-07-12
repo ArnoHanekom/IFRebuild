@@ -1,6 +1,5 @@
 ﻿using Infinity.Roulette.Containers;
 using Infinity.Roulette.ViewModels;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -22,6 +21,7 @@ public partial class Splash : Window
         if (Container.container != null)
             splashVM = Container.container.Resolve<SplashScreenViewModel>();
 
+        DataContext = splashVM;
         InitializeComponent();
         Task.Run(SetupTimerAsync);
         DoLicenseCheckAsync();
@@ -81,5 +81,15 @@ public partial class Splash : Window
         await Task.Delay(2000);
         _isValidLicense = await splashVM.IsValidLicenseAsync();
         _checkCompleted = true;
+    }
+
+    private void mnuAdmin_Click(object sender, RoutedEventArgs e)
+    {
+        Admin admin = new()
+        {
+            Owner = this,
+            WindowStartupLocation = WindowStartupLocation.CenterOwner
+        };
+        admin.ShowDialog();
     }
 }

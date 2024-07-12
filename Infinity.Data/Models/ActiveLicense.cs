@@ -3,5 +3,5 @@
 public class ActiveLicense
 {
     public string ActiveAppLicense { get; set; } = string.Empty;
-    public DateTime Activated { get; set; } = DateTime.Now;
+    public DateTime Expire { get; set; } = DateTime.Now;
 }
