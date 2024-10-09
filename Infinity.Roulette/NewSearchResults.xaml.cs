@@ -36,12 +36,14 @@ public partial class NewSearchResults : Window
     private void ResultsGrid_LoadingRow(object sender, DataGridRowEventArgs e)
     {
         searchVM.IsLoadingEvent = true;
-        if (e.Row.Item is not Table table)
-            return;
+        if (e.Row.Item is not Table table) return;
         e.Row.Style = Application.Current.FindResource("NormalResultRow") as Style;
-
-        if (table.R1WMatch || table.TWMatch)
-            e.Row.Style = Application.Current.FindResource("HighlightWinsMatch") as Style;
+        
+        if (table.R1WMatch) e.Row.Style = Application.Current.FindResource("HighlightWinsMatch") as Style;
+        if (table.IsTWSearch)
+        {
+            if (table.isHighestRowWin) e.Row.Style = Application.Current.FindResource("HighlightWinsMatch") as Style;
+        }
     }
     private void ResultsGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
@@ -90,10 +92,6 @@ public partial class NewSearchResults : Window
         await Task.Run(() =>
         {
             searchVM.IsLoadingEvent = true;
-        });
-        await Dispatcher.InvokeAsync(() =>
-        {
-            //cbRunSpinfileLimit.IsChecked = false;
         });
         await SelectAll(true);
         await Task.Run(() =>
@@ -148,10 +146,9 @@ public partial class NewSearchResults : Window
         {
             searchVM.IsLoadingEvent = true;
         });
-        await base.Dispatcher.InvokeAsync(delegate
+        await Dispatcher.InvokeAsync(() =>
         {
             cbRunSpinfileAll.IsChecked = false;
-            //cbRunSpinfileLimit.IsChecked = false;
         });
         await SelectAll(false);
         await SelectAllR1W(true);
@@ -169,7 +166,6 @@ public partial class NewSearchResults : Window
         await Dispatcher.InvokeAsync(() =>
         {
             cbRunSpinfileAll.IsChecked = false;
-            //cbRunSpinfileLimit.IsChecked = false;
         });
         await SelectAll(select: false);
         await SelectAllTW(select: true);
@@ -285,7 +281,7 @@ public partial class NewSearchResults : Window
     }
     private async void btnPlay_Click(object sender, RoutedEventArgs e)
     {
-        List<Table> spinfileTables = GetSpinfileTables();
+        List<Table> spinfileTables = GetSpinfileTables(searchVM.SelectedSpinfileCount);
         if (spinfileTables == null || spinfileTables.Count <= 0)
             return;
 
@@ -298,11 +294,16 @@ public partial class NewSearchResults : Window
         _manualSelected = [];
         await searchVM.PrepareSpinStartAsync(spinfileTables.ToList()).ConfigureAwait(false);
         await searchVM.PlaySpinfileTablesAsync(this, searchVM.cancelToken).ConfigureAwait(false);
+        await Dispatcher.InvokeAsync(() =>
+        {
+            searchVM.SelectedSpinfileCount = -2;
+        });
     }
 
-    private List<Table> GetSpinfileTables()
+    private List<Table> GetSpinfileTables(int selectedCount)
     {
-        return [.. ResultsGrid.Items.Cast<Table>().Where(t => t.RunSpinfile)];
+        if (selectedCount == -1) return [.. ResultsGrid.Items.Cast<Table>().Where(t => t.RunSpinfile)];
+        return [.. ResultsGrid.Items.Cast<Table>().Where(t => t.Counts == selectedCount)];
     }
 
     public async void ReloadGrid()
@@ -312,6 +313,7 @@ public partial class NewSearchResults : Window
             cbRunSpinfileAll.IsChecked = false;
             //cbRunSpinfileLimit.IsChecked = false;
             ResultsGrid.ItemsSource = searchVM.LoadedResults;
+            cbSpinfileCounts.SelectedIndex = 0;
         });
     }
     private void btnStop_Click(object sender, RoutedEventArgs e)
@@ -397,4 +399,50 @@ public partial class NewSearchResults : Window
         _manualSelected.Add(table);
     }
     private List<Table> _manualSelected { get; set; } = [];
+
+    private List<Table> UncheckAllRunWithSpinfile()
+    {
+        List<Table> result = [.. ResultsGrid.Items.Cast<Table>()];
+        return result
+            .Select(t => 
+                {
+                    t.RunSpinfile = false; 
+                    return t; 
+                }).ToList();
+    }
+
+    private List<Table> CheckSelectedSpinfileCountRunWithSpinfile(List<Table> resultsList)
+    {
+        switch(searchVM.SelectedSpinfileCount)
+        {
+            case -1:
+                return resultsList.Select(t =>
+                {
+                    t.RunSpinfile = true;
+                    return t;
+                }).ToList();
+            case >= 0:
+                return resultsList.Select(t =>
+                {
+                    t.RunSpinfile = false;
+                    if (t.Counts == searchVM.SelectedSpinfileCount)
+                        t.RunSpinfile = true;
+                    return t;
+                }).ToList();
+            default:
+                return resultsList;
+        }
+    }
+
+    private List<Table> GetSelectedSpinfileCount_CheckResults()
+    {
+        var uncheckedList = UncheckAllRunWithSpinfile();
+        return CheckSelectedSpinfileCountRunWithSpinfile(uncheckedList);
+    }
+
+    private async void ChangeSelectedSpinfileCount_Selection(object sender, SelectionChangedEventArgs e)
+    {
+        
+        await Dispatcher.InvokeAsync(() => ResultsGrid.ItemsSource = GetSelectedSpinfileCount_CheckResults());
+    }
 }

@@ -55,7 +55,8 @@ public partial class NewDashboard : Window
         FileInfo fileInfo = new("settings.json");
         if (!fileInfo.Exists)
             return mainVM.CleanDashboardSetting();
-        Setting newSetting = JsonConvert.DeserializeObject<Setting>(new StreamReader(fileInfo.Open(FileMode.Open)).ReadToEnd())!;
+        using var streamer = new StreamReader(fileInfo.Open(FileMode.Open));
+        Setting newSetting = JsonConvert.DeserializeObject<Setting>(streamer.ReadToEnd())!;
         if (newSetting == null)
             return mainVM.CleanDashboardSetting();
 

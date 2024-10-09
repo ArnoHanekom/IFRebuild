@@ -175,6 +175,33 @@
         <Setter Property="Foreground" Value="{StaticResource solid-color-brush-count-blue}" />
     </Style>
 
+    <Style TargetType="{x:Type RadioButton}">
+        <Setter Property="Control.FontFamily" Value="Century Gothic"/>
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RadioButton}">
+                    <BulletDecorator Background="Transparent" Cursor="Hand" Margin="10,5,0,0">
+                        <BulletDecorator.Bullet>
+                            <Grid Height="15" Width="15">
+                                <Border Name="RadioOuter" Background="Transparent" BorderBrush="White" BorderThickness="3" CornerRadius="50"/>
+                                <Border Name="RadioMarkInner" Margin="2" Background="#FF282828" CornerRadius="50" Visibility="Visible"/>
+                                <Border Name="RadioMark" Margin="4" Background="White" CornerRadius="50" Visibility="Hidden"/>
+                            </Grid>
+                        </BulletDecorator.Bullet>
+                        <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontFamily="Century Gothic" FontSize="11">
+      <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </TextBlock>
+                    </BulletDecorator>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="ToggleButton.IsChecked" Value="true">
+                            <Setter TargetName="RadioMark" Property="UIElement.Visibility" Value="Visible"/>
+                            <Setter TargetName="RadioOuter" Value="White" Property="Border.BorderBrush"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Style x:Key="rbRestyle" TargetType="{x:Type RadioButton}">
         <Setter Property="Control.FontFamily" Value="Century Gothic"/>
         <Setter Property="Control.Template">

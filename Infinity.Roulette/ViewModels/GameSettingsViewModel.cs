@@ -26,6 +26,32 @@ namespace Infinity.Roulette.ViewModels
         private readonly ISettingService _settingService;
         private readonly IGameTypeService _gameTypeService;
 
+        private bool _displayR1Limit { get; set; } = true;
+
+        public bool DisplayR1Limit
+        {
+            get => _displayR1Limit;
+            set
+            {
+                _displayR1Limit = value;
+                OnPropertyChanged(nameof(DisplayR1Limit));
+                OnPropertyChanged(nameof(DisplayTWLimit));
+            }
+        }
+
+        private int _selectedLimitFocus { get; set; }
+        public int SelectedLimitFocus
+        {
+            get => _selectedLimitFocus;
+            set
+            {
+                _selectedLimitFocus = value;
+                OnPropertyChanged(nameof(SelectedLimitFocus));
+            }
+        }
+
+        public bool DisplayTWLimit => !DisplayR1Limit;
+
         private Setting _setting { get; set; }
 
         public Setting Setting
@@ -161,6 +187,7 @@ namespace Infinity.Roulette.ViewModels
             GameSetting = gameSetting is not null 
                 ? gameSetting 
                 : new() { Type = GameType.Autoplay };
+            SelectedLimitFocus = GameSetting.SelectedLimitFocus;
         }
 
         private void PrepareAutoplayOptions()
@@ -203,19 +230,24 @@ namespace Infinity.Roulette.ViewModels
             GameSetting? gameSetting = Setting.GameSettings.Find(gs => gs.Type == GameType.Autoplay);
             if (AutoplaySelected)
                 GameSetting.AutoplayNumber = new int?(SelectedAutoplayValue);
-            
+            GameSetting.SelectedLimitFocus = SelectedLimitFocus;
+            if (GameSetting.SelectedLimitFocus == 0 || GameSetting.SelectedLimitFocus == 1) GameSetting.TWLimit = null;
+            if (GameSetting.SelectedLimitFocus == 2) GameSetting.R1WLimit = null;
+
             if (gameSetting is not null)
                 Setting.GameSettings[Setting.GameSettings.IndexOf(gameSetting)] = GameSetting;
             else
                 Setting.GameSettings.Add(GameSetting);
+
             _settingService.Save(Setting);
             GetLatestSetting();
             LoadGameSetting();
-            FileInfo fileInfo = new FileInfo("settings.json");
+            FileInfo fileInfo = new("settings.json");
             if (fileInfo.Exists)
                 fileInfo.Delete();
-            using (StreamWriter streamWriter = new StreamWriter(fileInfo.Open(FileMode.OpenOrCreate)))
-                streamWriter.Write(JsonConvert.SerializeObject(Setting));
+
+            using var streamer = new StreamWriter(fileInfo.Open(FileMode.OpenOrCreate));
+            streamer.Write(JsonConvert.SerializeObject(Setting));
         }
 
         public void LoadSelectedSetting()

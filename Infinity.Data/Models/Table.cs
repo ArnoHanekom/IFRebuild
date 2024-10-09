@@ -55,6 +55,9 @@ namespace Infinity.Data.Models
 
         public int Matched => ExactMatch ? 1 : WinsMatch ? 1 : R1WMatch ? 1 : TWMatch ? 1 : 0;
         public int Order => ExactMatch ? 0 : WinsMatch ? 1 : R1WMatch ? 2 : TWMatch ? 3 : 99;
-        public int ColumnWithHighestRowWin => (Game.BoardLayouts[0].CodeWins.OrderByDescending(cw => cw.Value).FirstOrDefault()).Key + 1;
+        public int ColumnWithHighestRowWin => Game.BoardLayouts[0].CodeWins.OrderByDescending(cw => cw.Value).FirstOrDefault().Key + 1;
+        public int ColumnWithHighestRowWinValue => Game.BoardLayouts[0].CodeWins.OrderByDescending(cw => cw.Value).FirstOrDefault().Value;
+
+        public bool IsTWSearch { get; set; } = false;  
     }
 }

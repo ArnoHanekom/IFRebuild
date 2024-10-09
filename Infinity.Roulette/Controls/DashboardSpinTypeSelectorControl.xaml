@@ -29,7 +29,8 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
-                <RadioButton x:Name="rbRandom" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="0" Content="Random" Style="{StaticResource rbRestyle-orange}" Foreground="{StaticResource solid-color-brush-lime-green}"
+                <RadioButton x:Name="rbRandom" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="0" Content="Random" 
+                             Style="{StaticResource rbRestyle-orange}" Foreground="{StaticResource solid-color-brush-lime-green}"
                              Checked="rbRandom_Checked" 
                              IsChecked="{Binding RouletteGameType, Converter={StaticResource GameTypeConverter}, ConverterParameter={x:Static constants:GameType.Random}}" />
                 <RadioButton x:Name="rbAutoplay" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="1" Content="Autoplay" Style="{StaticResource rbRestyle-blue}" Foreground="{StaticResource solid-color-brush-lime-green}"

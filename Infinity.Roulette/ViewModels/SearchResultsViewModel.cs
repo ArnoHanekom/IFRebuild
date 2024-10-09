@@ -4,6 +4,7 @@ using Infinity.Services.Interfaces;
 using Infinity.Engine;
 using System.IO;
 using Infinity.Engine.Services;
+using System.Windows.Controls;
 
 namespace Infinity.Roulette.ViewModels;
 
@@ -41,6 +42,7 @@ public class SearchResultsViewModel : ViewModelBase
     }
     private void LoadResults()
     {
+        LoadSelectedSpinfileCountDefaults();
         IsLoadingEvent = true;
         LoadedResults = [.. _searches.GetSpinResults().Where(t => t.ExactMatch && t.DoneSpinning).OrderByDescending(t => t.Rows).OrderBy(t => t.Order)];
         OpenedResults = [];
@@ -540,4 +542,31 @@ public class SearchResultsViewModel : ViewModelBase
         }
     }
     public bool IsNotPlaying => !Spinning;
+
+    private List<ComboBoxItem> _spinfileCountOptions { get; set; } = [];
+    public List<ComboBoxItem> SpinfileCountOptions
+    {
+        get => _spinfileCountOptions;
+        set
+        {
+            if (_spinfileCountOptions != value) _spinfileCountOptions = value;
+            OnPropertyChanged(nameof(SpinfileCountOptions));
+        }
+    }
+
+    private int _selectedSpinfileCount { get; set; } = -2;
+    public int SelectedSpinfileCount
+    {
+        get => _selectedSpinfileCount;
+        set
+        {
+            if (_selectedSpinfileCount != value) _selectedSpinfileCount = value;
+            OnPropertyChanged(nameof(SelectedSpinfileCount));
+        }
+    }
+
+    public void LoadSelectedSpinfileCountDefaults()
+    {
+        SelectedSpinfileCount = -2;     
+    }
 }

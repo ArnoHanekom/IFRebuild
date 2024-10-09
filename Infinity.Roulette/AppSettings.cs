@@ -22,6 +22,15 @@ namespace Infinity.Roulette
 
         public void LoadSettings()
         {
+            FileInfo fileInfo1 = new("settings.json");
+            if (fileInfo1.Exists)
+            {
+                using var streamer = new StreamReader(fileInfo1.Open(FileMode.Open));
+                Setting setting = JsonConvert.DeserializeObject<Setting>(streamer.ReadToEnd())!;
+                if (setting != null)
+                    _settingService.Save(setting);
+            }
+            
             //FileInfo settingsFile = new("dashboard-settings.json");
             //if (settingsFile.Exists)
             //{
@@ -29,13 +38,6 @@ namespace Infinity.Roulette
             //    if (dashSetting is not null)
             //        _reworkSettingService.IngestSavedSettings(dashSetting);
             //}
-            FileInfo fileInfo1 = new FileInfo("settings.json");
-            if (fileInfo1.Exists)
-            {
-                Setting setting = JsonConvert.DeserializeObject<Setting>(new StreamReader(fileInfo1.Open(FileMode.Open)).ReadToEnd())!;
-                if (setting != null)
-                    _settingService.Save(setting);
-            }
             //FileInfo fileInfo2 = new FileInfo("table-settings.json");
             //if (!fileInfo2.Exists)
             //    return;

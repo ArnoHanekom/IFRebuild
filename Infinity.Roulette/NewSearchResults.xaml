@@ -12,7 +12,7 @@
         WindowStartupLocation="CenterScreen" UseLayoutRounding="True" AllowsTransparency="True"
         WindowStyle="None" BorderThickness="0" ui:TitleBar.ExtendViewIntoTitleBar="True"
         Background="Transparent" Title="Results" MinHeight="400" SizeToContent="WidthAndHeight"
-        MinWidth="615" SnapsToDevicePixels="True">
+        MinWidth="695" SnapsToDevicePixels="True">
     <FrameworkElement.Resources>
         <convert:GameTypeConverter x:Key="GameTypeConverter"/>
         <convert:VisibilityConverter x:Key="VisibilityConverter"/>
@@ -142,6 +142,37 @@
                         HorizontalAlignment="Left" MinWidth="0" Width="Auto" FontWeight="SemiBold" Cursor="Hand"
                         FontFamily="{Binding ElementName=fontFan, Path=Text, Converter={StaticResource FontFamilyConverter}}"/>
 
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" Margin="0, 5, 15, -5">
+                        <Label Content="Spinfile counts: " FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                        <ComboBox Name="cbSpinfileCounts" MinHeight="20" Height="20" Width="120"
+                               SelectedValuePath="Tag" SelectedValue="{Binding SelectedSpinfileCount, Mode=TwoWay}" FontWeight="SemiBold" Cursor="Hand"
+                        FontFamily="{Binding ElementName=fontFan, Path=Text, Converter={StaticResource FontFamilyConverter}}" SelectionChanged="ChangeSelectedSpinfileCount_Selection">
+                            <ComboBoxItem Content="Select count" Tag="-2" />
+                            <ComboBoxItem Content="All" Tag="-1" />
+                            <ComboBoxItem Content="0" Tag="0" />
+                            <ComboBoxItem Content="1" Tag="1" />
+                            <ComboBoxItem Content="2" Tag="2" />
+                            <ComboBoxItem Content="3" Tag="3" />
+                            <ComboBoxItem Content="4" Tag="4" />
+                            <ComboBoxItem Content="5" Tag="5" />
+                            <ComboBoxItem Content="6" Tag="6" />
+                            <ComboBoxItem Content="7" Tag="7" />
+                            <ComboBoxItem Content="8" Tag="8" />
+                            <ComboBoxItem Content="9" Tag="9" />
+                            <ComboBoxItem Content="10" Tag="10" />
+                            <ComboBoxItem Content="11" Tag="11" />
+                            <ComboBoxItem Content="12" Tag="12" />
+                            <ComboBoxItem Content="13" Tag="13" />
+                            <ComboBoxItem Content="14" Tag="14" />
+                            <ComboBoxItem Content="15" Tag="15" />
+                            <ComboBoxItem Content="16" Tag="16" />
+                            <ComboBoxItem Content="17" Tag="17" />
+                            <ComboBoxItem Content="18" Tag="18" />
+                            <ComboBoxItem Content="19" Tag="19" />
+                            <ComboBoxItem Content="20" Tag="20" />
+                        </ComboBox>
+                    </StackPanel>
+
                     <Grid x:Name="resultsContainer" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch">
                         <Grid.RowDefinitions>
                             <RowDefinition />
@@ -160,7 +191,7 @@
                                 <DataGrid MouseDoubleClick="ResultsGrid_MouseDoubleClick" Loaded="ResultsGrid_Loaded"
         LoadingRow="ResultsGrid_LoadingRow" x:Name="ResultsGrid" AutoGenerateColumns="False"
         Margin="7,0,0,0" CanUserReorderColumns="False" IsReadOnly="True" SelectionMode="Single"
-        SelectionUnit="FullRow" Background="Transparent" Foreground="White" MaxHeight="450" MinWidth="520"
+        SelectionUnit="FullRow" Background="Transparent" Foreground="White" MaxHeight="450" MinWidth="600"
         CanUserResizeColumns="False" CanUserResizeRows="False" HorizontalContentAlignment="Stretch"
         VerticalContentAlignment="Stretch" UseLayoutRounding="True" EnableColumnVirtualization="True"
         FontFamily="{Binding ElementName=fontFan, Path=Text, Converter={StaticResource FontFamilyConverter}}"
@@ -210,6 +241,15 @@
                                     <DataGrid.Columns>
                                         <DataGridTextColumn MinWidth="80" Width="1*" Header="RW Col" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
                                             Binding="{Binding ColumnWithHighestRowWin}">
+                                            <DataGridColumn.CellStyle>
+                                                <Style TargetType="{x:Type DataGridCell}">
+                                                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                                    <Setter Property="Control.FontWeight" Value="Bold"/>
+                                                </Style>
+                                            </DataGridColumn.CellStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn MinWidth="80" Width="1*" Header="RW Val" HeaderStyle="{DynamicResource ResultsGridHeaderStyle}"
+                                            Binding="{Binding ColumnWithHighestRowWinValue}">
                                             <DataGridColumn.CellStyle>
                                                 <Style TargetType="{x:Type DataGridCell}">
                                                     <Setter Property="TextBlock.TextAlignment" Value="Center"/>

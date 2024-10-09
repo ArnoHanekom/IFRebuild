@@ -482,6 +482,8 @@ public class MainViewModel : ViewModelBase
 
     private void GetLatestSetting() => Setting = _settingService.Get();
 
+    private int _selectedLimitFocus { get; set; }
+
     private void OverwriteGameTypeDefaults()
     {
         Tables = GameSetting.PlayTables;
@@ -491,6 +493,7 @@ public class MainViewModel : ViewModelBase
         GSLimit = GameSetting.GSLimit;
         R1WLimit = GameSetting.R1WLimit;
         TWLimit = GameSetting.TWLimit;
+        _selectedLimitFocus = GameSetting.SelectedLimitFocus;
         CheckAndLoadAutoplaySettings();
     }
 
@@ -720,8 +723,16 @@ public class MainViewModel : ViewModelBase
                 return gameTable;
             }
             gameTable.Game.CaptureSpin(_numberGenerator.NextRandomNumber(), 0);
-            gameTable.ExactMatch = CheckLimit(gameTable);
-            gameTable.WinsMatch = CheckWinsLimit(gameTable); 
+
+            gameTable.ExactMatch = _selectedLimitFocus switch
+            {
+                1 => CheckR1WExactMatch(gameTable),
+                2 => CheckTWExactMatch(gameTable),
+                _ => CheckLimit(gameTable)
+            };
+
+            gameTable.IsTWSearch = _selectedLimitFocus == 2;
+            gameTable.WinsMatch = CheckWinsLimit(gameTable);
             _tables.AddOverallSpin();
             SpinProgress = _tables.GetCurrentPercentage();
 
@@ -801,6 +812,24 @@ public class MainViewModel : ViewModelBase
             return tableService.Get(id, ap);
         }
     };
+
+    private bool CheckR1WExactMatch(Table table)
+    {
+        lock (table)
+        {
+            if (!R1WLimit.HasValue) return false;
+            return WinsLimitReached(table.FirstRowWin, R1WLimit.Value);
+        }
+    }
+
+    private bool CheckTWExactMatch(Table table)
+    {
+        lock (table)
+        {
+            if (!TWLimit.HasValue) return false;
+            return WinsLimitReached(table.HighestColumnWin, TWLimit.Value);
+        }
+    }
 
     private bool CheckLimit(Table table)
     {

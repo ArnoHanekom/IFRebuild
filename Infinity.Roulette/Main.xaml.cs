@@ -9,6 +9,7 @@ using Infinity.Data.Models;
 using Infinity.Roulette.Containers;
 using Infinity.Roulette.Statics;
 using Infinity.Roulette.ViewModels;
+using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json;
 using System.IO;
 using System.Threading.Tasks;
@@ -117,7 +118,8 @@ namespace Infinity.Roulette
             FileInfo fileInfo = new("settings.json");
             if (!fileInfo.Exists)
                 return mvm.CleanDashboardSetting();
-            Setting newSetting = JsonConvert.DeserializeObject<Setting>(new StreamReader(fileInfo.Open(FileMode.Open)).ReadToEnd())!;
+            using var streamer = new StreamReader(fileInfo.Open(FileMode.Open));
+            Setting newSetting = JsonConvert.DeserializeObject<Setting>(streamer.ReadToEnd())!;
             if (newSetting == null)
                 return mvm.CleanDashboardSetting();
 

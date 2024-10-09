@@ -238,6 +238,17 @@ namespace Infinity.Data.Models
       }
     }
 
+        private int _selectedLimitFocus { get; set; }
+        public int SelectedLimitFocus
+        {
+            get => _selectedLimitFocus;
+            set
+            {
+                _selectedLimitFocus = value;
+                OnPropertyChanged(nameof(SelectedLimitFocus));
+            }
+        }
+
     public event PropertyChangedEventHandler? PropertyChanged;
 
     protected void OnPropertyChanged(string propertyName)

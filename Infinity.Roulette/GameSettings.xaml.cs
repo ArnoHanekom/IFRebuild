@@ -7,6 +7,7 @@
 using Infinity.Roulette.Containers;
 using Infinity.Roulette.Statics;
 using Infinity.Roulette.ViewModels;
+using ModernWpf.Controls;
 using System;
 using System.CodeDom.Compiler;
 using System.Diagnostics;
@@ -61,5 +62,17 @@ namespace Infinity.Roulette
 
         private void btnCancel_Click(object sender, RoutedEventArgs e) => Close();
 
+        private async void selectedLimitFocus_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is not RadioButtons radioButtons) return;
+            var selectedFocus = radioButtons.SelectedIndex;
+            if (selectedFocus == -1) return;
+
+            await Task.Run(() =>
+            {
+                gameSettingsVM.SelectedLimitFocus = selectedFocus;
+                gameSettingsVM.DisplayR1Limit = selectedFocus == 0 || selectedFocus == 1;
+            });
+        }
     }
 }
