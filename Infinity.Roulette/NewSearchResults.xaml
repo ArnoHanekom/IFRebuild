@@ -320,24 +320,7 @@
                                                 </Style>
                                             </DataGridColumn.CellStyle>
                                             <DataGridColumn.Header>
-                                                <Grid Background="Transparent" Margin="5" VerticalAlignment="Bottom">
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition/>
-                                                        <RowDefinition/>
-                                                    </Grid.RowDefinitions>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="Auto" />
-                                                        <ColumnDefinition Width="Auto" />
-                                                        <ColumnDefinition Width="Auto" />
-                                                        <ColumnDefinition Width="Auto" />
-                                                    </Grid.ColumnDefinitions>
-                                                    <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Text="Run" FontSize="18"
-                                                        FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,0,0,0" />
-                                                    <CheckBox Checked="cbRunSpinfileAll_Checked" Unchecked="cbRunSpinfileAll_Unchecked" x:Name="cbRunSpinfileAll"
-                                                          Margin="10,5,10,0" Style="{StaticResource WhiteCheckBox}" Grid.Row="1" Grid.Column="0"
-                                                          Content="All" HorizontalAlignment="Left" MinWidth="0" Width="Auto" FontWeight="SemiBold"
-                                                          Cursor="Hand" />
-                                                </Grid>
+                                                <TextBlock Text="Spinfile" FontSize="14" FontWeight="SemiBold" Margin="12,0,0,13" />
                                             </DataGridColumn.Header>
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>

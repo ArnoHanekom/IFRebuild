@@ -108,7 +108,7 @@ public partial class NewSearchResults : Window
         });
         await Dispatcher.InvokeAsync(() =>
         {
-            cbRunSpinfileAll.IsChecked = false;
+            //cbRunSpinfileAll.IsChecked = false;
         });
         await SelectAll(false);
         await SelectAllLimits(true);
@@ -148,7 +148,7 @@ public partial class NewSearchResults : Window
         });
         await Dispatcher.InvokeAsync(() =>
         {
-            cbRunSpinfileAll.IsChecked = false;
+            //cbRunSpinfileAll.IsChecked = false;
         });
         await SelectAll(false);
         await SelectAllR1W(true);
@@ -165,7 +165,7 @@ public partial class NewSearchResults : Window
         });
         await Dispatcher.InvokeAsync(() =>
         {
-            cbRunSpinfileAll.IsChecked = false;
+            //cbRunSpinfileAll.IsChecked = false;
         });
         await SelectAll(select: false);
         await SelectAllTW(select: true);
@@ -310,7 +310,7 @@ public partial class NewSearchResults : Window
     {
         await base.Dispatcher.InvokeAsync(delegate
         {
-            cbRunSpinfileAll.IsChecked = false;
+            //cbRunSpinfileAll.IsChecked = false;
             //cbRunSpinfileLimit.IsChecked = false;
             ResultsGrid.ItemsSource = searchVM.LoadedResults;
             cbSpinfileCounts.SelectedIndex = 0;
@@ -325,7 +325,7 @@ public partial class NewSearchResults : Window
     {
         await base.Dispatcher.InvokeAsync(delegate
         {
-            cbRunSpinfileAll.IsChecked = false;
+            //cbRunSpinfileAll.IsChecked = false;
             //cbRunSpinfileLimit.IsChecked = false;
             ResultsGrid.ItemsSource = searchVM.LoadedResults.Where((Table lr) => lr.R1WMatch);
         });
@@ -334,7 +334,7 @@ public partial class NewSearchResults : Window
     {
         await base.Dispatcher.InvokeAsync(delegate
         {
-            cbRunSpinfileAll.IsChecked = false;
+            //cbRunSpinfileAll.IsChecked = false;
             //cbRunSpinfileLimit.IsChecked = false;
             ResultsGrid.ItemsSource = searchVM.LoadedResults;
         });
