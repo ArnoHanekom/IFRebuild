@@ -114,7 +114,7 @@ namespace Infinity.Engine
                 lock (game.BoardLayouts)
                 {
                     var numbers = game.BoardLayouts[0].Columns.SelectMany(c => c.Numbers).ToList();
-                    return numbers.Count(n => n.Codes.Count() <= 1);
+                    return numbers.Count(n => n.Codes.Count <= 1);
                 }
             }
             

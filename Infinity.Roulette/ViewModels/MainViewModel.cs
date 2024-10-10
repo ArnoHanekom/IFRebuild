@@ -688,10 +688,31 @@ public class MainViewModel : ViewModelBase
 
     private async Task<Table> PlayTableGameAutoplayAsync(int tableId, int currentAp, CancellationToken ct)
     {        
-        Table tableForPlay = TableForPlay(tableId, currentAp);
+        Table tableForPlay = await TableForPlay(tableId, currentAp).ConfigureAwait(false);
+        //await _writeTableGameLayoutToWindow(tableId, currentAp);
         if (ct.IsCancellationRequested) return tableForPlay;        
         return await PlayTableGameSpinAsync(tableForPlay, ct).ConfigureAwait(false);
     }
+
+    //private async Task _writeTableGameLayoutToWindow(int tableId, int currentAp)
+    //{
+    //    Table tableForPlay = await TableForPlay(tableId, currentAp).ConfigureAwait(false);
+    //    await Task.Run(() =>
+    //    {
+    //        if (tableForPlay.Game.Spins == 0)
+    //        {
+    //            Debug.WriteLine($"Table {tableId} Autoplay {currentAp}");
+    //            Debug.WriteLine("Table Game Columns");
+    //            foreach (BoardColumn bc in tableForPlay.Game.BoardLayouts[0].Columns)
+    //            {
+    //                Debug.WriteLine($"\t{bc.Code}\t{bc.Numbers[0].ToString()}\t{bc.Numbers[1].ToString()}\t{bc.Numbers[2].ToString()}\t{bc.Numbers[3].ToString()}\t{bc.Numbers[4].ToString()}\t{bc.Numbers[5].ToString()}");
+    //            }
+    //            Debug.WriteLine("");
+    //            Debug.WriteLine("");
+    //        }
+    //    });
+    //}
+
     private async Task<Table> PlayTableGameSpinAsync(Table table, CancellationToken ct)
     {
         if (!Random.HasValue) return table; 
@@ -772,21 +793,24 @@ public class MainViewModel : ViewModelBase
         }
     }
 
-    private Table TableForPlay(int id, int autoplay)
+    private async Task<Table> TableForPlay(int id, int autoplay)
     {
-        var t = _getPlayTable(_tables, id, autoplay);
-        if (t is null)
+        return await Task.Run(() =>
         {
-            t = new (_engineService)
+            var t = _getPlayTable(_tables, id, autoplay);
+            if (t is null)
             {
-                TableId = id,
-                Autoplay = autoplay,
-                R1Wlimit = R1WLimit,
-                TWlimit = TWLimit
-            };
-            _tables.AddTable(t);
-        }
-        return t;
+                t = new(_engineService, ShuffleBoards)
+                {
+                    TableId = id,
+                    Autoplay = autoplay,
+                    R1Wlimit = R1WLimit,
+                    TWlimit = TWLimit
+                };
+                _tables.AddTable(t);
+            }
+            return t;
+        });
     }
 
     public Setting CleanDashboardSetting()
@@ -953,5 +977,17 @@ public class MainViewModel : ViewModelBase
     {
         get => _searching;
         private set => _searching = value;
+    }
+
+    private bool _shuffleBoards { get; set; } = false;
+
+    public bool ShuffleBoards
+    {
+        get => _shuffleBoards;
+        set
+        {
+            if (_shuffleBoards != value) _shuffleBoards = value;
+            OnPropertyChanged(nameof(ShuffleBoards));
+        }
     }
 }

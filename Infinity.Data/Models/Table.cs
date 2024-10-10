@@ -3,17 +3,22 @@ using Infinity.Engine.Services;
 
 namespace Infinity.Data.Models
 {
-    
+
     public class Table
     {
         private Func<KeyValuePair<int, int>?, bool> _r1wAndHighest = R1Rows => R1Rows.HasValue && R1Rows.Value.Key == 0;
         private Func<KeyValuePair<int, int>?, int, bool> _r1wLimitReached = (R1Rows, r1limit) => R1Rows.HasValue && R1Rows.Value.Value >= r1limit;
+        private bool _shuffleBoards { get; set; }
 
-        private readonly IEngineService _engineService; 
-        public Table(IEngineService engineService)
+        private readonly IEngineService _engineService;
+        public Table(IEngineService engineService, bool shuffleBoards = false)
         {
             _engineService = engineService;
+            _shuffleBoards = shuffleBoards;
             Game = new RouletteGame(36, engineService);
+
+            if (_shuffleBoards) Game = Game.Shuffle();
+
             Game.UpdateTableGuid(UniqueTableId);
         }
         private KeyValuePair<int, int>? R1Rows => Game == null ? new KeyValuePair<int, int>?() : new KeyValuePair<int, int>?(Game.BoardLayouts[0].CodeWins.OrderByDescending(cw => cw.Value).FirstOrDefault());
@@ -58,6 +63,50 @@ namespace Infinity.Data.Models
         public int ColumnWithHighestRowWin => Game.BoardLayouts[0].CodeWins.OrderByDescending(cw => cw.Value).FirstOrDefault().Key + 1;
         public int ColumnWithHighestRowWinValue => Game.BoardLayouts[0].CodeWins.OrderByDescending(cw => cw.Value).FirstOrDefault().Value;
 
-        public bool IsTWSearch { get; set; } = false;  
+        public bool IsTWSearch { get; set; } = false;
+    }
+
+    public static class TableGameExtensions
+    {
+        private static Random _rand { get; set; } = new Random();
+        public static RouletteGame Shuffle(this RouletteGame game)
+        {
+            lock (game)
+            {
+                var layout = game.BoardLayouts[0];
+                var shuffled = _shuffledList(_listToShuffle);
+                List<List<BoardNumber>> colNumbers = [];
+
+                for (int i = 0; i < 6; i++)
+                {
+                    var numbers = shuffled.Skip(i * 6).Take(6).ToList();
+                    var boardNumbers = numbers.Select(layout.FindNumber).ToList();
+                    foreach (var bn in boardNumbers)
+                    {
+                        bn!.BoardCode = i + 1;
+                    }
+                    colNumbers.Add(boardNumbers!);
+                }
+                for (int j = 0; j < 6; j++)
+                {
+                    layout.Columns[j].Numbers = colNumbers[j];
+                }
+                return game;
+            }            
+        }
+
+        private static List<int> _shuffledList(List<int> listToShuffle)
+        {
+            for (int i = listToShuffle.Count - 1; i > 0; i--)
+            {
+                var k = _rand.Next(i + 1);
+                var value = listToShuffle[k];
+                listToShuffle[k] = listToShuffle[i];
+                listToShuffle[i] = value;
+            }
+            return listToShuffle;
+        }
+
+        private static List<int> _listToShuffle => Enumerable.Range(1, 36).Select(x => x).ToList();
     }
 }

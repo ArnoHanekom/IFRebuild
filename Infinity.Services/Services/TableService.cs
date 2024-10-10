@@ -51,7 +51,7 @@ namespace Infinity.Services.Services
             if (spinTables == null)
             {
                 List<Table> tableList;
-                spinTables = tableList = new List<Table>();
+                spinTables = tableList = [];
             }
             lock (spinTables)
                 return spinTables.FirstOrDefault(st => st.TableId == tableId && st.Autoplay == autoplay);
