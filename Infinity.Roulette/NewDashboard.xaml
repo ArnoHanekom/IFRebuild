@@ -302,7 +302,7 @@
         </Border>
     </Grid>
     <Window.ContextMenu>
-        <ContextMenu>
+        <ContextMenu x:Name="mnuWindow">
             <MenuItem x:Name="mnuDefaultSettings" Click="mnuDefaultSettings_Click" Cursor="Hand" ForceCursor="True">
                 <MenuItem.Icon>
                     <Image Source="/cogwheel-icon-menu_2.png" Width="50" Height="50" />
@@ -314,7 +314,7 @@
                     </Grid>
                 </MenuItem.Header>
             </MenuItem>
-            <MenuItem x:Name="mnuShuffleBoards" IsCheckable="True" IsChecked="{Binding ShuffleBoards}" Cursor="Hand" ForceCursor="True">
+            <MenuItem x:Name="mnuShuffleBoards" IsCheckable="True" IsChecked="{Binding ShuffleBoards}" Cursor="Hand" ForceCursor="True" StaysOpenOnClick="True" Click="mnuShuffleBoards_Click">
                 <MenuItem.Header>
                     <Grid>
                         <TextBlock Text="Shuffle boards?" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="12" FontWeight="Light" FontFamily="Century Gothic" Foreground="#BBC2CC" UseLayoutRounding="True" />

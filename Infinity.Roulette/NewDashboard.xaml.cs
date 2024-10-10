@@ -6,6 +6,7 @@ using Infinity.Roulette.ViewModels;
 using Newtonsoft.Json;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using Unity;
 
 namespace Infinity.Roulette;
@@ -87,6 +88,7 @@ public partial class NewDashboard : Window
             AlertNotifications.PlayAlert("C:\\Windows\\Media\\Windows Message Nudge.wav");
             AlertNotifications.DisplayAlertMessage("Dashboard was reset.");
         }
+        mainVM.ShuffleBoards = false;
         mainVM.ResetSearchTables();
         ReloadSettings();
         //    ((Main)Owner).ReloadSettings();
@@ -100,5 +102,14 @@ public partial class NewDashboard : Window
             Owner = this
         };
         spinfileGenerator.ShowDialog();
+    }
+
+    private async void mnuShuffleBoards_Click(object sender, RoutedEventArgs e)
+    {
+        await Task.Delay(400);
+        await Dispatcher.InvokeAsync(() =>
+        {
+            mnuWindow.IsOpen = false;
+        });
     }
 }
