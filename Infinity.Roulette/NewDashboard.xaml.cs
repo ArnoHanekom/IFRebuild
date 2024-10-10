@@ -87,6 +87,7 @@ public partial class NewDashboard : Window
             AlertNotifications.PlayAlert("C:\\Windows\\Media\\Windows Message Nudge.wav");
             AlertNotifications.DisplayAlertMessage("Dashboard was reset.");
         }
+        mainVM.ResetSearchTables();
         ReloadSettings();
         //    ((Main)Owner).ReloadSettings();
         //    ((Main)Owner).ReloadGameSettingBindings();

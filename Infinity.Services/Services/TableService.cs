@@ -28,7 +28,7 @@ namespace Infinity.Services.Services
         public void ClearPlaySearch()
         {
             lock (spinTables)
-                spinTables = new List<Table>();
+                spinTables = [];
         }
 
         public void AddTable(Table table)

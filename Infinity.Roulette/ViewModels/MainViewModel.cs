@@ -547,6 +547,12 @@ public class MainViewModel : ViewModelBase
         LoadDefaults();
     }
 
+    public void ResetSearchTables()
+    {
+        _searches.NewSpinSearch();
+        _tables.ClearPlaySearch();
+    }
+
     private void _clearDefaultSettings()
     {
         FileInfo fileInfo = new("settings.json");
