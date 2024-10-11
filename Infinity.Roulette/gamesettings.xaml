@@ -134,7 +134,7 @@
                         
                         <Button x:Name="btnSaveSettings" Click="btnSaveSettings_Click" Grid.Row="0" Grid.Column="0"
                             Style="{StaticResource saveButton}" Width="45" Height="45" Margin="0" 
-                            ToolTip="Save" IsEnabled="{Binding IsNotPlaying}">
+                            ToolTip="Save">
                             <Button.Content>
                                 <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center" Height="25" Margin="0,0,-2,0">
                                     <Image Source="{StaticResource save-icon-drawingImage}">
@@ -147,7 +147,7 @@
                         </Button>
                         <Button x:Name="btnCancel" Click="btnCancel_Click" Grid.Row="0" Grid.Column="2"
     Style="{StaticResource cancelButton}" Width="45" Height="45" Margin="0" 
-    ToolTip="Cancel" IsEnabled="{Binding IsNotPlaying}">
+    ToolTip="Cancel">
                             <Button.Content>
                                 <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center" Height="25" Margin="0,0,-2,0">
                                     <Image Source="{StaticResource cancel-icon-drawingImage}">

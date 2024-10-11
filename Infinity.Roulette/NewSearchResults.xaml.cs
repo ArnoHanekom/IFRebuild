@@ -281,7 +281,7 @@ public partial class NewSearchResults : Window
     }
     private async void btnPlay_Click(object sender, RoutedEventArgs e)
     {
-        List<Table> spinfileTables = GetSpinfileTables(searchVM.SelectedSpinfileCount);
+        List<Table> spinfileTables = GetSpinfileTables;
         if (spinfileTables == null || spinfileTables.Count <= 0)
             return;
 
@@ -300,18 +300,12 @@ public partial class NewSearchResults : Window
         });
     }
 
-    private List<Table> GetSpinfileTables(int selectedCount)
-    {
-        if (selectedCount == -1) return [.. ResultsGrid.Items.Cast<Table>().Where(t => t.RunSpinfile)];
-        return [.. ResultsGrid.Items.Cast<Table>().Where(t => t.Counts == selectedCount)];
-    }
+    private List<Table> GetSpinfileTables => [.. ResultsGrid.Items.Cast<Table>().Where(t => t.RunSpinfile)];
 
     public async void ReloadGrid()
     {
         await base.Dispatcher.InvokeAsync(delegate
         {
-            //cbRunSpinfileAll.IsChecked = false;
-            //cbRunSpinfileLimit.IsChecked = false;
             ResultsGrid.ItemsSource = searchVM.LoadedResults;
             cbSpinfileCounts.SelectedIndex = 0;
         });
@@ -442,7 +436,40 @@ public partial class NewSearchResults : Window
 
     private async void ChangeSelectedSpinfileCount_Selection(object sender, SelectionChangedEventArgs e)
     {
-        
         await Dispatcher.InvokeAsync(() => ResultsGrid.ItemsSource = GetSelectedSpinfileCount_CheckResults());
+    }
+
+    private async void cbSpinfileRows_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        await Dispatcher.InvokeAsync(() => ResultsGrid.ItemsSource = GetSelectedSpinfileRow_CheckResults());
+    }
+
+    private List<Table> GetSelectedSpinfileRow_CheckResults()
+    {
+        var uncheckedList = UncheckAllRunWithSpinfile();
+        return CheckSelectedSpinfileRowRunWithSpinfile(uncheckedList);
+    }
+
+    private List<Table> CheckSelectedSpinfileRowRunWithSpinfile(List<Table> resultsList)
+    {
+        switch (searchVM.SelectedSpinfileRow)
+        {
+            case -1:
+                return resultsList.Select(t =>
+                {
+                    t.RunSpinfile = true;
+                    return t;
+                }).ToList();
+            case >= 0:
+                return resultsList.Select(t =>
+                {
+                    t.RunSpinfile = false;
+                    if (t.Rows == searchVM.SelectedSpinfileRow)
+                        t.RunSpinfile = true;
+                    return t;
+                }).ToList();
+            default:
+                return resultsList;
+        }
     }
 }
