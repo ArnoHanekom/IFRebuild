@@ -315,9 +315,12 @@
                 </MenuItem.Header>
             </MenuItem>
             <MenuItem x:Name="mnuShuffleBoards" IsCheckable="True" IsChecked="{Binding ShuffleBoards}" Cursor="Hand" ForceCursor="True" StaysOpenOnClick="True" Click="mnuShuffleBoards_Click">
+                <MenuItem.Icon>
+                    <Image Source="/shuffle_grey.png" Width="50" Height="50" />
+                </MenuItem.Icon>
                 <MenuItem.Header>
                     <Grid>
-                        <TextBlock Text="Shuffle boards?" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="12" FontWeight="Light" FontFamily="Century Gothic" Foreground="#BBC2CC" UseLayoutRounding="True" />
+                        <TextBlock Text="Shuffle boards" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="12" FontWeight="Light" FontFamily="Century Gothic" Foreground="#BBC2CC" UseLayoutRounding="True" />
                     </Grid>
                 </MenuItem.Header>
             </MenuItem>

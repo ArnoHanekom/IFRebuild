@@ -26,6 +26,7 @@
 		<None Remove="matrix.ico" />
 		<None Remove="randomize btn.png" />
 		<None Remove="roulette.ico" />
+		<None Remove="shuffle_grey.png" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="images\roulette.ico" />
@@ -90,6 +91,7 @@
 		<Resource Include="matrix.ico" />
 		<Resource Include="randomize btn.png" />
 		<Resource Include="roulette.ico" />
+		<Resource Include="shuffle_grey.png" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Update="images\matrix.ico">
