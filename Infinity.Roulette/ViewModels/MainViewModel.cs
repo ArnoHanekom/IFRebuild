@@ -990,4 +990,15 @@ public class MainViewModel : ViewModelBase
             OnPropertyChanged(nameof(ShuffleBoards));
         }
     }
+    
+    private int _appThreadCount { get; set; }
+    public int AppThreadCount
+    {
+        get => _appThreadCount;
+        set
+        {
+            if (_appThreadCount != value) _appThreadCount = value;
+            OnPropertyChanged(nameof(AppThreadCount));
+        }
+    }
 }

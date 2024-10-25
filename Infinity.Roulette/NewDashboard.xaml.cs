@@ -7,19 +7,32 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using Unity;
 
 namespace Infinity.Roulette;
 public partial class NewDashboard : Window
 {
     private MainViewModel mainVM { get; set; } = default!;
+    private DispatcherTimer _timer { get; set; }
     public NewDashboard()
     {
         if (Container.container != null)
             mainVM = Container.container.Resolve<MainViewModel>();
+
+        _timer = new();
+        _timer.Tick += Timer_Tick;
+        _timer.Interval = new TimeSpan(0, 0, 0, 0, 100);
+        _timer.Start();
         DataContext = mainVM;
         InitializeComponent();
     }
+
+    private void Timer_Tick(object? sender, EventArgs e) 
+    {
+            mainVM.AppThreadCount = System.Diagnostics.Process.GetCurrentProcess().Threads.Count;
+    }
+
     private async void btnPlay_Click(object sender, RoutedEventArgs e)
     {
         if (mainVM.GameSetting is not null)

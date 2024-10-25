@@ -585,4 +585,21 @@ public class SearchResultsViewModel : ViewModelBase
     {
         SelectedSpinfileRow = -2;
     }
+
+    private int _selectedSpinfileR1W { get; set; } = -2;
+
+    public int SelectedSpinfileR1W
+    {
+        get => _selectedSpinfileR1W;
+        set
+        {
+            if (_selectedSpinfileR1W != value) _selectedSpinfileR1W = value;
+            OnPropertyChanged(nameof(SelectedSpinfileR1W));
+        }
+    }
+
+    public void LoadSelectedSpinfileR1WDefaults()
+    {
+        SelectedSpinfileR1W = -2;
+    }
 }

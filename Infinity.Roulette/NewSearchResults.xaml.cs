@@ -472,4 +472,38 @@ public partial class NewSearchResults : Window
                 return resultsList;
         }
     }
+
+    private async void cbSpinfileR1W_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        await Dispatcher.InvokeAsync(() => ResultsGrid.ItemsSource = GetSelectedSpinfileR1W_CheckResults());
+    }
+
+    private List<Table> GetSelectedSpinfileR1W_CheckResults()
+    {
+        var uncheckedList = UncheckAllRunWithSpinfile();
+        return CheckSelectedSpinfileR1WRunWithSpinfile(uncheckedList);
+    }
+
+    private List<Table> CheckSelectedSpinfileR1WRunWithSpinfile(List<Table> resultsList)
+    {
+        switch (searchVM.SelectedSpinfileR1W)
+        {
+            case -1:
+                return resultsList.Select(t =>
+                {
+                    t.RunSpinfile = true;
+                    return t;
+                }).ToList();
+            case >= 0:
+                return resultsList.Select(t =>
+                {
+                    t.RunSpinfile = false;
+                    if (t.FirstRowWin == searchVM.SelectedSpinfileR1W)
+                        t.RunSpinfile = true;
+                    return t;
+                }).ToList();
+            default:
+                return resultsList;
+        }
+    }
 }
