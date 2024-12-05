@@ -10,6 +10,7 @@ public partial class App : Application
     {
         Container.RegisterServices();
         Container.container?.Resolve<AppSettings>().LoadSettings();
-        new Splash().Show();
+        new NewDashboard().Show();
+        //new Splash().Show();
     }
 }

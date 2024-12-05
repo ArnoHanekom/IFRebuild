@@ -4,6 +4,7 @@ using Infinity.Services.Interfaces;
 using Infinity.Engine;
 using System.IO;
 using Infinity.Engine.Services;
+using DocumentFormat.OpenXml.Drawing.Diagrams;
 
 namespace Infinity.Roulette.ViewModels;
 
@@ -540,4 +541,48 @@ public class SearchResultsViewModel : ViewModelBase
         }
     }
     public bool IsNotPlaying => !Spinning;
+
+    private int _selectedSpinfileCount { get; set; } = -2;
+    public int SelectedSpinfileCount
+    {
+        get => _selectedSpinfileCount;
+        set
+        {
+            if (_selectedSpinfileCount != value) _selectedSpinfileCount = value;
+            OnPropertyChanged(nameof(SelectedSpinfileCount));
+        }
+    }
+
+    private int _selectedSpinfileRow { get; set; } = -2;
+    public int SelectedSpinfileRow
+    {
+        get => _selectedSpinfileRow;
+        set
+        {
+            if (_selectedSpinfileRow != value) _selectedSpinfileRow = value;
+            OnPropertyChanged(nameof(SelectedSpinfileRow));
+        }
+    }
+
+    private int _selectedSpinfileR1W { get; set; } = -2;
+    public int SelectedSpinfileR1W
+    {
+        get => _selectedSpinfileR1W;
+        set
+        {
+            if (_selectedSpinfileR1W != value) _selectedSpinfileR1W = value;
+            OnPropertyChanged(nameof(SelectedSpinfileR1W));
+        }
+    }
+
+    private int _selectedSpinfileMaxGS { get; set; } = -2;
+    public int SelectedSpinfileMaxGS
+    {
+        get => _selectedSpinfileMaxGS;
+        set
+        {
+            if (_selectedSpinfileMaxGS != value) _selectedSpinfileMaxGS = value;
+            OnPropertyChanged(nameof(SelectedSpinfileMaxGS));
+        }
+    }
 }

@@ -12,7 +12,7 @@
         WindowStartupLocation="CenterScreen" UseLayoutRounding="True" AllowsTransparency="True"
         WindowStyle="None" BorderThickness="0" ui:TitleBar.ExtendViewIntoTitleBar="True"
         Background="Transparent" Title="Results" MinHeight="400" SizeToContent="WidthAndHeight"
-        MinWidth="615" SnapsToDevicePixels="True">
+        MinWidth="865" SnapsToDevicePixels="True">
     <FrameworkElement.Resources>
         <convert:GameTypeConverter x:Key="GameTypeConverter"/>
         <convert:VisibilityConverter x:Key="VisibilityConverter"/>
@@ -38,7 +38,7 @@
                 <Grid Grid.Row="1">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="80" />
-                        <RowDefinition Height="30" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
@@ -141,6 +141,241 @@
                         Style="{StaticResource WhiteCheckBox}" Content="R1W Only?"
                         HorizontalAlignment="Left" MinWidth="0" Width="Auto" FontWeight="SemiBold" Cursor="Hand"
                         FontFamily="{Binding ElementName=fontFan, Path=Text, Converter={StaticResource FontFamilyConverter}}"/>
+
+                    <StackPanel Grid.Row="1" HorizontalAlignment="Right" Margin="0, 0, 10, 0" Grid.Column="2">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right">
+                            <Label Content="Spinfile counts: " FontWeight="SemiBold" FontSize="14" />
+                            <ComboBox x:Name="cbSpinfileCounts" MinWidth="125" SelectedValuePath="Tag" SelectedValue="{Binding SelectedSpinfileCount, Mode=TwoWay}" SelectionChanged="cbSpinfileCounts_SelectionChanged">
+                                <ComboBoxItem Content="Select count" Tag="-2" />
+                                <ComboBoxItem Content="All" Tag="-1" />
+                                <ComboBoxItem Content="0" Tag="0" />
+                                <ComboBoxItem Content="1" Tag="1" />
+                                <ComboBoxItem Content="2" Tag="2" />
+                                <ComboBoxItem Content="3" Tag="3" />
+                                <ComboBoxItem Content="4" Tag="4" />
+                                <ComboBoxItem Content="5" Tag="5" />
+                                <ComboBoxItem Content="6" Tag="6" />
+                                <ComboBoxItem Content="7" Tag="7" />
+                                <ComboBoxItem Content="8" Tag="8" />
+                                <ComboBoxItem Content="9" Tag="9" />
+                                <ComboBoxItem Content="10" Tag="10" />
+                                <ComboBoxItem Content="11" Tag="11" />
+                                <ComboBoxItem Content="12" Tag="12" />
+                                <ComboBoxItem Content="13" Tag="13" />
+                                <ComboBoxItem Content="14" Tag="14" />
+                                <ComboBoxItem Content="15" Tag="15" />
+                                <ComboBoxItem Content="16" Tag="16" />
+                                <ComboBoxItem Content="17" Tag="17" />
+                                <ComboBoxItem Content="18" Tag="18" />
+                                <ComboBoxItem Content="19" Tag="19" />
+                                <ComboBoxItem Content="20" Tag="20" />
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0, 10, 0, 0" HorizontalAlignment="Right">
+                            <Label Content="Spinfile rows: " FontWeight="SemiBold" FontSize="14" />
+                            <ComboBox x:Name="cbSpinfileRows" MinWidth="125" SelectedValuePath="Tag" SelectedValue="{Binding SelectedSpinfileRow, Mode=TwoWay}" SelectionChanged="cbSpinfileRows_SelectionChanged">
+                                <ComboBoxItem Content="Select row" Tag="-2" />
+                                <ComboBoxItem Content="All" Tag="-1" />
+                                <ComboBoxItem Content='30' Tag='30' />
+                                <ComboBoxItem Content='31' Tag='31' />
+                                <ComboBoxItem Content='32' Tag='32' />
+                                <ComboBoxItem Content='33' Tag='33' />
+                                <ComboBoxItem Content='34' Tag='34' />
+                                <ComboBoxItem Content='35' Tag='35' />
+                                <ComboBoxItem Content='36' Tag='36' />
+                                <ComboBoxItem Content='37' Tag='37' />
+                                <ComboBoxItem Content='38' Tag='38' />
+                                <ComboBoxItem Content='39' Tag='39' />
+                                <ComboBoxItem Content='40' Tag='40' />
+                                <ComboBoxItem Content='41' Tag='41' />
+                                <ComboBoxItem Content='42' Tag='42' />
+                                <ComboBoxItem Content='43' Tag='43' />
+                                <ComboBoxItem Content='44' Tag='44' />
+                                <ComboBoxItem Content='45' Tag='45' />
+                                <ComboBoxItem Content='46' Tag='46' />
+                                <ComboBoxItem Content='47' Tag='47' />
+                                <ComboBoxItem Content='48' Tag='48' />
+                                <ComboBoxItem Content='49' Tag='49' />
+                                <ComboBoxItem Content='50' Tag='50' />
+                                <ComboBoxItem Content='51' Tag='51' />
+                                <ComboBoxItem Content='52' Tag='52' />
+                                <ComboBoxItem Content='53' Tag='53' />
+                                <ComboBoxItem Content='54' Tag='54' />
+                                <ComboBoxItem Content='55' Tag='55' />
+                                <ComboBoxItem Content='56' Tag='56' />
+                                <ComboBoxItem Content='57' Tag='57' />
+                                <ComboBoxItem Content='58' Tag='58' />
+                                <ComboBoxItem Content='59' Tag='59' />
+                                <ComboBoxItem Content='60' Tag='60' />
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0, 10, 0, 0" HorizontalAlignment="Right">
+                            <Label Content="Spinfile R1W: " FontWeight="SemiBold" FontSize="14" />
+                            <ComboBox x:Name="cbSpinfileR1W" MinWidth="125" SelectedValuePath="Tag" SelectedValue="{Binding SelectedSpinfileR1W, Mode=TwoWay}" SelectionChanged="cbSpinfileR1W_SelectionChanged">
+                                <ComboBoxItem Content="Select R1W" Tag="-2" />
+                                <ComboBoxItem Content="All" Tag="-1" />
+                                <ComboBoxItem Content="0" Tag="0" />
+                                <ComboBoxItem Content='1' Tag='1' />
+                                <ComboBoxItem Content='2' Tag='2' />
+                                <ComboBoxItem Content='3' Tag='3' />
+                                <ComboBoxItem Content='4' Tag='4' />
+                                <ComboBoxItem Content='5' Tag='5' />
+                                <ComboBoxItem Content='6' Tag='6' />
+                                <ComboBoxItem Content='7' Tag='7' />
+                                <ComboBoxItem Content='8' Tag='8' />
+                                <ComboBoxItem Content='9' Tag='9' />
+                                <ComboBoxItem Content='10' Tag='10' />
+                                <ComboBoxItem Content='11' Tag='11' />
+                                <ComboBoxItem Content='12' Tag='12' />
+                                <ComboBoxItem Content='13' Tag='13' />
+                                <ComboBoxItem Content='14' Tag='14' />
+                                <ComboBoxItem Content='15' Tag='15' />
+                                <ComboBoxItem Content='16' Tag='16' />
+                                <ComboBoxItem Content='17' Tag='17' />
+                                <ComboBoxItem Content='18' Tag='18' />
+                                <ComboBoxItem Content='19' Tag='19' />
+                                <ComboBoxItem Content='20' Tag='20' />
+                                <ComboBoxItem Content='21' Tag='21' />
+                                <ComboBoxItem Content='22' Tag='22' />
+                                <ComboBoxItem Content='23' Tag='23' />
+                                <ComboBoxItem Content='24' Tag='24' />
+                                <ComboBoxItem Content='25' Tag='25' />
+                                <ComboBoxItem Content='26' Tag='26' />
+                                <ComboBoxItem Content='27' Tag='27' />
+                                <ComboBoxItem Content='28' Tag='28' />
+                                <ComboBoxItem Content='29' Tag='29' />
+                                <ComboBoxItem Content='30' Tag='30' />
+                                <ComboBoxItem Content='31' Tag='31' />
+                                <ComboBoxItem Content='32' Tag='32' />
+                                <ComboBoxItem Content='33' Tag='33' />
+                                <ComboBoxItem Content='34' Tag='34' />
+                                <ComboBoxItem Content='35' Tag='35' />
+                                <ComboBoxItem Content='36' Tag='36' />
+                                <ComboBoxItem Content='37' Tag='37' />
+                                <ComboBoxItem Content='38' Tag='38' />
+                                <ComboBoxItem Content='39' Tag='39' />
+                                <ComboBoxItem Content='40' Tag='40' />
+                                <ComboBoxItem Content='41' Tag='41' />
+                                <ComboBoxItem Content='42' Tag='42' />
+                                <ComboBoxItem Content='43' Tag='43' />
+                                <ComboBoxItem Content='44' Tag='44' />
+                                <ComboBoxItem Content='45' Tag='45' />
+                                <ComboBoxItem Content='46' Tag='46' />
+                                <ComboBoxItem Content='47' Tag='47' />
+                                <ComboBoxItem Content='48' Tag='48' />
+                                <ComboBoxItem Content='49' Tag='49' />
+                                <ComboBoxItem Content='50' Tag='50' />
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0, 10, 0, 0" HorizontalAlignment="Right">
+    <Label Content="Spinfile max gs: " FontWeight="SemiBold" FontSize="14" />
+                            <ComboBox x:Name="cbSpinfileMaxGs" MinWidth="125" SelectedValuePath="Tag" SelectedValue="{Binding SelectedSpinfileMaxGS, Mode=TwoWay}" SelectionChanged="cbSpinfileMaxGs_SelectionChanged">
+        <ComboBoxItem Content="Select max gs" Tag="-2" />
+        <ComboBoxItem Content="All" Tag="-1" />
+        <ComboBoxItem Content="0" Tag="0" />
+                                <ComboBoxItem Content='1' Tag='1' />
+                                <ComboBoxItem Content='2' Tag='2' />
+                                <ComboBoxItem Content='3' Tag='3' />
+                                <ComboBoxItem Content='4' Tag='4' />
+                                <ComboBoxItem Content='5' Tag='5' />
+                                <ComboBoxItem Content='6' Tag='6' />
+                                <ComboBoxItem Content='7' Tag='7' />
+                                <ComboBoxItem Content='8' Tag='8' />
+                                <ComboBoxItem Content='9' Tag='9' />
+                                <ComboBoxItem Content='10' Tag='10' />
+                                <ComboBoxItem Content='11' Tag='11' />
+                                <ComboBoxItem Content='12' Tag='12' />
+                                <ComboBoxItem Content='13' Tag='13' />
+                                <ComboBoxItem Content='14' Tag='14' />
+                                <ComboBoxItem Content='15' Tag='15' />
+                                <ComboBoxItem Content='16' Tag='16' />
+                                <ComboBoxItem Content='17' Tag='17' />
+                                <ComboBoxItem Content='18' Tag='18' />
+                                <ComboBoxItem Content='19' Tag='19' />
+                                <ComboBoxItem Content='20' Tag='20' />
+                                <ComboBoxItem Content='21' Tag='21' />
+                                <ComboBoxItem Content='22' Tag='22' />
+                                <ComboBoxItem Content='23' Tag='23' />
+                                <ComboBoxItem Content='24' Tag='24' />
+                                <ComboBoxItem Content='25' Tag='25' />
+                                <ComboBoxItem Content='26' Tag='26' />
+                                <ComboBoxItem Content='27' Tag='27' />
+                                <ComboBoxItem Content='28' Tag='28' />
+                                <ComboBoxItem Content='29' Tag='29' />
+                                <ComboBoxItem Content='30' Tag='30' />
+                                <ComboBoxItem Content='31' Tag='31' />
+                                <ComboBoxItem Content='32' Tag='32' />
+                                <ComboBoxItem Content='33' Tag='33' />
+                                <ComboBoxItem Content='34' Tag='34' />
+                                <ComboBoxItem Content='35' Tag='35' />
+                                <ComboBoxItem Content='36' Tag='36' />
+                                <ComboBoxItem Content='37' Tag='37' />
+                                <ComboBoxItem Content='38' Tag='38' />
+                                <ComboBoxItem Content='39' Tag='39' />
+                                <ComboBoxItem Content='40' Tag='40' />
+                                <ComboBoxItem Content='41' Tag='41' />
+                                <ComboBoxItem Content='42' Tag='42' />
+                                <ComboBoxItem Content='43' Tag='43' />
+                                <ComboBoxItem Content='44' Tag='44' />
+                                <ComboBoxItem Content='45' Tag='45' />
+                                <ComboBoxItem Content='46' Tag='46' />
+                                <ComboBoxItem Content='47' Tag='47' />
+                                <ComboBoxItem Content='48' Tag='48' />
+                                <ComboBoxItem Content='49' Tag='49' />
+                                <ComboBoxItem Content='50' Tag='50' />
+                                <ComboBoxItem Content='51' Tag='51' />
+                                <ComboBoxItem Content='52' Tag='52' />
+                                <ComboBoxItem Content='53' Tag='53' />
+                                <ComboBoxItem Content='54' Tag='54' />
+                                <ComboBoxItem Content='55' Tag='55' />
+                                <ComboBoxItem Content='56' Tag='56' />
+                                <ComboBoxItem Content='57' Tag='57' />
+                                <ComboBoxItem Content='58' Tag='58' />
+                                <ComboBoxItem Content='59' Tag='59' />
+                                <ComboBoxItem Content='60' Tag='60' />
+                                <ComboBoxItem Content='61' Tag='61' />
+                                <ComboBoxItem Content='62' Tag='62' />
+                                <ComboBoxItem Content='63' Tag='63' />
+                                <ComboBoxItem Content='64' Tag='64' />
+                                <ComboBoxItem Content='65' Tag='65' />
+                                <ComboBoxItem Content='66' Tag='66' />
+                                <ComboBoxItem Content='67' Tag='67' />
+                                <ComboBoxItem Content='68' Tag='68' />
+                                <ComboBoxItem Content='69' Tag='69' />
+                                <ComboBoxItem Content='70' Tag='70' />
+                                <ComboBoxItem Content='71' Tag='71' />
+                                <ComboBoxItem Content='72' Tag='72' />
+                                <ComboBoxItem Content='73' Tag='73' />
+                                <ComboBoxItem Content='74' Tag='74' />
+                                <ComboBoxItem Content='75' Tag='75' />
+                                <ComboBoxItem Content='76' Tag='76' />
+                                <ComboBoxItem Content='77' Tag='77' />
+                                <ComboBoxItem Content='78' Tag='78' />
+                                <ComboBoxItem Content='79' Tag='79' />
+                                <ComboBoxItem Content='80' Tag='80' />
+                                <ComboBoxItem Content='81' Tag='81' />
+                                <ComboBoxItem Content='82' Tag='82' />
+                                <ComboBoxItem Content='83' Tag='83' />
+                                <ComboBoxItem Content='84' Tag='84' />
+                                <ComboBoxItem Content='85' Tag='85' />
+                                <ComboBoxItem Content='86' Tag='86' />
+                                <ComboBoxItem Content='87' Tag='87' />
+                                <ComboBoxItem Content='88' Tag='88' />
+                                <ComboBoxItem Content='89' Tag='89' />
+                                <ComboBoxItem Content='90' Tag='90' />
+                                <ComboBoxItem Content='91' Tag='91' />
+                                <ComboBoxItem Content='92' Tag='92' />
+                                <ComboBoxItem Content='93' Tag='93' />
+                                <ComboBoxItem Content='94' Tag='94' />
+                                <ComboBoxItem Content='95' Tag='95' />
+                                <ComboBoxItem Content='96' Tag='96' />
+                                <ComboBoxItem Content='97' Tag='97' />
+                                <ComboBoxItem Content='98' Tag='98' />
+                                <ComboBoxItem Content='99' Tag='99' />
+                                <ComboBoxItem Content='100' Tag='100' />
+                            </ComboBox>
+</StackPanel>
+                    </StackPanel>
 
                     <Grid x:Name="resultsContainer" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch">
                         <Grid.RowDefinitions>

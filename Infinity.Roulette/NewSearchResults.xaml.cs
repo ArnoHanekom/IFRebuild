@@ -397,4 +397,89 @@ public partial class NewSearchResults : Window
         _manualSelected.Add(table);
     }
     private List<Table> _manualSelected { get; set; } = [];
+
+    private List<Table> UncheckRunWithSpinfile()
+    {
+        return ResultsGrid.Items.Cast<Table>().Select(i =>
+            {
+                i.RunSpinfile = false;
+                return i;
+            }).ToList();
+    }
+
+    private async void cbSpinfileCounts_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        await Dispatcher.InvokeAsync(() =>
+        {
+            var uncheckedList = UncheckRunWithSpinfile();
+            if (searchVM.SelectedSpinfileCount == -2) ResultsGrid.ItemsSource = uncheckedList;
+            if (searchVM.SelectedSpinfileCount != -2) ResultsGrid.ItemsSource = CheckSelectedCountRunWithSpinfile(uncheckedList);
+        });
+    }
+
+    private List<Table> CheckSelectedCountRunWithSpinfile(List<Table> source)
+    {
+        return source.Select(s =>
+            {
+                if (s.Counts == searchVM.SelectedSpinfileCount || searchVM.SelectedSpinfileCount == -1) s.RunSpinfile = true;
+                return s;
+            }).ToList();
+    }
+
+    private async void cbSpinfileRows_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        await Dispatcher.InvokeAsync(() =>
+        {
+            var uncheckedList = UncheckRunWithSpinfile();
+            if (searchVM.SelectedSpinfileRow == -2) ResultsGrid.ItemsSource = uncheckedList;
+            if (searchVM.SelectedSpinfileRow != -2) ResultsGrid.ItemsSource = CheckSelectedRowRunWithSpinfile(uncheckedList);
+        });
+    }
+
+    private List<Table> CheckSelectedRowRunWithSpinfile(List<Table> source)
+    {
+        return source.Select(s =>
+        {
+            if (s.Rows == searchVM.SelectedSpinfileRow || searchVM.SelectedSpinfileRow == -1) s.RunSpinfile = true;
+            return s;
+        }).ToList();
+    }
+
+    private async void cbSpinfileR1W_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        await Dispatcher.InvokeAsync(() =>
+        {
+            var uncheckedList = UncheckRunWithSpinfile();
+            if (searchVM.SelectedSpinfileR1W == -2) ResultsGrid.ItemsSource = uncheckedList;
+            if (searchVM.SelectedSpinfileR1W != -2) ResultsGrid.ItemsSource = CheckSelectedR1WRunWithSpinfile(uncheckedList);
+        });
+    }
+
+    private List<Table> CheckSelectedR1WRunWithSpinfile(List<Table> source)
+    {
+        return source.Select(s =>
+        {
+            if (s.FirstRowWin == searchVM.SelectedSpinfileR1W || searchVM.SelectedSpinfileR1W == -1) s.RunSpinfile = true;
+            return s;
+        }).ToList();
+    }
+
+    private async void cbSpinfileMaxGs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        await Dispatcher.InvokeAsync(() =>
+        {
+            var uncheckedList = UncheckRunWithSpinfile();
+            if (searchVM.SelectedSpinfileMaxGS == -2) ResultsGrid.ItemsSource = uncheckedList;
+            if (searchVM.SelectedSpinfileMaxGS != -2) ResultsGrid.ItemsSource = CheckSelectedMaxGSRunWithSpinfile(uncheckedList);
+        });
+    }
+
+    private List<Table> CheckSelectedMaxGSRunWithSpinfile(List<Table> source)
+    {
+        return source.Select(s =>
+        {
+            if (s.MaxGS == searchVM.SelectedSpinfileMaxGS || searchVM.SelectedSpinfileMaxGS == -1) s.RunSpinfile = true;
+            return s;
+        }).ToList();
+    }
 }
